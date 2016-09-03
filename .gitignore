@@ -1,0 +1,4 @@
+# Ignore binaries and build files from CMake
+
+sniffer/bin
+sniffer/build

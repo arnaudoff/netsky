@@ -32,7 +32,7 @@ int main() {
     initialize_logger();
 
     std::shared_ptr<ConfigManager> config_manager {
-        new ConfigManager { "config.json" }
+        new ConfigManager { "../config/config.json" }
     };
 
     std::unique_ptr<ServerCommandInvoker> invoker {

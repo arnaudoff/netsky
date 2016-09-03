@@ -26,7 +26,7 @@ namespace Sniffer {
 
                     virtual void broadcast(const std::string& message) = 0;
 
-                    virtual ~Server();
+                    virtual ~Server() {};
             };
         }
     }

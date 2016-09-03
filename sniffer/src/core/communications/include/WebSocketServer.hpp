@@ -49,6 +49,8 @@ namespace Sniffer {
                     void add_connection(connection_hdl handle);
 
                     void remove_connection(connection_hdl handle);
+
+                    ~WebSocketServer() {};
             };
         }
     }

@@ -12,6 +12,8 @@ namespace Sniffer {
                         KillServerCommand(Server* server);
 
                         void execute(const std::vector<std::string>& arguments);
+
+                        ~KillServerCommand() {};
                 };
             }
         }

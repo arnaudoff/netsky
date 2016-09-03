@@ -28,7 +28,7 @@ namespace Sniffer {
 
                         virtual void execute(const std::vector<std::string>& arguments) = 0;
 
-                        virtual ~ServerCommand() = 0;
+                        virtual ~ServerCommand() {};
                 };
             }
         }
