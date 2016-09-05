@@ -5,7 +5,7 @@
 #include <sys/types.h>
 
 #include "../../include/PacketSnifferObserver.hpp"
-#include "SniffedPacket.hpp"
+#include "../../include/SniffedEntity.hpp"
 
 namespace Sniffer {
     namespace Core {
@@ -17,7 +17,7 @@ namespace Sniffer {
                 public:
                     void attach(PacketSnifferObserver* observer);
                     void detach(PacketSnifferObserver* observer);
-                    void notify(SniffedPacket* sniffed_packet);
+                    void notify(SniffedEntity* entity);
             };
         }
     }

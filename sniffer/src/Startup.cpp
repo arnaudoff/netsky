@@ -3,7 +3,7 @@
 
 #include "core/include/PolicyBindings.hpp"
 #include "core/include/ServerPacketSnifferObserver.hpp"
-#include "core/include/SniffedPacketJsonSerializer.hpp"
+#include "core/communications/serialization/include/SerializationManager.hpp"
 
 // Sniffers
 #include "core/sniffers/include/PacketSniffer.hpp"
@@ -53,12 +53,10 @@ int main() {
 
     invoker->add_command(kill_cmd.get());
 
-    std::unique_ptr<SniffedPacketSerializer> serializer {
-        new SniffedPacketJsonSerializer {}
-    };
+    SerializationMgr serializer;
 
     std::unique_ptr<PacketSnifferObserver> server_observer {
-        new ServerPacketSnifferObserver { server.get(), std::move(serializer) }
+        new ServerPacketSnifferObserver { server.get(), serializer }
     };
 
     std::unique_ptr<PacketSniffer> sniffer { new PcapPacketSniffer { config_manager } };

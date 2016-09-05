@@ -3,8 +3,9 @@
 
 #include <sys/types.h>
 
+#include "PolicyBindings.hpp"
 #include "PacketSnifferObserver.hpp"
-#include "../sniffers/include/SniffedPacket.hpp"
+#include "SniffedEntity.hpp"
 #include "../communications/include/Server.hpp"
 
 namespace Sniffer {
@@ -14,16 +15,14 @@ namespace Sniffer {
 
             private:
                 Server* server_;
-                std::unique_ptr<SniffedPacketSerializer> serializer_;
+                SerializationMgr serializer_;
 
             public:
                 ServerPacketSnifferObserver(
                         Server* server,
-                        std::unique_ptr<SniffedPacketSerializer> serializer)
-                    : server_{server}, serializer_{std::move(serializer)}
-                {}
+                        const SerializationMgr& serializer);
 
-                virtual void update(Sniffers::SniffedPacket* sniffed_packet) override;
+                virtual void update(SniffedEntity* entity) override;
 
                 ~ServerPacketSnifferObserver() {};
         };

@@ -21,9 +21,14 @@ namespace Sniffer {
 
                     virtual void sniff() override;
 
-                    static void on_packet_received(u_char* args, const struct pcap_pkthdr* header, const u_char* packet);
+                    static void on_packet_received(
+                            u_char* args,
+                            const struct pcap_pkthdr* header,
+                            const u_char* packet);
 
-                    void on_packet_received_internal(const struct pcap_pkthdr* header, const u_char* packet);
+                    void on_packet_received_internal(
+                            const struct pcap_pkthdr* header,
+                            const u_char* packet);
 
                 public:
                     PcapPacketSniffer(std::shared_ptr<ConfigManager> manager);

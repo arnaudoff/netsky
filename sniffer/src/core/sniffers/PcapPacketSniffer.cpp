@@ -87,8 +87,8 @@ void PcapPacketSniffer::on_packet_received(u_char* args,
 
 void PcapPacketSniffer::on_packet_received_internal(const struct pcap_pkthdr* header,
         const u_char* packet) {
-    std::unique_ptr<SniffedPacket> sniffed_packet { new SniffedPacket { packet } };
-    notify(sniffed_packet.get());
+    std::unique_ptr<SniffedEntity> sniffed_entity { new SniffedEntity { packet } };
+    notify(sniffed_entity.get());
 }
 
 PcapPacketSniffer::~PcapPacketSniffer() {

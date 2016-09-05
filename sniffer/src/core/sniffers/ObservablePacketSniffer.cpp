@@ -12,8 +12,8 @@ void ObservablePacketSniffer::detach(PacketSnifferObserver* observer) {
     observers_.erase(std::remove(observers_.begin(), observers_.end(), observer), observers_.end());
 }
 
-void ObservablePacketSniffer::notify(SniffedPacket* sniffed_packet) {
+void ObservablePacketSniffer::notify(SniffedEntity* entity) {
     for (const auto& observer : observers_) {
-        observer->update(sniffed_packet);
+        observer->update(entity);
     }
 }

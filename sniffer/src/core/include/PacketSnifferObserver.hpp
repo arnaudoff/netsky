@@ -4,14 +4,13 @@
 #include <memory>
 #include <sys/types.h>
 
-#include "SniffedPacketSerializer.hpp"
-#include "../sniffers/include/SniffedPacket.hpp"
+#include "SniffedEntity.hpp"
 
 namespace Sniffer {
     namespace Core {
         class PacketSnifferObserver {
             public:
-                virtual void update(Sniffers::SniffedPacket* sniffed_packet) = 0;
+                virtual void update(SniffedEntity* sniffed_packet) = 0;
                 virtual ~PacketSnifferObserver() {};
         };
     }

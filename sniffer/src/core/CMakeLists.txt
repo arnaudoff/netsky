@@ -1,8 +1,12 @@
-set(CORE_SOURCES ServerPacketSnifferObserver.cpp SniffedPacketJsonSerializer.cpp)
+set(CORE_SOURCES ServerPacketSnifferObserver.cpp)
 
 set(SNIFFERS_DIR sniffers)
 set(SNIFFERS_SOURCES ${SNIFFERS_DIR}/PacketSniffer.cpp
     ${SNIFFERS_DIR}/PcapPacketSniffer.cpp ${SNIFFERS_DIR}/ObservablePacketSniffer.cpp)
+
+set(PROTOCOLS_DIR protocols)
+set(PROTOCOLS_SOURCES ${PROTOCOLS_DIR}/Ethernet.cpp ${PROTOCOLS_DIR}/IPv4.cpp
+    ${PROTOCOLS_DIR}/TCP.cpp)
 
 set(COMMS_DIR communications)
 set(COMMS_SOURCES ${COMMS_DIR}/CommandParser.cpp
@@ -12,11 +16,15 @@ set(COMMS_SOURCES ${COMMS_DIR}/CommandParser.cpp
 set(COMMANDS_DIR communications/commands)
 set(COMMANDS_SOURCES ${COMMANDS_DIR}/KillServerCommand.cpp)
 
+set(SERIALIZATION_DIR communications/serialization)
+set(SERIALIZATION_SOURCES ${SERIALIZATION_DIR}/SerializedObject.cpp)
+
 find_package(Threads)
 find_package(Boost COMPONENTS system REQUIRED)
 
-add_library(sniffer-core ${CORE_SOURCES} ${SNIFFERS_SOURCES} ${COMMS_SOURCES}
-    ${COMMANDS_SOURCES})
+add_library(sniffer-core ${CORE_SOURCES} ${SNIFFERS_SOURCES}
+    ${PROTOCOLS_SOURCES} ${COMMS_SOURCES} ${COMMANDS_SOURCES}
+    ${SERIALIZATION_SOURCES})
 target_link_libraries(sniffer-core pcap ${CMAKE_THREAD_LIBS_INIT}
     ${Boost_SYSTEM_LIBRARY})
 
