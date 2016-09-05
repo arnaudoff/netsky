@@ -2,9 +2,10 @@
 #define TCP_HPP_
 
 #include <sys/types.h>
-#include <netinet/in.h>
-#include <sstream>
-#include "../../sniffers/include/SniffedPacket.hpp"
+
+#include "../../include/PolicyBindings.hpp"
+#include "../../communications/serialization/include/SerializableEntity.hpp"
+#include "../../include/SniffedEntity.hpp"
 
 #define TH_FIN 0x01
 #define TH_SYN 0x02
@@ -19,7 +20,7 @@
 namespace Sniffer {
     namespace Core {
         namespace Protocols {
-            class TCP {
+            class TCP : public Core::Communications::Serialization::SerializableEntity {
                 private:
                     typedef struct {
                         u_short th_sport;
@@ -35,34 +36,22 @@ namespace Sniffer {
 
                     const tcp_header_t* header_;
                     int size_;
+
                 public:
-                    TCP(Sniffers::SniffedPacket* sniffed_packet, int aggregated_offset)
-                        : header_{(tcp_header_t*)(sniffed_packet->get_data() + aggregated_offset)},
-                        size_{get_offset() * 4}
-                    {
-                        if (size_ < 20) {
-                            std::ostringstream exception_message;
-                            exception_message << "Invalid TCP header length: " <<
-                                size_ << " bytes.";
-                            throw std::out_of_range { exception_message.str() };
-                        }
-                    }
+                    TCP(SniffedEntity* entity, int aggregated_offset);
 
-                    int get_size() const {
-                        return size_;
-                    }
+                    int get_size() const;
 
-                    u_char get_offset() const {
-                        return (header_->th_offx2 & 0xf0) >> 4;
-                    }
+                    u_char get_offset() const;
 
-                    u_int16_t get_source_port() const {
-                        return ntohs(header_->th_sport);
-                    }
+                    u_int16_t get_source_port() const;
 
-                    u_int16_t get_destination_port() const {
-                        return ntohs(header_->th_dport);
-                    }
+                    u_int16_t get_destination_port() const;
+
+                    virtual Core::Communications::Serialization::SerializedObject
+                        serialize(const SerializationMgr& serializer) const override;
+
+                    virtual std::string get_name() const override;
 
                     ~TCP() {};
             };

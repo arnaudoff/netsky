@@ -3,14 +3,15 @@
 
 #include <sys/types.h>
 #include <string>
-#include <iomanip>
-#include <sstream>
-#include "../../sniffers/include/SniffedPacket.hpp"
+
+#include "../../include/PolicyBindings.hpp"
+#include "../../communications/serialization/include/SerializableEntity.hpp"
+#include "../../include/SniffedEntity.hpp"
 
 namespace Sniffer {
     namespace Core {
         namespace Protocols {
-            class Ethernet {
+            class Ethernet : public Core::Communications::Serialization::SerializableEntity {
                 private:
                     static const int ADDRESS_LENGTH = 6;
 
@@ -21,44 +22,22 @@ namespace Sniffer {
                     } ether_header_t;
 
                     const ether_header_t* header_;
-                public:
-                    Ethernet(Sniffers::SniffedPacket* sniffed_packet)
-                        : header_{(ether_header_t*)(sniffed_packet->get_data())}
-                    {}
 
+                public:
                     static const int FRAME_SIZE = 14;
 
-                    // TODO: Extract to cpp file and remove redundancy
+                    Ethernet(SniffedEntity* entity);
 
-                    std::string get_destination_address() const {
-                        std::ostringstream os;
-                        for (int i = 0; i < ADDRESS_LENGTH; i++) {
-                            os << std::setw(2) << std::setfill('0') << 
-                                std::hex << (int)(header_->destination_address[i]);
-                            if (i < ADDRESS_LENGTH - 1) {
-                                os << ":";
-                            }
-                        }
+                    std::string get_destination_address() const;
 
-                        return os.str();
-                    }
+                    std::string get_source_address() const;
 
-                    std::string get_source_address() const {
-                        std::ostringstream os;
-                        for (int i = 0; i < ADDRESS_LENGTH; i++) {
-                            os << std::setw(2) << std::setfill('0') <<
-                                std::hex << (int)(header_->destination_address[i]);
-                            if (i < ADDRESS_LENGTH - 1) {
-                                os << ":";
-                            }
-                        }
+                    u_short get_ether_type() const;
 
-                        return os.str();
-                    }
+                    virtual Core::Communications::Serialization::SerializedObject
+                        serialize(const SerializationMgr& serializer) const override;
 
-                    u_short get_ether_type() const {
-                        return header_->ether_type;
-                    }
+                    virtual std::string get_name() const override;
 
                     ~Ethernet() {};
             };
