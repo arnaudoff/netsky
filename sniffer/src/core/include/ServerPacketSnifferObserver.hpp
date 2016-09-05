@@ -6,7 +6,7 @@
 #include "PolicyBindings.hpp"
 #include "PacketSnifferObserver.hpp"
 #include "SniffedEntity.hpp"
-#include "../communications/include/Server.hpp"
+#include "../../communications/include/Server.hpp"
 
 namespace Sniffer {
     namespace Core {

@@ -1,14 +1,14 @@
 #include "include/ServerPacketSnifferObserver.hpp"
 
-#include "protocols/include/Ethernet.hpp"
-#include "protocols/include/IPv4.hpp"
-#include "protocols/include/TCP.hpp"
+#include "../protocols/include/Ethernet.hpp"
+#include "../protocols/include/IPv4.hpp"
+#include "../protocols/include/TCP.hpp"
 
-#include "communications/serialization/include/SerializableEntity.hpp"
+#include "../communications/serialization/include/SerializableEntity.hpp"
 
 using namespace Sniffer::Core;
-using namespace Sniffer::Core::Protocols;
-using namespace Sniffer::Core::Communications::Serialization;
+using namespace Sniffer::Protocols;
+using namespace Sniffer::Communications::Serialization;
 
 ServerPacketSnifferObserver::ServerPacketSnifferObserver(
         Server* server,
@@ -19,10 +19,10 @@ ServerPacketSnifferObserver::ServerPacketSnifferObserver(
 void ServerPacketSnifferObserver::update(SniffedEntity* entity) {
     std::vector<SerializableEntity*> entities;
 
-    Ethernet ethernet {entity};
+    Ethernet ethernet { entity };
     entities.push_back(&ethernet);
 
-    IPv4 ip {entity, Ethernet::FRAME_SIZE};
+    IPv4 ip { entity, Ethernet::FRAME_SIZE };
     entities.push_back(&ip);
 
     if (ip.get_upper_layer_protocol() == IPPROTO_TCP) {

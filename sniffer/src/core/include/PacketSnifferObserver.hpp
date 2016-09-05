@@ -10,7 +10,7 @@ namespace Sniffer {
     namespace Core {
         class PacketSnifferObserver {
             public:
-                virtual void update(SniffedEntity* sniffed_packet) = 0;
+                virtual void update(SniffedEntity* entity) = 0;
                 virtual ~PacketSnifferObserver() {};
         };
     }

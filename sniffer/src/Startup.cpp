@@ -1,19 +1,19 @@
 #include <memory>
 #include <spdlog/spdlog.h>
 
-#include "core/include/PolicyBindings.hpp"
-#include "core/include/ServerPacketSnifferObserver.hpp"
-#include "core/communications/serialization/include/SerializationManager.hpp"
+#include "include/PolicyBindings.hpp"
+#include "include/ServerPacketSnifferObserver.hpp"
+#include "communications/serialization/include/SerializationManager.hpp"
 
 // Sniffers
-#include "core/sniffers/include/PacketSniffer.hpp"
-#include "core/sniffers/include/PcapPacketSniffer.hpp"
+#include "core/include/PacketSniffer.hpp"
+#include "core/include/PcapPacketSniffer.hpp"
 
 // Communications
-#include "core/communications/commands/include/KillServerCommand.hpp"
-#include "core/communications/include/ServerCommandInvoker.hpp"
-#include "core/communications/include/WebSocketServer.hpp"
-#include "core/communications/include/WebSocketServerActionHandler.hpp"
+#include "communications/commands/include/KillServerCommand.hpp"
+#include "communications/include/ServerCommandInvoker.hpp"
+#include "communications/include/WebSocketServer.hpp"
+#include "communications/include/WebSocketServerActionHandler.hpp"
 
 // Utils
 #include "utils/include/ConfigurationManager.hpp"
@@ -21,10 +21,9 @@
 #include "utils/include/JsonFormattingPolicy.hpp"
 
 using namespace Sniffer::Core;
-using namespace Sniffer::Core::Sniffers;
 using namespace Sniffer::Utils;
-using namespace Sniffer::Core::Communications;
-using namespace Sniffer::Core::Communications::Commands;
+using namespace Sniffer::Communications;
+using namespace Sniffer::Communications::Commands;
 
 void initialize_logger();
 

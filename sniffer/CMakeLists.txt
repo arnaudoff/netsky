@@ -18,8 +18,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 # Configure a header file to pass some of the CMake settings
 # to the source code
 
-configure_file("${PROJECT_SOURCE_DIR}/${SOURCE_CODE_DIR}/SnifferConfig.h.in"
-               "${PROJECT_BINARY_DIR}/SnifferConfig.h")
+configure_file("${PROJECT_SOURCE_DIR}/${SOURCE_CODE_DIR}/SnifferConfig.hpp.in"
+               "${PROJECT_BINARY_DIR}/SnifferConfig.hpp")
 
 # Add the binary tree to the search path for include files
 # so that SnifferConfig.h is found
@@ -32,22 +32,25 @@ include_directories(vendor/include)
 
 # Deal with the core library of the sniffer
 
-file(GLOB_RECURSE Core_HEADERS "${SOURCE_CODE_DIR}/core/*.hpp")
+file(GLOB_RECURSE Source_HEADERS "${SOURCE_CODE_DIR}/*.hpp")
 
 # Automatically adds all directories that have a header file in them as
 # include directories
 
-set (Core_INCLUDE_DIRS "")
-foreach (_headerFile ${Core_HEADERS})
+set (Source_INCLUDE_DIRS "")
+foreach (_headerFile ${Source_HEADERS})
     get_filename_component(_dir ${_headerFile} PATH)
-    list (APPEND Core_INCLUDE_DIRS ${_dir})
+    list (APPEND Source_INCLUDE_DIRS ${_dir})
 endforeach()
-list(REMOVE_DUPLICATES Core_INCLUDE_DIRS)
+list(REMOVE_DUPLICATES Source_INCLUDE_DIRS)
 
-include_directories(${Core_INCLUDE_DIRS})
+include_directories(${Source_INCLUDE_DIRS})
 
+add_subdirectory("${SOURCE_CODE_DIR}/communications")
 add_subdirectory("${SOURCE_CODE_DIR}/core")
+add_subdirectory("${SOURCE_CODE_DIR}/protocols")
 add_subdirectory("${SOURCE_CODE_DIR}/utils")
 
 add_executable (sniffer ${SOURCE_CODE_DIR}/Startup.cpp)
-target_link_libraries(sniffer sniffer-core sniffer-utils)
+target_link_libraries(sniffer sniffer-comms sniffer-core sniffer-proto
+    sniffer-utils)
