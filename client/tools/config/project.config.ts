@@ -16,8 +16,9 @@ export class ProjectConfig extends SeedConfig {
     // Add `NPM` third-party libraries to be injected/bundled.
     this.NPM_DEPENDENCIES = [
       ...this.NPM_DEPENDENCIES,
-      // {src: 'jquery/dist/jquery.min.js', inject: 'libs'},
-      // {src: 'lodash/lodash.min.js', inject: 'libs'},
+      { src: 'jquery/dist/jquery.min.js', inject: 'libs'},
+      { src: 'semantic-ui-css/semantic.min.js', inject: 'libs'},
+      { src: 'semantic-ui-css/semantic.min.css', inject: true, vendor: true}
     ];
 
     // Add `local` third-party libraries to be injected/bundled.
