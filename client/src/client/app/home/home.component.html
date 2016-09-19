@@ -7,12 +7,19 @@
     </div>
   </h2>
   <div class="ui inverted section divider"></div>
-  <div class="ui fluid steps">
+  <div class="ui small fluid steps">
     <div class="active step">
       <i class="plug icon"></i>
       <div class="content">
         <div class="title">Interface</div>
         <div class="description">Choose the interface to sniff on</div>
+      </div>
+    </div>
+    <div class="disabled step">
+      <i class="options icon"></i>
+      <div class="content">
+        <div class="title">Filters</div>
+        <div class="description">Choose filters to apply to the capture</div>
       </div>
     </div>
     <div class="disabled step">
@@ -30,38 +37,6 @@
     </div>
   </div>
   <div class="ui inverted section divider"></div>
-  <div class="ui fluid labeled icon dropdown button">
-    <i class="filter icon"></i>
-    <span class="text">Select an interface</span>
-    <div class="menu">
-      <div class="header">
-        Search Issues
-      </div>
-      <div class="ui left icon input">
-        <i class="search icon"></i>
-        <input type="text" name="search" placeholder="Search...">
-      </div>
-      <div class="header">
-        <i class="tags icon"></i>
-        Filter by tag
-      </div>
-      <div class="item">
-        <div class="ui red empty circular label"></div>
-        Important
-      </div>
-      <div class="item">
-        <div class="ui blue empty circular label"></div>
-        Announcement
-      </div>
-      <div class="item">
-        <div class="ui black empty circular label"></div>
-        Discussion
-      </div>
-    </div>
-  </div>
-  <br />
-  <button class="ui right labeled icon button next-button">
-    <i class="right arrow icon"></i>
-      Next
-  </button>
+  
+  <router-outlet></router-outlet>
 </div>

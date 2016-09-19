@@ -6,4 +6,5 @@ import { CaptureRoutes } from './capture/index';
 export const routes: Routes = [
   ...HomeRoutes,
   ...CaptureRoutes,
+  { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
