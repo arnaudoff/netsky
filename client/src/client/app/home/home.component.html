@@ -1,5 +1,67 @@
-<div class="ui main text container">
-  <h1 class="ui header">Netsky 0.0.1</h1>
-  <p>Welcome to the web interface of Netsky.</p>
-  <p>Choose the interface to sniff on</p>
+<div class="ui main container">
+  <h2 class="ui header">
+    <img src="/assets/images/logo.png">
+    <div class="content">
+      Netsky
+      <div class="sub header">A simple packet sniffer</div>
+    </div>
+  </h2>
+  <div class="ui inverted section divider"></div>
+  <div class="ui fluid steps">
+    <div class="active step">
+      <i class="plug icon"></i>
+      <div class="content">
+        <div class="title">Interface</div>
+        <div class="description">Choose the interface to sniff on</div>
+      </div>
+    </div>
+    <div class="disabled step">
+      <i class="users icon"></i>
+      <div class="content">
+        <div class="title">Shared sniffing</div>
+        <div class="description">Choose who to share your capture with</div>
+      </div>
+    </div>
+    <div class="disabled step">
+      <i class="check circle icon"></i>
+      <div class="content">
+        <div class="title">Start the capture</div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted section divider"></div>
+  <div class="ui fluid labeled icon dropdown button">
+    <i class="filter icon"></i>
+    <span class="text">Select an interface</span>
+    <div class="menu">
+      <div class="header">
+        Search Issues
+      </div>
+      <div class="ui left icon input">
+        <i class="search icon"></i>
+        <input type="text" name="search" placeholder="Search...">
+      </div>
+      <div class="header">
+        <i class="tags icon"></i>
+        Filter by tag
+      </div>
+      <div class="item">
+        <div class="ui red empty circular label"></div>
+        Important
+      </div>
+      <div class="item">
+        <div class="ui blue empty circular label"></div>
+        Announcement
+      </div>
+      <div class="item">
+        <div class="ui black empty circular label"></div>
+        Discussion
+      </div>
+    </div>
+  </div>
+  <br />
+  <button class="ui right labeled icon button next-button">
+    <i class="right arrow icon"></i>
+      Next
+  </button>
 </div>
