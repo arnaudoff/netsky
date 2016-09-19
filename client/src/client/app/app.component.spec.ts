@@ -6,11 +6,14 @@ import { APP_BASE_HREF } from '@angular/common';
 import { async } from '@angular/core/testing';
 import { Route } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+
 import { AppComponent } from './app.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { FooterComponent } from './shared/footer/footer.component';
+
 import { HomeComponent } from './home/home.component';
 import { CaptureComponent } from './capture/capture.component';
 import { PacketListComponent } from './packet-list/packet-list.component';
-import { NavbarComponent } from './shared/navbar/navbar.component';
 
 export function main() {
 
@@ -25,7 +28,7 @@ export function main() {
       TestBed.configureTestingModule({
         imports: [FormsModule, RouterTestingModule.withRoutes(config)],
         declarations: [
-          TestComponent, NavbarComponent, AppComponent,
+          TestComponent, AppComponent, NavbarComponent, FooterComponent,
           HomeComponent, CaptureComponent, PacketListComponent
         ],
         providers: [
