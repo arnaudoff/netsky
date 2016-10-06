@@ -1,3 +1,3 @@
 export interface IConfigurableEntity {
-  options: Array<string>;
+  values: Array<string>;
 }

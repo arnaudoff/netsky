@@ -3,4 +3,3 @@
  */
 export * from './sniffer-config-builder.service';
 export * from './configurable-entity.interface';
-export * from './sniffer-config.interface';

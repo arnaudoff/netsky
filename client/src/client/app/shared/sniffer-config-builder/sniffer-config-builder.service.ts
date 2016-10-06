@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ConfigurableEntity } from './configurable-entity';
-import { ISnifferConifg } from './sniffer-config.interface';
+import { IConfigurableEntity } from './configurable-entity.interface';
 
 /**
  * This class provides the SnifferConfigBuilder service to
@@ -8,32 +7,30 @@ import { ISnifferConifg } from './sniffer-config.interface';
  */
 @Injectable()
 export class SnifferConfigBuilderService {
-  private snifferConfig: ISnifferConfig;
+  private interfaces: IConfigurableEntity;
+  private filters: IConfigurableEntity;
+  private shared: IConfigurableEntity;
 
   /**
-   * Creates a new SnifferConfigBuilderService.
+   * Creates a new SnifferConfigBuilderService with default values.
    * @constructor
    */
-  constructor() {}
-
-  /**
-   * Adds a ConfigurableEntity to the internal list with the given key
-   */
-  add(key: string, value: ConfigurableEntity): void {
-    this.configurationKeys.push(key);
-    this.configurationValues.push(value);
+  constructor() {
+      this.interfaces = { values: [""] };
+      this.filters = { values: [""] };
+      this.shared = { values: [""] };
   }
 
-  /**
-    * Gets the constructed internal object.
-    */
-  get(): Object {
-    let result: Object = {};
-
-    this.configurationKeys.forEach((key, index) => {
-      result[key] = this.configurationValues[index];
-    })
-
-    return result;
+  set_interfaces(interfaces: IConfigurableEntity): void {
+      this.interfaces = interfaces;
   }
+
+  set_filters(filters: IConfigurableEntity): void {
+      this.filters = filters;
+  }
+
+  set_shared(shared: IConfigurableEntity): void {
+      this.shared = shared;
+  }
+
 }

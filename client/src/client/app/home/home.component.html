@@ -8,28 +8,28 @@
   </h2>
   <div class="ui inverted section divider"></div>
   <div class="ui small fluid steps">
-    <div class="active step">
+    <div id="interface-step" class="active step">
       <i class="plug icon"></i>
       <div class="content">
         <div class="title">Interface</div>
         <div class="description">Choose the interface to sniff on</div>
       </div>
     </div>
-    <div class="disabled step">
+    <div id="filters-step" class="disabled step">
       <i class="options icon"></i>
       <div class="content">
         <div class="title">Filters</div>
         <div class="description">Choose filters to apply to the capture</div>
       </div>
     </div>
-    <div class="disabled step">
+    <div id="shared-step" class="disabled step">
       <i class="users icon"></i>
       <div class="content">
         <div class="title">Shared sniffing</div>
         <div class="description">Choose who to share your capture with</div>
       </div>
     </div>
-    <div class="disabled step">
+    <div id="start-step" class="disabled step">
       <i class="check circle icon"></i>
       <div class="content">
         <div class="title">Start the capture</div>
@@ -37,6 +37,6 @@
     </div>
   </div>
   <div class="ui inverted section divider"></div>
-  
+
   <router-outlet></router-outlet>
 </div>

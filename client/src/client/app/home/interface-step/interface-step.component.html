@@ -1,6 +1,7 @@
 <select class="ui fluid search dropdown" multiple="" #selectInterfaces>
   <option value="">Search available interfaces...</option>
-  <option *ngFor="#interface of interfaces" [value]="interface">{{ interface }}</option>
+  <option *ngFor="let interface of interfaces" [value]="interface.name">{{
+  interface.name }}</option>
 </select>
 <br />
 <button class="ui right labeled icon button next-button" (click)="handleStep()">

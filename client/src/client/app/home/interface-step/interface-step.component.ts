@@ -1,8 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-//declare var $: JQueryStatic;
-
 import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
 
 /**
@@ -17,28 +14,28 @@ import { SnifferConfigBuilderService } from './../../shared/sniffer-config-build
 
 export class InterfaceStepComponent {
   @ViewChild('selectInterfaces') selectElement: ElementRef;
-  private interfaces: Array<string>;
+  private interfaces: Array<Object>;
 
   constructor(private router: Router,
      private snifferConfigBuilderService: SnifferConfigBuilderService) {}
 
   ngAfterViewInit() {
-    // receive the available interfaces
-    this.interfaces = ["eth0", "wlan0"];
+    this.interfaces = [{ name: 'eth0'}, { name: 'wlan0' }];
 
-    // initialize the dropdown with the received interfaces
     $(this.selectElement.nativeElement).dropdown();
   }
 
   handleStep() {
-    // get value from the dropdown
-    console.log($(this.selectElement.nativeElement).dropdown('get value'));
+    let selectedInterfaces: Array<string> =
+        $(this.selectElement.nativeElement).dropdown('get value'));
 
-    // save to the config service
-    this.snifferConfigBuilderService.add('interface', { "options": ['eth0'] });
+    this.snifferConfigBuilderService.set_interfaces({ values: selectedInterfaces });
 
-    // navigate to the next route
-    this.router.navigate(['./filter']);
+    $('#interface-step')
+        .addClass('disabled')
+        .removeClass('active');
+
+    this.router.navigate(['home/filter']);
   }
 
 }

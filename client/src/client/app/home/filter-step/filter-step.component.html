@@ -1,4 +1,10 @@
 <div class="ui fluid icon input">
-  <input type="text" placeholder="Filters..">
+  <input id="filters" type="text" [(ngModel)]="filters" placeholder="Filters..">
   <i class="plug icon"></i>
 </div>
+<br />
+<button class="ui right labeled icon button next-button" (click)="handleStep()">
+  <i class="right arrow icon"></i>
+    Next
+</button>
+
