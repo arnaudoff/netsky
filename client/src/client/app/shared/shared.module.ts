@@ -7,6 +7,7 @@ import { NavbarComponent } from './navbar/index';
 import { FooterComponent } from './footer/index';
 import { WebSocketService } from './websocket/index';
 import { SnifferClientService } from './sniffer-client/index';
+import { SnifferConfigBuilderService } from './sniffer-config-builder/index';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -22,7 +23,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [WebSocketService, SnifferClientService]
+      providers: [WebSocketService, SnifferClientService, SnifferConfigBuilderService]
     };
   }
 }
