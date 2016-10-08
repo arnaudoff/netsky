@@ -9,7 +9,7 @@ import { IConfigurableEntity } from './configurable-entity.interface';
 export class SnifferConfigBuilderService {
   private interfaces: IConfigurableEntity;
   private filters: IConfigurableEntity;
-  private shared: IConfigurableEntity;
+  private listeners: IConfigurableEntity;
 
   /**
    * Creates a new SnifferConfigBuilderService with default values.
@@ -18,7 +18,7 @@ export class SnifferConfigBuilderService {
   constructor() {
       this.interfaces = { values: [""] };
       this.filters = { values: [""] };
-      this.shared = { values: [""] };
+      this.listeners = { values: [""] };
   }
 
   set_interfaces(interfaces: IConfigurableEntity): void {
@@ -29,8 +29,8 @@ export class SnifferConfigBuilderService {
       this.filters = filters;
   }
 
-  set_shared(shared: IConfigurableEntity): void {
-      this.shared = shared;
+  set_listeners(listeners: IConfigurableEntity): void {
+      this.listeners = listeners;
   }
 
 }

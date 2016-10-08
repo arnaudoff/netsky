@@ -20,6 +20,10 @@ export class InterfaceStepComponent {
      private snifferConfigBuilderService: SnifferConfigBuilderService) {}
 
   ngAfterViewInit() {
+    $('#interface-step')
+        .addClass('active')
+        .removeClass('disabled');
+
     this.interfaces = [{ name: 'eth0'}, { name: 'wlan0' }];
 
     $(this.selectElement.nativeElement).dropdown();

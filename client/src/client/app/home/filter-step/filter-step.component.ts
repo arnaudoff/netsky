@@ -31,7 +31,7 @@ export class FilterStepComponent {
         .addClass('disabled')
         .removeClass('active');
 
-    this.router.navigate(['home/shared']);
+    this.router.navigate(['home/sharing']);
   }
 
 }
