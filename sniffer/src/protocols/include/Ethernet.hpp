@@ -25,7 +25,7 @@ namespace Sniffer {
             public:
                 static const int FRAME_SIZE = 14;
 
-                Ethernet(SniffedEntity* entity);
+                Ethernet(Core::SniffedEntity* entity);
 
                 std::string get_destination_address() const;
 

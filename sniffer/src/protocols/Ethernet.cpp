@@ -6,7 +6,7 @@
 using namespace Sniffer::Protocols;
 using namespace Sniffer::Communications::Serialization;
 
-Ethernet::Ethernet(SniffedEntity* entity)
+Ethernet::Ethernet(Sniffer::Core::SniffedEntity* entity)
     : header_{(ether_header_t*)(entity->get_data())}
 {}
 

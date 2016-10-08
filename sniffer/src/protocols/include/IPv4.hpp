@@ -36,7 +36,7 @@ namespace Sniffer {
                 int size_;
 
             public:
-                IPv4(SniffedEntity* entity, int aggregated_offset);
+                IPv4(Core::SniffedEntity* entity, int aggregated_offset);
 
                 u_char get_header_length() const;
 

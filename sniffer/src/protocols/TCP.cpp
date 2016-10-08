@@ -7,7 +7,7 @@
 using namespace Sniffer::Protocols;
 using namespace Sniffer::Communications::Serialization;
 
-TCP::TCP(SniffedEntity* entity, int aggregated_offset)
+TCP::TCP(Sniffer::Core::SniffedEntity* entity, int aggregated_offset)
     : header_{(tcp_header_t*)(entity->get_data() + aggregated_offset)},
     size_{get_offset() * 4} {
     if (size_ < 20) {

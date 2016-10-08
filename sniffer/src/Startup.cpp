@@ -1,8 +1,8 @@
 #include <memory>
 #include <spdlog/spdlog.h>
 
-#include "include/PolicyBindings.hpp"
-#include "include/ServerPacketSnifferObserver.hpp"
+#include "core/include/PolicyBindings.hpp"
+#include "core/include/ServerPacketSnifferObserver.hpp"
 #include "communications/serialization/include/SerializationManager.hpp"
 
 // Sniffers

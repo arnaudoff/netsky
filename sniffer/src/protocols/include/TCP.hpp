@@ -37,7 +37,7 @@ namespace Sniffer {
                 int size_;
 
             public:
-                TCP(SniffedEntity* entity, int aggregated_offset);
+                TCP(Core::SniffedEntity* entity, int aggregated_offset);
 
                 int get_size() const;
 
