@@ -11,11 +11,17 @@ namespace Sniffer {
                     std::string data_;
 
                 public:
-                    SerializedObject(const std::string& data);
+                    SerializedObject(const std::string& data)
+                        : data_{data}
+                    {}
 
-                    std::string get_data() const;
+                    std::string get_data() const {
+                        return data_;
+                    }
 
-                    void set_data(const std::string& data);
+                    void set_data(const std::string& data) {
+                        data_ = data;
+                    }
             };
 
         }
