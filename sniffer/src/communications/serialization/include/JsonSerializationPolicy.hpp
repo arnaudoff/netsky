@@ -18,6 +18,28 @@ namespace Sniffer {
                         return obj;
                     }
 
+                    bool object_exists(
+                            const SerializedObject& data,
+                            const std::string& object) const {
+                        auto json_obj = json::parse(data.get_data());
+
+                        if (json_obj.find(object) != json_obj.end()) {
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    template<typename U>
+                    U get_value(
+                            const T& data,
+                            const std::string& object,
+                            const std::string& key) const {
+                        auto json_obj = json::parse(data.get_data());
+                        return json_obj[object][key].template get<U>();
+                    }
+
+
                     template<typename U>
                     void set_value(T& object, const std::string& key,
                             U value) const {

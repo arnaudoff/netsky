@@ -8,9 +8,14 @@ namespace Sniffer {
         namespace Commands {
             class KillServerCommand : public ServerCommand {
                 public:
-                    KillServerCommand(Server* server);
+                    KillServerCommand(Server* server, const SerializationMgr& serializer);
 
-                    void execute(const std::vector<std::string>& arguments);
+                    virtual std::map<std::string, std::vector<std::string>>
+                        parse(const std::string& data) const override;
+
+                    virtual void execute(
+                            const ConnectionData& con_data,
+                            std::map<std::string, std::vector<std::string>> args) override;
 
                     ~KillServerCommand() {};
             };

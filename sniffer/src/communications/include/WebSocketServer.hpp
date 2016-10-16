@@ -1,7 +1,7 @@
 #ifndef WEB_SOCKET_SERVER_HPP_
 #define WEB_SOCKET_SERVER_HPP_
 
-#include <set>
+#include <map>
 #include <memory>
 
 #include <websocketpp/config/asio_no_tls.hpp>
@@ -22,26 +22,30 @@ namespace Sniffer {
 
         class WebSocketServer : public Server {
             typedef websocketpp::server<websocketpp::config::asio> server_t;
-            typedef std::set<
+            typedef std::map<
                 connection_hdl,
+                ConnectionData,
                 std::owner_less<connection_hdl>> connection_list_t;
 
             private:
+                std::unique_ptr<WebSocketServerActionHandler> action_handler_;
                 server_t server_;
                 connection_list_t connections_;
-                std::shared_ptr<ConfigManager> config_manager_;
-                std::unique_ptr<WebSocketServerActionHandler> action_handler_;
 
                 void run(uint16_t port);
 
             public:
                 WebSocketServer(
-                        std::shared_ptr<ConfigManager> manager,
+                        const ConfigurationMgr& manager,
                         std::unique_ptr<WebSocketServerActionHandler> handler);
 
                 virtual void start(uint16_t port) override;
 
                 virtual void stop() override;
+
+                virtual void unicast(
+                        const ConnectionData& con_data,
+                        const std::string& msg) override;
 
                 virtual void broadcast(const std::string& message) override;
 
@@ -49,7 +53,9 @@ namespace Sniffer {
 
                 void remove_connection(connection_hdl handle);
 
-                ~WebSocketServer() {};
+                ConnectionData get_connection_data_from_hdl(connection_hdl hdl);
+
+                ~WebSocketServer() override;
         };
     }
 }

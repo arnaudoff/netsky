@@ -15,6 +15,21 @@ namespace Sniffer {
                         return SerializationPolicy<SerializedObject>::create();
                     }
 
+                    bool object_exists(const SerializedObject& data,
+                            const std::string& object) const {
+                        return SerializationPolicy<SerializedObject>::object_exists(data, object);
+                    }
+
+                    template<typename U>
+                    U get_value(
+                            const SerializedObject& data,
+                            const std::string& object,
+                            const std::string& key) const {
+                        return SerializationPolicy<SerializedObject>::template
+                            get_value<U>(data, object, key);
+                    }
+
+
                     template<typename U>
                     void set_value(SerializedObject& object, const std::string& key,
                             U value) const {

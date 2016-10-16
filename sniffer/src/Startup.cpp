@@ -2,23 +2,16 @@
 #include <spdlog/spdlog.h>
 
 #include "core/include/PolicyBindings.hpp"
-#include "core/include/ServerPacketSnifferObserver.hpp"
-#include "communications/serialization/include/SerializationManager.hpp"
+#include "core/include/PcapInterfaceRetriever.hpp"
 
-// Sniffers
-#include "core/include/PacketSniffer.hpp"
-#include "core/include/PcapPacketSniffer.hpp"
-
-// Communications
-#include "communications/commands/include/KillServerCommand.hpp"
 #include "communications/include/ServerCommandInvoker.hpp"
+
+#include "communications/commands/include/KillServerCommand.hpp"
+#include "communications/commands/include/RetrieveInterfacesCommand.hpp"
+#include "communications/commands/include/StartPacketSnifferCommand.hpp"
+
 #include "communications/include/WebSocketServer.hpp"
 #include "communications/include/WebSocketServerActionHandler.hpp"
-
-// Utils
-#include "utils/include/ConfigurationManager.hpp"
-#include "utils/include/FileStoragePolicy.hpp"
-#include "utils/include/JsonFormattingPolicy.hpp"
 
 using namespace Sniffer::Core;
 using namespace Sniffer::Utils;
@@ -30,10 +23,6 @@ void initialize_logger();
 int main() {
     initialize_logger();
 
-    std::shared_ptr<ConfigManager> config_manager {
-        new ConfigManager { "../config/config.json" }
-    };
-
     std::unique_ptr<ServerCommandInvoker> invoker {
         new ServerCommandInvoker {}
     };
@@ -42,27 +31,35 @@ int main() {
         new WebSocketServerActionHandler { invoker.get() }
     };
 
+    ConfigurationMgr config_manager;
+    SerializationMgr serializer;
+    PacketParser parser { serializer };
+
     std::unique_ptr<Server> server {
         new WebSocketServer { config_manager, std::move(action_handler) }
     };
 
     std::unique_ptr<ServerCommand> kill_cmd {
-        new KillServerCommand { server.get() }
+        new KillServerCommand { server.get(), serializer }
+    };
+
+    std::unique_ptr<InterfaceRetriever> pcap_retriever {
+        new PcapInterfaceRetriever {}
+    };
+
+    std::unique_ptr<ServerCommand> retrieve_iface_cmd {
+        new RetrieveInterfacesCommand { server.get(), serializer, std::move(pcap_retriever) }
+    };
+
+    std::unique_ptr<ServerCommand> start_sniffer_cmd {
+        new StartPacketSnifferCommand { server.get(), serializer, parser }
     };
 
     invoker->add_command(kill_cmd.get());
+    invoker->add_command(retrieve_iface_cmd.get());
+    invoker->add_command(start_sniffer_cmd.get());
 
-    SerializationMgr serializer;
-
-    std::unique_ptr<PacketSnifferObserver> server_observer {
-        new ServerPacketSnifferObserver { server.get(), serializer }
-    };
-
-    std::unique_ptr<PacketSniffer> sniffer { new PcapPacketSniffer { config_manager } };
-    sniffer->attach(server_observer.get());
-
-    server->start(config_manager->get_value<int>("server", "port"));
-    sniffer->start();
+    server->start(config_manager.get_value<int>("server", "port"));
 
     return 0;
 
@@ -70,5 +67,5 @@ int main() {
 
 void initialize_logger() {
     auto console_logger = spdlog::stdout_logger_mt("console", true);
-    console_logger->info("Initialized Netsky 0.1");
+    console_logger->info("Initialized Netsky 0.1.0");
 }

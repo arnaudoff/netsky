@@ -1,10 +1,11 @@
 #ifndef SERVER_COMMAND_INVOKER_HPP_
 #define SERVER_COMMAND_INVOKER_HPP_
 
-#include "../commands/include/ServerCommand.hpp"
-
 #include <string>
 #include <unordered_set>
+
+#include "../commands/include/ServerCommand.hpp"
+#include "ConnectionData.hpp"
 
 namespace Sniffer {
     namespace Communications {
@@ -17,7 +18,8 @@ namespace Sniffer {
 
                 void add_command(Commands::ServerCommand* command);
 
-                void invoke(const std::string& received_message);
+                void invoke(const ConnectionData& con_data,
+                        const std::string& received_message);
 
                 ~ServerCommandInvoker() {};
         };

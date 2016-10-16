@@ -53,7 +53,9 @@ void WebSocketServerActionHandler::handle(WebSocketServer* server) {
             server->remove_connection(current_action.handle);
         } else if (current_action.type == MESSAGE) {
             lock_guard<mutex> guard(connection_lock_);
-            command_invoker_->invoke(current_action.message->get_payload());
+            command_invoker_->invoke(
+                    server->get_connection_data_from_hdl(current_action.handle),
+                    current_action.message->get_payload());
         } else {
             spdlog::get("console")->info("The WebSocket server received an action that cannot be handled.");
         }

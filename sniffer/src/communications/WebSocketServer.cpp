@@ -6,9 +6,9 @@
 using namespace Sniffer::Communications;
 
 WebSocketServer::WebSocketServer(
-        std::shared_ptr<ConfigManager> manager,
+        const ConfigurationMgr& manager,
         std::unique_ptr<WebSocketServerActionHandler> handler)
-    : Server{manager}, action_handler_{std::move(handler)} {
+    : Server(manager), action_handler_{std::move(handler)} {
         server_.init_asio();
         server_.set_open_handler(bind(
                     &WebSocketServerActionHandler::on_open,
@@ -59,17 +59,47 @@ void WebSocketServer::stop() {
     server_.stop_listening();
 }
 
+void WebSocketServer::unicast(const ConnectionData& con_data, const std::string& msg) {
+    for (auto it = connections_.begin(); it != connections_.end(); ++it) {
+        if (it->second == con_data) {
+            server_.send(it->first, msg, websocketpp::frame::opcode::text);
+            break;
+        }
+    }
+}
+
 void WebSocketServer::broadcast(const std::string& message) {
     connection_list_t::iterator it;
     for (it = connections_.begin(); it != connections_.end(); ++it) {
-        server_.send(*it, message, websocketpp::frame::opcode::text);
+        server_.send(it->first, message, websocketpp::frame::opcode::text);
     }
 }
 
 void WebSocketServer::add_connection(connection_hdl handle) {
-    connections_.insert(handle);
+    ConnectionData data { session_id_++ };
+    connections_[handle] = data;
+
+    // TODO: use connection::get_remote_endpoint() here
+    spdlog::get("console")->info("Session established: {0}", data.get_session_id());
 }
 
 void WebSocketServer::remove_connection(connection_hdl handle) {
+    auto data = get_connection_data_from_hdl(handle);
+
     connections_.erase(handle);
+
+    // TODO: use connection::get_remote_endpoint() here
+    spdlog::get("console")->info("Session killed: {0}", data.get_session_id());
 }
+
+ConnectionData WebSocketServer::get_connection_data_from_hdl(connection_hdl hdl) {
+    auto it = connections_.find(hdl);
+
+    if (it == connections_.end()) {
+        throw std::invalid_argument("No connection data avaliable for this handle");
+    }
+
+    return it->second;
+}
+
+WebSocketServer::~WebSocketServer() {}
