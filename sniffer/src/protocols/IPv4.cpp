@@ -6,8 +6,8 @@
 using namespace Sniffer::Protocols;
 using namespace Sniffer::Communications::Serialization;
 
-IPv4::IPv4(Sniffer::Core::SniffedEntity* entity, int aggregated_offset)
-    : header_{(ipv4_header_t*)(entity->get_data() + aggregated_offset)},
+IPv4::IPv4(const u_char* packet, int aggregated_offset)
+    : header_{(ipv4_header_t*)(packet + aggregated_offset)},
     size_{get_header_length() * 4} {
     if (size_ < 20) {
         std::ostringstream exception_message;

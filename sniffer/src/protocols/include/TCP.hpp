@@ -4,7 +4,6 @@
 #include <sys/types.h>
 
 #include "../../core/include/PolicyBindings.hpp"
-#include "../../core/include/SniffedEntity.hpp"
 #include "../../communications/serialization/include/SerializableEntity.hpp"
 
 #define TH_FIN 0x01
@@ -37,7 +36,7 @@ namespace Sniffer {
                 int size_;
 
             public:
-                TCP(Core::SniffedEntity* entity, int aggregated_offset);
+                TCP(const u_char* packet, int aggregated_offset);
 
                 int get_size() const;
 

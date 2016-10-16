@@ -5,7 +5,6 @@
 #include <string>
 
 #include "../../core/include/PolicyBindings.hpp"
-#include "../../core/include/SniffedEntity.hpp"
 #include "../../communications/serialization/include/SerializableEntity.hpp"
 
 namespace Sniffer {
@@ -25,7 +24,7 @@ namespace Sniffer {
             public:
                 static const int FRAME_SIZE = 14;
 
-                Ethernet(Core::SniffedEntity* entity);
+                Ethernet(const u_char* packet);
 
                 std::string get_destination_address() const;
 

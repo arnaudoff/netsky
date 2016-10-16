@@ -1,34 +1,31 @@
+#include <iterator>
+#include <algorithm>
 #include <sstream>
 #include <spdlog/spdlog.h>
 
 #include "include/PcapPacketSniffer.hpp"
 #include "include/SnifferException.hpp"
 
-using namespace Sniffer::Core;
+#include "../communications/include/Server.hpp"
 
-PcapPacketSniffer::PcapPacketSniffer(std::shared_ptr<ConfigManager> manager)
-    : PacketSniffer(manager)
+using namespace Sniffer::Core;
+using namespace Sniffer::Communications;
+
+PcapPacketSniffer::PcapPacketSniffer(
+        Server* server,
+        std::vector<std::string> interfaces,
+        std::vector<std::string> filters,
+        std::vector<std::string> shared,
+        const ConfigurationMgr& config,
+        const PacketParser& parser)
+    : PacketSniffer(server, interfaces, filters, shared, config, parser)
 {}
 
 void PcapPacketSniffer::prepare_interface() {
     char error_buffer[PCAP_ERRBUF_SIZE];
-    const char* interface_name = NULL;
 
-    int conf_snap_len = config_manager_->get_value<int>("sniffer", "snap_len");
-    std::string conf_interface_name =
-        config_manager_->get_value<std::string>("sniffer", "interface_name");
-
-    if (conf_interface_name.empty()) {
-        interface_name = pcap_lookupdev(error_buffer);
-
-        if (interface_name == NULL) {
-            std::ostringstream exception_message;
-            exception_message << "Could not find default device: " << error_buffer;
-            throw SnifferException { exception_message.str() };
-        }
-    } else {
-        interface_name = conf_interface_name.c_str();
-    }
+    // TODO: Fix when multiple interfaces are supported
+    const char* interface_name = interfaces_[0].c_str();
 
     if (pcap_lookupnet(interface_name, &network_, &subnet_mask_, error_buffer) == -1) {
         spdlog::get("console")->warn("Could not get netmask for device {0}: {1}",
@@ -37,8 +34,9 @@ void PcapPacketSniffer::prepare_interface() {
         subnet_mask_ = 0;
     }
 
-    handle_ = pcap_open_live(interface_name, conf_snap_len, 1, 1000,
-            error_buffer);
+    int snap_len = config_manager_.get_value<int>("sniffer", "snap_len");
+
+    handle_ = pcap_open_live(interface_name, snap_len, 1, 1000, error_buffer);
     if (handle_ == NULL) {
         std::ostringstream exception_message;
         exception_message << "Couldn't open device " << interface_name << ": "
@@ -53,21 +51,26 @@ void PcapPacketSniffer::prepare_interface() {
     }
 }
 
-void PcapPacketSniffer::apply_filters() {
-    char filter_expression[] = "ip";
+void PcapPacketSniffer::parse_filters() {
+    std::ostringstream filters;
+    std::copy(filters_.begin(), filters_.end() - 1,
+            std::ostream_iterator<std::string>(filters, ";"));
+    filters << filters_.back();
 
-    if (pcap_compile(handle_, &compiled_filter_expression_,
-                filter_expression, 0, network_) == -1) {
+    if (pcap_compile(handle_, &parsed_filters_, filters.str().c_str(), 0, network_) == -1) {
         std::ostringstream exception_message;
-        exception_message << "Couldn't parse filter " << filter_expression <<
-            ": " << pcap_geterr(handle_);
+        exception_message << "Couldn't parse filters " << filters.str() << ": " << pcap_geterr(handle_);
         throw SnifferException { exception_message.str() };
     }
+}
 
-    if (pcap_setfilter(handle_, &compiled_filter_expression_) == -1) {
+void PcapPacketSniffer::apply_filters() {
+    if (pcap_setfilter(handle_, &parsed_filters_) == -1) {
         std::ostringstream exception_message;
-        exception_message << "Couldn't install filter " << filter_expression <<
-            ": " << pcap_geterr(handle_);
+        exception_message << "Couldn't apply filters ";
+        std::copy(filters_.begin(), filters_.end() - 1,
+                std::ostream_iterator<std::string>(exception_message, ","));
+        exception_message << filters_.back() << ": " << pcap_geterr(handle_);
         throw SnifferException { exception_message.str() };
     }
 }
@@ -75,7 +78,7 @@ void PcapPacketSniffer::apply_filters() {
 void PcapPacketSniffer::sniff() {
     pcap_loop(
             handle_,
-            config_manager_->get_value<int>("sniffer", "packets_count"),
+            config_manager_.get_value<int>("sniffer", "packets_count"),
             on_packet_received,
             (u_char *)this);
 }
@@ -87,11 +90,10 @@ void PcapPacketSniffer::on_packet_received(u_char* args,
 
 void PcapPacketSniffer::on_packet_received_internal(const struct pcap_pkthdr* header,
         const u_char* packet) {
-    std::unique_ptr<SniffedEntity> sniffed_entity { new SniffedEntity { packet } };
-    notify(sniffed_entity.get());
+    server_->broadcast(packet_parser_.parse(packet));
 }
 
 PcapPacketSniffer::~PcapPacketSniffer() {
-    pcap_freecode(&compiled_filter_expression_);
+    pcap_freecode(&parsed_filters_);
     pcap_close(handle_);
 }

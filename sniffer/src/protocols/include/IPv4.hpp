@@ -8,7 +8,6 @@
 #include <netinet/in.h> // in_addr
 
 #include "../../core/include/PolicyBindings.hpp"
-#include "../../core/include/SniffedEntity.hpp"
 #include "../../communications/serialization/include/SerializableEntity.hpp"
 
 #define IP_RF 0x8000            /* reserved fragment flag */
@@ -36,7 +35,7 @@ namespace Sniffer {
                 int size_;
 
             public:
-                IPv4(Core::SniffedEntity* entity, int aggregated_offset);
+                IPv4(const u_char* packet, int aggregated_offset);
 
                 u_char get_header_length() const;
 

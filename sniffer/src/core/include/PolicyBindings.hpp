@@ -10,7 +10,7 @@
 
 typedef Sniffer::Utils::ConfigurationManager<
     Sniffer::Utils::FileStoragePolicy,
-    Sniffer::Utils::JsonFormattingPolicy> ConfigManager;
+    Sniffer::Utils::JsonFormattingPolicy> ConfigurationMgr;
 
 typedef Sniffer::Communications::Serialization::SerializationManager<
     Sniffer::Communications::Serialization::JsonSerializationPolicy>

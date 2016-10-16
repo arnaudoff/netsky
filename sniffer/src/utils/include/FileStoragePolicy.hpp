@@ -11,19 +11,18 @@ namespace Sniffer {
         template<class T>
         class FileStoragePolicy {
             public:
-                std::shared_ptr<T> read(const std::string& resource) {
+                T read(const std::string& resource) {
                     std::ifstream t(resource);
                     std::stringstream buffer;
 
                     buffer << t.rdbuf();
-                    std::shared_ptr<T> ptr { new T { buffer.str() } };
-
-                    return ptr;
+                    T config { buffer.str() };
+                    return config;
                 }
 
-                void write(const std::shared_ptr<const T> config, const std::string& resource) {
+                void write(const T& config, const std::string& resource) {
                     std::ofstream out(resource);
-                    out << config->get_contents();
+                    out << config.get_contents();
                     out.close();
                 }
         };

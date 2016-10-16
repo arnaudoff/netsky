@@ -10,11 +10,16 @@ namespace Sniffer {
         class PcapPacketSniffer : public PacketSniffer {
             private:
                 pcap_t* handle_;
+
                 bpf_u_int32 subnet_mask_;
+
                 bpf_u_int32 network_;
-                struct bpf_program compiled_filter_expression_;
+
+                struct bpf_program parsed_filters_;
 
                 virtual void prepare_interface() override;
+
+                virtual void parse_filters() override;
 
                 virtual void apply_filters() override;
 
@@ -30,7 +35,13 @@ namespace Sniffer {
                         const u_char* packet);
 
             public:
-                PcapPacketSniffer(std::shared_ptr<ConfigManager> manager);
+                PcapPacketSniffer(
+                        Server* server,
+                        std::vector<std::string> interfaces,
+                        std::vector<std::string> filters,
+                        std::vector<std::string> shared,
+                        const ConfigurationMgr& config,
+                        const PacketParser& parser);
 
                 ~PcapPacketSniffer() override;
         };

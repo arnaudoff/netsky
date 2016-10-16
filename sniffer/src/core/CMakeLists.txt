@@ -1,5 +1,4 @@
-set(CORE_SOURCES ObservablePacketSniffer.cpp PacketSniffer.cpp
-    PcapPacketSniffer.cpp ServerPacketSnifferObserver.cpp)
+set(CORE_SOURCES PacketParser.cpp PacketSniffer.cpp PcapInterfaceRetriever PcapPacketSniffer.cpp)
 
 add_library(sniffer-core ${CORE_SOURCES})
 target_link_libraries(sniffer-core pcap)

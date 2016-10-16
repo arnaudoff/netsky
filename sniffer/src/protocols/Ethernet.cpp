@@ -6,8 +6,8 @@
 using namespace Sniffer::Protocols;
 using namespace Sniffer::Communications::Serialization;
 
-Ethernet::Ethernet(Sniffer::Core::SniffedEntity* entity)
-    : header_{(ether_header_t*)(entity->get_data())}
+Ethernet::Ethernet(const u_char* packet)
+    : header_{(ether_header_t*)(packet)}
 {}
 
 std::string Ethernet::get_destination_address() const {

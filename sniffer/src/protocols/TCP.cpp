@@ -7,8 +7,8 @@
 using namespace Sniffer::Protocols;
 using namespace Sniffer::Communications::Serialization;
 
-TCP::TCP(Sniffer::Core::SniffedEntity* entity, int aggregated_offset)
-    : header_{(tcp_header_t*)(entity->get_data() + aggregated_offset)},
+TCP::TCP(const u_char* packet, int aggregated_offset)
+    : header_{(tcp_header_t*)(packet + aggregated_offset)},
     size_{get_offset() * 4} {
     if (size_ < 20) {
         std::ostringstream exception_message;
