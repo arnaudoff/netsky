@@ -34,11 +34,11 @@ namespace Sniffer {
                 virtual void stop() = 0;
 
                 virtual void unicast(
-                        const ConnectionData& connection, const std::string& msg);
+                        const ConnectionData& connection, const std::string& msg) = 0;
 
                 virtual void broadcast(const std::string& message) = 0;
 
-                virtual ~Server() {};
+                virtual ~Server() {}
         };
     }
 }

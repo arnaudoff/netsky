@@ -10,11 +10,11 @@ namespace Sniffer {
             class ResponseModel : public Serialization::SerializableEntity {
                 public:
                     virtual Serialization::SerializedObject serialize(
-                            const SerializationMgr& serializer) const override;
+                            const SerializationMgr& serializer) const = 0;
 
-                    virtual std::string get_name() const override;
+                    virtual std::string get_name() const = 0;
 
-                    virtual ~ResponseModel() {};
+                    virtual ~ResponseModel() {}
             };
         }
     }

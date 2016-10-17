@@ -101,5 +101,3 @@ ConnectionData WebSocketServer::get_connection_data_from_hdl(connection_hdl hdl)
 
     return it->second;
 }
-
-WebSocketServer::~WebSocketServer() {}

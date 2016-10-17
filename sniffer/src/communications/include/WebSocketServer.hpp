@@ -55,7 +55,7 @@ namespace Sniffer {
 
                 ConnectionData get_connection_data_from_hdl(connection_hdl hdl);
 
-                ~WebSocketServer() override;
+                ~WebSocketServer() {}
         };
     }
 }
