@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
+import { SnifferClientService } from './../../shared/sniffer-client/index';
 
 /**
  * This class represents the lazy loaded InterfaceStepComponent.
@@ -14,17 +15,23 @@ import { SnifferConfigBuilderService } from './../../shared/sniffer-config-build
 
 export class InterfaceStepComponent {
   @ViewChild('selectInterfaces') selectElement: ElementRef;
-  private interfaces: Array<Object>;
+  private interfaces: Array<string>;
 
-  constructor(private router: Router,
-     private snifferConfigBuilderService: SnifferConfigBuilderService) {}
+  constructor(
+      private router: Router,
+      private snifferConfigBuilderService: SnifferConfigBuilderService,
+      private snifferClientService: SnifferClientService) {
+    // TODO: send interface retrieval request here
+  }
 
   ngAfterViewInit() {
     $('#interface-step')
         .addClass('active')
         .removeClass('disabled');
 
-    this.interfaces = [{ name: 'eth0'}, { name: 'wlan0' }];
+    this.snifferClientService.interfaces.subscribe(ifresponse => {
+      ifresponse.names.forEach(ifname => this.interfaces.push({ name: ifname }));
+    });
 
     $(this.selectElement.nativeElement).dropdown();
   }
