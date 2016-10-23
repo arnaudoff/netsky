@@ -12,7 +12,7 @@ namespace Sniffer {
                     virtual Serialization::SerializedObject serialize(
                             const SerializationMgr& serializer) const = 0;
 
-                    virtual std::string get_name() const = 0;
+                    virtual std::string get_model_name() const = 0;
 
                     virtual ~ResponseModel() {}
             };

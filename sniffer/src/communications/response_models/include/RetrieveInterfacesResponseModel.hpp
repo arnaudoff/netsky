@@ -5,21 +5,22 @@
 #include <string>
 
 #include "ResponseModel.hpp"
+#include "InterfaceResponseModel.hpp"
 
 namespace Sniffer {
     namespace Communications {
         namespace ResponseModels {
             class RetrieveInterfacesResponseModel : public ResponseModel {
                 private:
-                    std::vector<std::string> names_;
+                    std::vector<InterfaceResponseModel> interfaces_;
 
                 public:
-                    RetrieveInterfacesResponseModel(std::vector<std::string> names);
+                    RetrieveInterfacesResponseModel(std::vector<InterfaceResponseModel> interfaces);
 
                     virtual Serialization::SerializedObject serialize(
                             const SerializationMgr& serializer) const override;
 
-                    virtual std::string get_name() const override;
+                    virtual std::string get_model_name() const override;
 
                     ~RetrieveInterfacesResponseModel() override;
             };

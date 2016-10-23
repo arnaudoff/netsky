@@ -53,6 +53,7 @@ void WebSocketServerActionHandler::handle(WebSocketServer* server) {
             server->remove_connection(current_action.handle);
         } else if (current_action.type == MESSAGE) {
             lock_guard<mutex> guard(connection_lock_);
+            spdlog::get("console")->info("Received message: {0}", current_action.message->get_payload());
             command_invoker_->invoke(
                     server->get_connection_data_from_hdl(current_action.handle),
                     current_action.message->get_payload());

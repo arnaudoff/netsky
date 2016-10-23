@@ -10,7 +10,7 @@ namespace Sniffer {
     namespace Core {
         class PcapInterfaceRetriever : public InterfaceRetriever {
             public:
-                virtual std::vector<std::string> retrieve() override;
+                virtual std::vector<Interface> retrieve() override;
         };
     }
 }
