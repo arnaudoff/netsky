@@ -3,9 +3,14 @@ import * as Rx from 'rxjs/Rx';
 
 @Injectable()
 export class WebSocketService {
+  public activeConnection: Rx.Observable<Object>;
   private subject: Rx.Subject<MessageEvent>;
+  private ws: WebSocket;
 
   public connect(url: string): Rx.Subject<MessageEvent> {
+    this.ws = new WebSocket(url);
+    this.activeConnection = Rx.Observable.fromEvent(this.ws, 'open');
+
     if (!this.subject) {
       this.subject = this.create(url);
     }
@@ -14,20 +19,23 @@ export class WebSocketService {
   }
 
   private create(url: string): Rx.Subject<MessageEvent> {
-    let ws = new WebSocket(url);
+    let wsInstance = this.ws;
 
     let observable = Rx.Observable.create((observer: Rx.Observer<MessageEvent>) => {
-      ws.onmessage = observer.next.bind(observer);
-      ws.onerror = observer.error.bind(observer);
-      ws.onclose = observer.complete.bind(observer);
+      // Emit the received message to the observer
+      wsInstance.onmessage = observer.next.bind(observer);
 
-      return ws.close.bind(ws);
+      wsInstance.onerror = observer.error.bind(observer);
+      wsInstance.onclose = observer.complete.bind(observer);
+
+      // Close the websocket on unsubscribe
+      return wsInstance.close.bind(wsInstance);
     });
 
     let observer = {
       next: (data: Object) => {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data));
+        if (wsInstance.readyState === WebSocket.OPEN) {
+          wsInstance.send(JSON.stringify(data));
         }
       }
     };

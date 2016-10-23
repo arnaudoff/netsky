@@ -1,7 +1,8 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
 import { SnifferClientService } from './../../shared/sniffer-client/index';
+import { IRetrieveInterfacesResponseModel } from './../../shared/sniffer-client/index';
 
 /**
  * This class represents the lazy loaded InterfaceStepComponent.
@@ -15,22 +16,26 @@ import { SnifferClientService } from './../../shared/sniffer-client/index';
 
 export class InterfaceStepComponent {
   @ViewChild('selectInterfaces') selectElement: ElementRef;
-  private interfaces: Array<string>;
+  private interfaces: Array<Object>;
 
   constructor(
       private router: Router,
       private snifferConfigBuilderService: SnifferConfigBuilderService,
       private snifferClientService: SnifferClientService) {
-    // TODO: send interface retrieval request here
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
+    this.snifferClientService.retrieveInterfaces();
+
     $('#interface-step')
         .addClass('active')
         .removeClass('disabled');
 
-    this.snifferClientService.interfaces.subscribe(ifresponse => {
-      ifresponse.names.forEach(ifname => this.interfaces.push({ name: ifname }));
+    var interfaces : Array<Object> = [];
+
+    this.snifferClientService.interfaces.subscribe((ifresponse: IRetrieveInterfacesResponseModel) => {
+      ifresponse.interfaces.names.forEach((ifname: string) => this.interfaces.push({ name: ifname }))
+      console.log(ifresponse);
     });
 
     $(this.selectElement.nativeElement).dropdown();
@@ -38,7 +43,7 @@ export class InterfaceStepComponent {
 
   handleStep() {
     let selectedInterfaces: Array<string> =
-        $(this.selectElement.nativeElement).dropdown('get value'));
+        $(this.selectElement.nativeElement).dropdown('get value');
 
     this.snifferConfigBuilderService.set_interfaces({ values: selectedInterfaces });
 

@@ -34,7 +34,7 @@ export class SharingStepComponent {
 
   handleStep() {
     let selectedListeners: Array<string> =
-        $(this.selectElement.nativeElement).dropdown('get value'));
+        $(this.selectElement.nativeElement).dropdown('get value');
 
     this.snifferConfigBuilderService.set_listeners({ values: selectedListeners });
 
