@@ -15,7 +15,7 @@ namespace Sniffer {
                     virtual SerializedObject serialize(
                             const SerializationMgr& serializer) const = 0;
 
-                    virtual std::string get_name() const = 0;
+                    virtual std::string get_entity_name() const = 0;
 
                     virtual ~SerializableEntity() {};
             };

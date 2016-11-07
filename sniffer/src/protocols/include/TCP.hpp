@@ -49,7 +49,7 @@ namespace Sniffer {
                 virtual Communications::Serialization::SerializedObject
                     serialize(const SerializationMgr& serializer) const override;
 
-                virtual std::string get_name() const override;
+                virtual std::string get_entity_name() const override;
 
                 ~TCP() {};
         };

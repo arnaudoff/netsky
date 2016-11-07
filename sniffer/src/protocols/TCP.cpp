@@ -34,7 +34,7 @@ u_int16_t TCP::get_destination_port() const {
     return ntohs(header_->th_dport);
 }
 
-std::string TCP::get_name() const {
+std::string TCP::get_entity_name() const {
     return "tcp";
 }
 

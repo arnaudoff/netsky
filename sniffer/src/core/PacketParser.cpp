@@ -33,7 +33,7 @@ std::string PacketParser::parse(const u_char* packet) {
 
     for (auto entity : entities) {
         auto entity_obj = entity->serialize(serializer_);
-        serializer_.set_object(final_obj, entity->get_name(), entity_obj);
+        serializer_.set_object(final_obj, entity->get_entity_name(), entity_obj);
     }
 
     return final_obj.get_data();

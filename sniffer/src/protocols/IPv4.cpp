@@ -40,7 +40,7 @@ int IPv4::get_size() const {
     return size_;
 }
 
-std::string IPv4::get_name() const {
+std::string IPv4::get_entity_name() const {
     return "ipv4";
 }
 

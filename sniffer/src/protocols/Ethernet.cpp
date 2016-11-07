@@ -40,7 +40,7 @@ u_short Ethernet::get_ether_type() const {
     return header_->ether_type;
 }
 
-std::string Ethernet::get_name() const {
+std::string Ethernet::get_entity_name() const {
     return "ethernet";
 }
 

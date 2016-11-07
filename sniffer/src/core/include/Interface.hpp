@@ -4,42 +4,41 @@
 #include <sys/socket.h>
 #include <vector>
 #include <string>
+#include <memory>
+
+#include "InterfaceAddress.hpp"
+
+#include "../../communications/serialization/include/SerializedObject.hpp"
+#include "../../communications/serialization/include/SerializableEntity.hpp"
 
 namespace Sniffer {
     namespace Core {
-        class Interface {
-            std::string name_;
-            std::string description_;
-            std::vector<std::string> addresses_;
-            std::vector<std::string> netmasks_;
+        class Interface :
+                public Communications::Serialization::SerializableEntity {
+            private:
+                std::string name_;
+                std::string description_;
+                std::vector<InterfaceAddress> addresses_;
 
             public:
-                Interface(std::string name,
-                        std::string desc,
-                        std::vector<std::string> addr,
-                        std::vector<std::string> netmasks)
-                    : name_{name},
-                    description_{desc},
-                    addresses_{addr},
-                    netmasks_{netmasks}
+                Interface(const char* name, const char* desc);
 
-                std::string get_name() const {
-                    return name_;
-                }
+                std::string get_name() const;
 
-                std::string get_description() const {
-                    return description_;
-                }
+                std::string get_description() const;
 
-                std::vector<std::string> get_addresses() const {
-                    return addresses_;
-                }
+                void set_addresses(std::vector<InterfaceAddress> addresses);
 
-                std::vector<std::string> get_netmasks() const {
-                    return netmasks_;
-                }
+                std::vector<InterfaceAddress> get_addresses() const;
 
-        }
+                virtual Communications::Serialization::SerializedObject serialize(
+                        const SerializationMgr& serializer) const override;
+
+                virtual std::string get_entity_name() const override;
+
+                ~Interface() override;
+
+        };
     }
 }
 

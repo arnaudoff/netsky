@@ -10,6 +10,10 @@ namespace Sniffer {
     namespace Core {
         class PcapInterfaceRetriever : public InterfaceRetriever {
             public:
+                PcapInterfaceRetriever(const IpAddressFactory& factory)
+                    : InterfaceRetriever{factory}
+                {}
+
                 virtual std::vector<Interface> retrieve() override;
         };
     }

@@ -3,6 +3,7 @@
 
 #include "core/include/PolicyBindings.hpp"
 #include "core/include/PcapInterfaceRetriever.hpp"
+#include "core/include/IpAddressFactory.hpp"
 
 #include "communications/include/ServerCommandInvoker.hpp"
 
@@ -43,8 +44,10 @@ int main() {
         new KillServerCommand { server.get(), serializer }
     };
 
+    IpAddressFactory ip_addr_factory;
+
     std::unique_ptr<InterfaceRetriever> pcap_retriever {
-        new PcapInterfaceRetriever {}
+        new PcapInterfaceRetriever { ip_addr_factory }
     };
 
     std::unique_ptr<ServerCommand> retrieve_iface_cmd {
