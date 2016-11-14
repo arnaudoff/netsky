@@ -7,30 +7,42 @@ import { IConfigurableEntity } from './configurable-entity.interface';
  */
 @Injectable()
 export class SnifferConfigBuilderService {
-  private interfaces: IConfigurableEntity;
-  private filters: IConfigurableEntity;
-  private listeners: IConfigurableEntity;
+  private interfaces_: IConfigurableEntity;
+  private filters_: IConfigurableEntity;
+  private listeners_: IConfigurableEntity;
 
   /**
    * Creates a new SnifferConfigBuilderService with default values.
    * @constructor
    */
   constructor() {
-      this.interfaces = { values: [""] };
-      this.filters = { values: [""] };
-      this.listeners = { values: [""] };
+      this.interfaces_ = { values: ["any"] };
+      this.filters_ = { values: [""] };
+      this.listeners_ = { values: [""] };
   }
 
-  set_interfaces(interfaces: IConfigurableEntity): void {
-      this.interfaces = interfaces;
+  public set interfaces(interfaces: IConfigurableEntity) {
+      this.interfaces_ = interfaces;
   }
 
-  set_filters(filters: IConfigurableEntity): void {
-      this.filters = filters;
+  public get interfaces() : IConfigurableEntity {
+      return this.interfaces_;
   }
 
-  set_listeners(listeners: IConfigurableEntity): void {
-      this.listeners = listeners;
+  public set filters(filters: IConfigurableEntity) {
+      this.filters_ = filters;
+  }
+
+  public get filters() : IConfigurableEntity {
+      return this.filters_;
+  }
+
+  public set listeners(listeners: IConfigurableEntity) {
+      this.listeners_ = listeners;
+  }
+
+  public get listeners(): IConfigurableEntity {
+      return this.listeners_;
   }
 
 }

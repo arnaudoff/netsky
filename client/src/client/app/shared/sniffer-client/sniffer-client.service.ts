@@ -4,6 +4,7 @@ import { WebSocketService } from './../websocket/index';
 
 import { IPacketResponseModel } from './packet-response-model.interface';
 import { IRetrieveInterfacesResponseModel } from './retrieve-interfaces-response-model.interface';
+import { IConfigurableEntity } from './../sniffer-config-builder/index';
 
 const SNIFFER_SERVER_URL = 'ws://localhost:1903';
 
@@ -50,4 +51,23 @@ export class SnifferClientService {
         this.connectionInstance.next({ "retrieve-interfaces": {} });
     });
   }
+
+  public startSniffer(
+      interfaces: IConfigurableEntity,
+      filters: IConfigurableEntity,
+      listeners: IConfigurableEntity): void {
+
+    let argumentsObject: Object = {
+      interfaces: interfaces.values,
+      filters: filters.values,
+      shared: listeners.values
+    };
+
+    let commandObject: Object = {
+        "start-packet-sniffer": argumentsObject
+    };
+
+    this.connectionInstance.next(commandObject);
+  }
+
 }

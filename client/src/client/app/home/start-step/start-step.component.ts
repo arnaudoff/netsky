@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
+import { SnifferClientService } from './../../shared/sniffer-client/index';
 
 /**
  * This class represents the lazy loaded StartStepComponent.
@@ -14,7 +15,9 @@ import { SnifferConfigBuilderService } from './../../shared/sniffer-config-build
 
 export class StartStepComponent {
   constructor(private router: Router,
-     private snifferConfigBuilderService: SnifferConfigBuilderService) {}
+     private snifferConfigBuilderService: SnifferConfigBuilderService,
+     private snifferClientService: SnifferClientService)
+  {}
 
   ngAfterViewInit() {
     $('#start-step')
@@ -23,6 +26,11 @@ export class StartStepComponent {
   }
 
   handleStep() {
+    this.snifferClientService.startSniffer(
+        this.snifferConfigBuilderService.interfaces,
+        this.snifferConfigBuilderService.filters,
+        this.snifferConfigBuilderService.listeners);
+
     this.router.navigate(['capture']);
   }
 

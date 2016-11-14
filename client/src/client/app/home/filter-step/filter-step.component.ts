@@ -25,7 +25,7 @@ export class FilterStepComponent {
   }
 
   handleStep() {
-    this.snifferConfigBuilderService.set_filters({ values: [this.filters] });
+    this.snifferConfigBuilderService.filters = { values: [this.filters] };
 
     $('#filters-step')
         .addClass('disabled')

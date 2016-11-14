@@ -45,7 +45,7 @@ export class InterfaceStepComponent {
     let selectedInterfaces: Array<string> =
         $(this.selectElement.nativeElement).dropdown('get value');
 
-    this.snifferConfigBuilderService.set_interfaces({ values: selectedInterfaces });
+    this.snifferConfigBuilderService.interfaces = { values: selectedInterfaces };
 
     $('#interface-step')
         .addClass('disabled')
