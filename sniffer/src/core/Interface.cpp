@@ -27,16 +27,20 @@ std::vector<InterfaceAddress> Interface::get_addresses() const {
 
 SerializedObject Interface::serialize(
         const SerializationMgr& serializer) const {
-    auto addresses_obj = serializer.create_object();
+    auto obj = serializer.create_object();
+    serializer.set_value<std::string>(obj, "name", name_);
+
+    if (!description_.empty()) {
+        serializer.set_value<std::string>(obj, "description", description_);
+    }
 
     for (const auto addr: addresses_) {
         auto addr_obj = addr.serialize(serializer);
-        serializer.set_object(addresses_obj, addr.get_entity_name(), addr_obj);
-    }
 
-    auto obj = serializer.create_object();
-    serializer.set_value<std::string>(obj, "description", get_description());
-    serializer.set_object(obj, "addresses", addresses_obj);
+        if (!serializer.is_empty(addr_obj)) {
+            serializer.push_back_obj(obj, "addresses", addr_obj);
+        }
+    }
 
     return obj;
 }

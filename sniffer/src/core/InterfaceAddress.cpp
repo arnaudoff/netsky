@@ -47,20 +47,23 @@ SerializedObject InterfaceAddress::serialize(
         const SerializationMgr& serializer) const {
     auto obj = serializer.create_object();
 
-    serializer.set_value<const char*>(
-            obj,
-            "bcast_addr",
-            broadcast_address_ ? broadcast_address_->data() : "none");
+    if (address_) {
+        serializer.set_value<const char*>(obj, "addr", address_->data());
+    }
 
-    serializer.set_value<const char*>(
-            obj,
-            "dst_addr",
-            destination_address_ ? destination_address_->data() : "none");
+    if (broadcast_address_) {
+        serializer.set_value<const char*>(obj, "bcast_addr",
+                broadcast_address_->data());
+    }
 
-    serializer.set_value<const char*>(
-            obj,
-            "netmask",
-            netmask_ ? netmask_->data() : "none");
+    if (destination_address_) {
+        serializer.set_value<const char*>(obj, "dst_addr",
+                destination_address_->data());
+    }
+
+    if (netmask_) {
+        serializer.set_value<const char*>(obj, "netmask", netmask_->data());
+    }
 
     return obj;
 }

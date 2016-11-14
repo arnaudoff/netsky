@@ -30,6 +30,12 @@ namespace Sniffer {
                         return false;
                     }
 
+                    bool is_empty(const SerializedObject& obj) const {
+                        auto json_obj = json::parse(obj.get_data());
+
+                        return json_obj.empty();
+                    }
+
                     template<typename U>
                     U get_value(
                             const T& data,
@@ -50,13 +56,31 @@ namespace Sniffer {
                         object.set_data(json_obj.dump());
                     }
 
-                    void set_object(T& parent_obj, const std::string& key,
+                    void set_object(
+                            T& parent_obj,
+                            const std::string& key,
                             const T& obj) const {
-                        auto json_parent_obj = json::parse(parent_obj.get_data());
+                        auto json_pobj = json::parse(parent_obj.get_data());
                         auto json_obj = json::parse(obj.get_data());
-                        json_parent_obj[key] = json_obj;
+                        json_pobj[key] = json_obj;
 
-                        parent_obj.set_data(json_parent_obj.dump());
+                        parent_obj.set_data(json_pobj.dump());
+                    }
+
+                    void push_back_obj(
+                            T& parent_obj,
+                            const std::string& key,
+                            const T& obj) const {
+                        auto json_pobj = json::parse(parent_obj.get_data());
+                        auto json_obj = json::parse(obj.get_data());
+
+                        if (!json_pobj.count(key)) {
+                            json_pobj[key] = json::array();
+                        }
+
+                        json_pobj[key].push_back(json_obj);
+
+                        parent_obj.set_data(json_pobj.dump());
                     }
             };
 

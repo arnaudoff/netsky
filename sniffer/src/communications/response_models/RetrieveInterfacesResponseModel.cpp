@@ -15,13 +15,10 @@ SerializedObject RetrieveInterfacesResponseModel::serialize(
 
     for (const auto& iface: interfaces_) {
         auto iface_obj = iface.serialize(serializer);
-        serializer.set_object(obj, iface.get_entity_name(), iface_obj);
+        serializer.push_back_obj(obj, get_entity_name(), iface_obj);
     }
 
-    auto final_obj = serializer.create_object();
-    serializer.set_object(final_obj, get_entity_name(), obj);
-
-    return final_obj;
+    return obj;
 }
 
 std::string RetrieveInterfacesResponseModel::get_entity_name() const {

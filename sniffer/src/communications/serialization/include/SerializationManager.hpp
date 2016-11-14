@@ -20,6 +20,10 @@ namespace Sniffer {
                         return SerializationPolicy<SerializedObject>::object_exists(data, object);
                     }
 
+                    bool is_empty(const SerializedObject& obj) const {
+                        return SerializationPolicy<SerializedObject>::is_empty(obj);
+                    }
+
                     template<typename U>
                     U get_value(
                             const SerializedObject& data,
@@ -33,16 +37,21 @@ namespace Sniffer {
                     template<typename U>
                     void set_value(SerializedObject& object, const std::string& key,
                             U value) const {
-                        return SerializationPolicy<SerializedObject>::template
+                        SerializationPolicy<SerializedObject>::template
                             set_value<U>(object, key, value);
                     }
 
                     void set_object(SerializedObject& p_obj, const std::string& key,
                             const SerializedObject& obj) const {
-                        return SerializationPolicy<SerializedObject>::
+                        SerializationPolicy<SerializedObject>::
                             set_object(p_obj, key, obj);
                     }
 
+                    void push_back_obj(SerializedObject& p_obj, const std::string& key,
+                            const SerializedObject& obj) const {
+                        SerializationPolicy<SerializedObject>::
+                            push_back_obj(p_obj, key, obj);
+                    }
             };
         }
     }
