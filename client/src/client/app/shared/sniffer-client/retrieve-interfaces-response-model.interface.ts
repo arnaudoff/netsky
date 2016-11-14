@@ -1,5 +1,5 @@
+import { IInterfaceResponseModel } from './interface-response-model.interface';
+
 export interface IRetrieveInterfacesResponseModel {
-    interfaces: {
-        names: Array<string>
-    }
+    interfaces: Array<IInterfaceResponseModel>
 }

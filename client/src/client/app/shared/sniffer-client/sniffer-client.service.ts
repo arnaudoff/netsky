@@ -41,18 +41,12 @@ export class SnifferClientService {
       })
       .map((response: MessageEvent) : IRetrieveInterfacesResponseModel => {
         let data = JSON.parse(response.data);
-
-        return {
-            interfaces: {
-                names: data.interfaces.names
-            }
-        }
+        return <IRetrieveInterfacesResponseModel>data;
       });
   }
 
   public retrieveInterfaces() : void {
     this.wsService.activeConnection.subscribe((v: Object) => {
-        console.log(v);
         this.connectionInstance.next({ "retrieve-interfaces": {} });
     });
   }

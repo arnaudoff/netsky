@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
 import { SnifferClientService } from './../../shared/sniffer-client/index';
 import { IRetrieveInterfacesResponseModel } from './../../shared/sniffer-client/index';
+import { IInterfaceResponseModel } from './../../shared/sniffer-client/index';
 
 /**
  * This class represents the lazy loaded InterfaceStepComponent.
@@ -16,7 +17,7 @@ import { IRetrieveInterfacesResponseModel } from './../../shared/sniffer-client/
 
 export class InterfaceStepComponent {
   @ViewChild('selectInterfaces') selectElement: ElementRef;
-  private interfaces: Array<Object>;
+  private interfaces: Array<IInterfaceResponseModel> = [];
 
   constructor(
       private router: Router,
@@ -31,11 +32,10 @@ export class InterfaceStepComponent {
         .addClass('active')
         .removeClass('disabled');
 
-    var interfaces : Array<Object> = [];
-
     this.snifferClientService.interfaces.subscribe((ifresponse: IRetrieveInterfacesResponseModel) => {
-      ifresponse.interfaces.names.forEach((ifname: string) => this.interfaces.push({ name: ifname }))
-      console.log(ifresponse);
+      for (let entry of ifresponse.interfaces) {
+          this.interfaces.push(entry);
+      }
     });
 
     $(this.selectElement.nativeElement).dropdown();

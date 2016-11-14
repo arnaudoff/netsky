@@ -4,6 +4,32 @@
   interface.name }}</option>
 </select>
 <br />
+<div class="ui list">
+  <div *ngFor="let interface of interfaces" class="item">
+    <i class="plug icon"></i>
+    <div class="content">
+      <div class="header">{{ interface.name }}</div>
+      <div class="description">{{ interface.description }}</div>
+      <div class="list">
+        <div *ngFor="let address of interface.addresses" class="item">
+          <i class="share alternate icon"></i>
+          <div class="content">
+            <div class="header">{{ address.addr }}</div>
+            <div class="description">
+              <span *ngIf="address.bcast_addr">Broadcast: </span>
+              {{ address.bcast_addr }}
+              <span *ngIf="address.dst_addr">Destination: </span>
+              {{ address.dst_addr }}
+              <span *ngIf="address.netmask">Netmask: </span>
+              {{ address.netmask }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
 <button class="ui right labeled icon button next-button" (click)="handleStep()">
   <i class="right arrow icon"></i>
     Next
