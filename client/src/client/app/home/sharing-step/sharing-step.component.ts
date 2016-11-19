@@ -1,6 +1,11 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
+
+import { SnifferConfigBuilderService }
+from './../../shared/sniffer-config-builder/index';
+
+import { IConfigurableEntity }
+from './../../shared/sniffer-config-builder/configurable-entity.interface';
 
 /**
  * This class represents the lazy loaded SharingStepComponent.
@@ -29,14 +34,17 @@ export class SharingStepComponent {
         { name: 'July', addr: '192.168.1.13' }
     ];
 
-    $(this.selectElement.nativeElement).dropdown();
+    $(this.selectElement.nativeElement).dropdown({forceSelection: false});
   }
 
   handleStep() {
-    let selectedListeners: Array<string> =
+    let selectedElements: string =
         $(this.selectElement.nativeElement).dropdown('get value');
+    let selectedListeners: Array<string> = selectedElements.split(',');
 
-    this.snifferConfigBuilderService.listeners = { values: selectedListeners };
+    let configurableEntity: IConfigurableEntity = { values: selectedListeners };
+
+    this.snifferConfigBuilderService.listeners = configurableEntity;
 
     $('#sharing-step')
         .addClass('disabled')

@@ -1,9 +1,17 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
+
 import { SnifferClientService } from './../../shared/sniffer-client/index';
-import { IRetrieveInterfacesResponseModel } from './../../shared/sniffer-client/index';
 import { IInterfaceResponseModel } from './../../shared/sniffer-client/index';
+
+import { IRetrieveInterfacesResponseModel }
+from './../../shared/sniffer-client/index';
+
+import { IConfigurableEntity }
+from './../../shared/sniffer-config-builder/configurable-entity.interface';
+
+import { SnifferConfigBuilderService }
+from './../../shared/sniffer-config-builder/index';
 
 /**
  * This class represents the lazy loaded InterfaceStepComponent.
@@ -38,14 +46,22 @@ export class InterfaceStepComponent {
       }
     });
 
-    $(this.selectElement.nativeElement).dropdown();
+    $(this.selectElement.nativeElement).dropdown({forceSelection: false});
   }
 
   handleStep() {
-    let selectedInterfaces: Array<string> =
-        $(this.selectElement.nativeElement).dropdown('get value');
+    let selectedElements: Array<string> =
+        $(this.selectElement.nativeElement).dropdown('get values');
 
-    this.snifferConfigBuilderService.interfaces = { values: selectedInterfaces };
+    let selectedInterfaces: Array<string> = [];
+    selectedElements.forEach((item, index) => {
+        if (index < selectedElements.length - 1) {
+            selectedInterfaces.push(item);
+        }
+    });
+
+    let configurableEntity: IConfigurableEntity = { values: selectedInterfaces };
+    this.snifferConfigBuilderService.interfaces = configurableEntity;
 
     $('#interface-step')
         .addClass('disabled')
