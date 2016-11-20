@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs/Rx';
 import { WebSocketService } from './../websocket/index';
 
-import { IPacketResponseModel } from './packet-response-model.interface';
-import { IRetrieveInterfacesResponseModel } from './retrieve-interfaces-response-model.interface';
+import { IPacketResponseModel } from './packet.model';
+import { IRetrieveInterfacesResponseModel } from './retrieve-interfaces.model';
 import { IConfigurableEntity } from './../sniffer-config-builder/index';
 
 const SNIFFER_SERVER_URL = 'ws://localhost:1903';

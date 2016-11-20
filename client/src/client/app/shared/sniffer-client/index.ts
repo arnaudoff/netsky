@@ -1,8 +1,9 @@
 /**
- * This barrel file provides the export for the shared SnifferClient service.
+ * This barrel file provides the export for the shared SnifferClient service,
+ * as well as the response models used for negotiating interfaces, listeners
+ * and actual protocols.
  */
+
 export * from './sniffer-client.service';
-export * from './packet-response-model.interface';
-export * from './interface-address-response-model.interface';
-export * from './interface-response-model.interface';
-export * from './retrieve-interfaces-response-model.interface';
+export * from './models/negotiation';
+export * from './models/protocols';

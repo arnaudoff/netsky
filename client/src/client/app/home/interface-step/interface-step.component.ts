@@ -1,16 +1,10 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferClientService } from './../../shared/sniffer-client/index';
-import { IInterfaceResponseModel } from './../../shared/sniffer-client/index';
-
-import { IRetrieveInterfacesResponseModel }
+import { SnifferClientService, IInterface, IRetrieveInterfaces }
 from './../../shared/sniffer-client/index';
 
-import { IConfigurableEntity }
-from './../../shared/sniffer-config-builder/configurable-entity.interface';
-
-import { SnifferConfigBuilderService }
+import { SnifferConfigBuilderService, IConfigurableEntity }
 from './../../shared/sniffer-config-builder/index';
 
 /**
@@ -25,7 +19,7 @@ from './../../shared/sniffer-config-builder/index';
 
 export class InterfaceStepComponent {
   @ViewChild('selectInterfaces') selectElement: ElementRef;
-  private interfaces: Array<IInterfaceResponseModel> = [];
+  private interfaces: Array<IInterface> = [];
 
   constructor(
       private router: Router,
@@ -40,8 +34,8 @@ export class InterfaceStepComponent {
         .addClass('active')
         .removeClass('disabled');
 
-    this.snifferClientService.interfaces.subscribe((ifresponse: IRetrieveInterfacesResponseModel) => {
-      for (let entry of ifresponse.interfaces) {
+    this.snifferClientService.interfaces.subscribe((retInterfaces: IRetrieveInterfaces) => {
+      for (let entry of retInterfaces.interfaces) {
           this.interfaces.push(entry);
       }
     });
