@@ -1,3 +1,0 @@
-class DataLinkLayer : public Layer {
-
-};
