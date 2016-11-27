@@ -5,9 +5,9 @@ project(sniffer VERSION 0.1.0)
 set(Sniffer_VERSION_MAJOR 0)
 set(Sniffer_VERSION_MINOR 1)
 
-# Set C++11 compiler flags
+# Set C++14 compiler flags
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
