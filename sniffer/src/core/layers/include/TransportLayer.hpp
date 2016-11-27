@@ -2,12 +2,12 @@
 #define TRANSPORT_LAYER_HPP_
 
 #include "Layer.hpp"
-#include "../include/ReceptionHandler.hpp"
-
-class SniffedPacket;
+#include "../../include/ReceptionHandler.hpp"
 
 namespace Sniffer {
     namespace Core {
+        class SniffedPacket;
+
         namespace Layers {
             class TransportLayer : public Layer {
                 private:
@@ -16,7 +16,11 @@ namespace Sniffer {
                 public:
                     TransportLayer();
 
-                    void handle_reception(SniffedPacket* packet);
+                    virtual void handle_reception(
+                            const SniffedPacket* packet,
+                            Communications::Serialization::SerializedObject acc,
+                            int next_header) override;
+
             };
         }
     }
