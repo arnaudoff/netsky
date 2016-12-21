@@ -8,8 +8,8 @@ using namespace Sniffer::Communications::Commands;
 StartPacketSnifferCommand::StartPacketSnifferCommand(
         Server* server,
         const SerializationMgr& serializer,
-        const PacketParser& parser)
-    : packet_parser_{parser}, ServerCommand{"start-packet-sniffer", server, serializer}
+        const LayerStack& ls)
+    : layer_stack_{ls}, ServerCommand{"start-packet-sniffer", server, serializer}
 {}
 
 std::map<std::string, std::vector<std::string>> StartPacketSnifferCommand::parse(
@@ -43,7 +43,16 @@ void StartPacketSnifferCommand::execute(
     auto filters = args["filters"];
     auto shared = args["shared"];
 
-    std::unique_ptr<PacketSniffer> sniffer { new PcapPacketSniffer { server_, interfaces, filters, shared, server_->get_config_manager(), packet_parser_ } };
+    std::unique_ptr<PacketSniffer> sniffer {
+        new PcapPacketSniffer {
+            server_,
+            interfaces,
+            filters,
+            shared,
+            server_->get_config_manager(),
+            layer_stack_
+        }
+    };
 
     server_->set_sniffer(std::move(sniffer));
 }
