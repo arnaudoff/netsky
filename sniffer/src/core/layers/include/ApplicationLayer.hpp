@@ -2,24 +2,20 @@
 #define APPLICATION_LAYER_HPP_
 
 #include "Layer.hpp"
-#include "../../include/ReceptionHandler.hpp"
 
 namespace Sniffer {
     namespace Core {
-        class SniffedPacket;
-
         namespace Layers {
             class ApplicationLayer : public Layer {
-                private:
-                    ReceptionHandler reception_handler_;
-
                 public:
-                    ApplicationLayer();
+                    ApplicationLayer(
+                          const SerializationMgr& serializer,
+                          const Sniffer::Protocols::Headers::HeaderFactory& hf);
 
                     virtual void handle_reception(
-                            const SniffedPacket* packet,
+                            SniffedPacket& packet,
                             Communications::Serialization::SerializedObject acc,
-                            int next_header) override;
+                            int next_header_id) override;
             };
         }
     }

@@ -2,7 +2,6 @@
 #define DATA_LINK_LAYER_HPP_
 
 #include "Layer.hpp"
-#include "../../include/ReceptionHandler.hpp"
 
 namespace Sniffer {
     namespace Core {
@@ -10,16 +9,15 @@ namespace Sniffer {
 
         namespace Layers {
             class DataLinkLayer : public Layer {
-                private:
-                    ReceptionHandler reception_handler_;
-
                 public:
-                    DataLinkLayer();
+                    DataLinkLayer(
+                            const SerializationMgr& serializer,
+                            const Sniffer::Protocols::Headers::HeaderFactory& hfactory);
 
                     virtual void handle_reception(
-                            const SniffedPacket* packet,
+                            SniffedPacket& packet,
                             Communications::Serialization::SerializedObject acc,
-                            int next_header) override;
+                            int next_header_id) override;
             };
         }
     }

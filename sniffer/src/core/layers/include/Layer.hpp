@@ -1,30 +1,48 @@
 #ifndef LAYER_HPP_
 #define LAYER_HPP_
 
-#include <map>
+#include <vector>
+#include <memory>
+#include <boost/iterator/indirect_iterator.hpp>
 
 #include "../../../communications/serialization/include/SerializedObject.hpp"
-
-class SniffedPacket;
+#include "../../include/ReceptionHandler.hpp"
+#include "../../../protocols/headers/metadata/include/HeaderMetadata.hpp"
 
 namespace Sniffer {
+    namespace Protocols {
+        namespace Headers {
+            class HeaderFactory;
+        }
+    }
+
     namespace Core {
+        class SniffedPacket;
+
         namespace Layers {
             class Layer {
                 private:
-                    using map_t = std::map<int, std::string>;
+                    using HeaderMetadata =
+                        Sniffer::Protocols::Headers::Metadata::HeaderMetadata;
+
+                    using HeaderMetadataCollection =
+                        std::vector<std::unique_ptr<HeaderMetadata>>;
 
                     Layer* lower_layer_;
                     Layer* upper_layer_;
-                    map_t supported_header_types_;
+                    HeaderMetadataCollection supported_headers_;
+
+                protected:
+                    ReceptionHandler reception_handler_;
 
                 public:
-                    Layer();
+                    Layer(const SerializationMgr& serializer,
+                          const Sniffer::Protocols::Headers::HeaderFactory& hf);
 
                     virtual void handle_reception(
-                            const SniffedPacket* packet,
+                            SniffedPacket& packet,
                             Communications::Serialization::SerializedObject acc,
-                            int next_header) = 0;
+                            int next_header_id) = 0;
 
                     Layer* get_lower_layer() const;
 
@@ -34,10 +52,17 @@ namespace Sniffer {
 
                     void set_upper_layer(Layer* layer);
 
-                    map_t get_supported_header_types() const;
+                    using SupportedHeadersIterator =
+                        boost::indirect_iterator<
+                            HeaderMetadataCollection::iterator,
+                            const HeaderMetadata>;
 
-                    void set_supported_header_types(
-                            const map_t& types);
+                    SupportedHeadersIterator begin();
+
+                    SupportedHeadersIterator end();
+
+                    void set_supported_headers(
+                            HeaderMetadataCollection&& headers);
 
                     virtual ~Layer() {};
             };
