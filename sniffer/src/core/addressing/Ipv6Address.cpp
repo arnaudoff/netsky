@@ -2,7 +2,7 @@
 
 #include "include/Ipv6Address.hpp"
 
-using namespace Sniffer::Core;
+using namespace Sniffer::Core::Addressing;
 
 Ipv6Address::Ipv6Address(struct sockaddr* sockaddr) {
     struct sockaddr_in6* addr_in6 = (struct sockaddr_in6*)sockaddr;

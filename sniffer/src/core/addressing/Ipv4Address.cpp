@@ -2,7 +2,7 @@
 
 #include "include/Ipv4Address.hpp"
 
-using namespace Sniffer::Core;
+using namespace Sniffer::Core::Addressing;
 
 Ipv4Address::Ipv4Address(struct sockaddr* sockaddr) {
     struct sockaddr_in* addr_in = (struct sockaddr_in*)sockaddr;
