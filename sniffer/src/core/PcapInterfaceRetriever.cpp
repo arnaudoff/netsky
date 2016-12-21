@@ -67,8 +67,14 @@ std::vector<Interface> PcapInterfaceRetriever::retrieve() {
                         name, netmask->data());
             }
 
-            InterfaceAddress if_addr { ip_addr, broad_addr, dst_addr, netmask };
-            interface_addresses.push_back(if_addr);
+            InterfaceAddress if_addr {
+                std::move(ip_addr),
+                std::move(broad_addr),
+                std::move(dst_addr),
+                std::move(netmask)
+            };
+
+            interface_addresses.push_back(std::move(if_addr));
         }
 
         interface.set_addresses(interface_addresses);

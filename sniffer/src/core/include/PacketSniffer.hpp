@@ -6,7 +6,7 @@
 #include <string>
 
 #include "PolicyBindings.hpp"
-#include "PacketParser.hpp"
+#include "LayerStack.hpp"
 
 namespace Sniffer {
     namespace Communications {
@@ -30,7 +30,7 @@ namespace Sniffer {
 
                 ConfigurationMgr config_manager_;
 
-                PacketParser packet_parser_;
+                LayerStack stack_;
 
                 virtual void prepare_interface() = 0;
 
@@ -47,7 +47,7 @@ namespace Sniffer {
                         std::vector<std::string> filters,
                         std::vector<std::string> shared,
                         const ConfigurationMgr& config,
-                        const PacketParser& parser);
+                        const LayerStack& stack);
 
                 void start();
 

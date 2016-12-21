@@ -1,33 +1,29 @@
 #ifndef SNIFFED_PACKET_HPP_
 #define SNIFFED_PACKET_HPP_
 
+#include <memory>
+#include "PacketRegion.hpp"
+
 namespace Sniffer {
     namespace Core {
         class SniffedPacket {
             private:
-                static constexpr int MAXIMUM_PACKET_LENGTH = 1500; // MTU
+                PacketRegion header_;
+                PacketRegion body_;
+                PacketRegion trailer_;
 
-                typedef struct {
-                    int offset;
-                    int length;
-                } chunk_t;
-
-                chunk_t header_;
-                chunk_t body_;
-                chunk_t trailer_;
-
-                char buffer[MAXIMUM_PACKET_LENGTH];
+                const u_char* data_;
 
             public:
-                SniffedPacket(chunk_t body);
+                SniffedPacket(
+                        const u_char* data,
+                        PacketRegion body);
 
-                void extract_header(int header_length);
+                const u_char* extract_header(int header_length);
 
-                char* get_header();
+                const u_char* extract_trailer(int trailer_length);
 
-                void extract_trailer(int trailer_length);
-
-                char* get_trailer();
+                const u_char* peek(int byte_offset);
         };
     }
 }

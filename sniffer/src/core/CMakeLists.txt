@@ -1,8 +1,15 @@
-set(CORE_SOURCES Interface.cpp InterfaceAddress.cpp IpAddressFactory.cpp
-    Ipv4Address.cpp Ipv6Address.cpp PacketParser.cpp PacketSniffer.cpp
-    PcapInterfaceRetriever PcapPacketSniffer.cpp)
+set(CORE_ADDRESSING_SOURCES addressing/Ipv4Address.cpp
+    addressing/Ipv6Address.cpp addressing/IpAddressFactory.cpp)
 
-add_library(sniffer-core ${CORE_SOURCES})
+set(CORE_SOURCES LayerStack.cpp Interface.cpp InterfaceAddress.cpp
+    PacketSniffer.cpp PcapInterfaceRetriever.cpp PcapPacketSniffer.cpp
+    ReceptionHandler.cpp SniffedPacket.cpp)
+
+set(LAYER_SOURCES layers/Layer.cpp layers/DataLinkLayer.cpp
+    layers/NetworkLayer.cpp layers/TransportLayer.cpp
+    layers/ApplicationLayer.cpp)
+
+add_library(sniffer-core ${CORE_SOURCES} ${LAYER_SOURCES} ${CORE_ADDRESSING_SOURCES})
 target_link_libraries(sniffer-core pcap)
 
 file(GLOB_RECURSE Core_HEADERS "*.hpp")

@@ -10,7 +10,7 @@ namespace Sniffer {
     namespace Core {
         class PcapInterfaceRetriever : public InterfaceRetriever {
             public:
-                PcapInterfaceRetriever(const IpAddressFactory& factory)
+                PcapInterfaceRetriever(const Addressing::IpAddressFactory& factory)
                     : InterfaceRetriever{factory}
                 {}
 

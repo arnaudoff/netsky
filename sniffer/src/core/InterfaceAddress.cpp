@@ -1,6 +1,7 @@
 #include "include/InterfaceAddress.hpp"
 
 using namespace Sniffer::Core;
+using namespace Sniffer::Core::Addressing;
 using namespace Sniffer::Communications::Serialization;
 
 InterfaceAddress::InterfaceAddress(ip_addr_t addr, ip_addr_t bcast,

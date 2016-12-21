@@ -3,13 +3,17 @@
 #include <sstream>
 #include <spdlog/spdlog.h>
 
+#include "include/PacketRegion.hpp"
 #include "include/PcapPacketSniffer.hpp"
 #include "include/SnifferException.hpp"
+#include "include/SniffedPacket.hpp"
 
 #include "../communications/include/Server.hpp"
+#include "../communications/serialization/include/SerializedObject.hpp"
 
 using namespace Sniffer::Core;
 using namespace Sniffer::Communications;
+using namespace Sniffer::Communications::Serialization;
 
 PcapPacketSniffer::PcapPacketSniffer(
         Server* server,
@@ -17,8 +21,8 @@ PcapPacketSniffer::PcapPacketSniffer(
         std::vector<std::string> filters,
         std::vector<std::string> shared,
         const ConfigurationMgr& config,
-        const PacketParser& parser)
-    : PacketSniffer(server, interfaces, filters, shared, config, parser)
+        const LayerStack& stack)
+    : PacketSniffer(server, interfaces, filters, shared, config, stack)
 {}
 
 void PcapPacketSniffer::prepare_interface() {
@@ -88,9 +92,17 @@ void PcapPacketSniffer::on_packet_received(u_char* args,
     ((PcapPacketSniffer *)args)->on_packet_received_internal(header, packet);
 }
 
-void PcapPacketSniffer::on_packet_received_internal(const struct pcap_pkthdr* header,
+void PcapPacketSniffer::on_packet_received_internal(
+        const struct pcap_pkthdr* header,
         const u_char* packet) {
-    server_->broadcast(packet_parser_.parse(packet));
+    PacketRegion body { 0, (int)header->caplen };
+
+    SniffedPacket packet_obj { packet, body };
+    SerializedObject accumulator_obj { "{}" };
+
+    // http://www.tcpdump.org/linktypes.html
+    stack_.handle_reception(packet_obj, accumulator_obj, 1);
+    server_->broadcast(accumulator_obj.get_data());
 }
 
 PcapPacketSniffer::~PcapPacketSniffer() {

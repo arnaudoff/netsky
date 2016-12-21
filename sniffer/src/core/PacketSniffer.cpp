@@ -9,13 +9,13 @@ PacketSniffer::PacketSniffer(
         std::vector<std::string> filters,
         std::vector<std::string> shared,
         const ConfigurationMgr& config,
-        const PacketParser& parser)
+        const LayerStack& stack)
     : server_{server},
     interfaces_{interfaces},
     filters_{filters},
     shared_{shared},
     config_manager_{config},
-    packet_parser_{parser}
+    stack_{stack}
 {}
 
 void PacketSniffer::start() {

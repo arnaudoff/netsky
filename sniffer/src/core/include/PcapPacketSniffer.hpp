@@ -1,5 +1,5 @@
-#ifndef PCAP_SNIFFER_HPP_
-#define PCAP_SNIFFER_HPP_
+#ifndef PCAP_PACKET_SNIFFER_HPP_
+#define PCAP_PACKET_SNIFFER_HPP_
 
 #include <pcap/pcap.h>
 
@@ -41,7 +41,7 @@ namespace Sniffer {
                         std::vector<std::string> filters,
                         std::vector<std::string> shared,
                         const ConfigurationMgr& config,
-                        const PacketParser& parser);
+                        const LayerStack& stack);
 
                 ~PcapPacketSniffer() override;
         };

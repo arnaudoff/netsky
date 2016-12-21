@@ -1,15 +1,19 @@
 #ifndef LAYER_STACK_HPP_
 #define LAYER_STACK_HPP_
 
-class SniffedPacket;
-class Layer;
+#include "../../communications/serialization/include/SerializedObject.hpp"
 
 namespace Sniffer {
     namespace Core {
+        namespace Layers {
+            class Layer;
+        }
+
+        class SniffedPacket;
         class LayerStack {
             private:
-                Layer* highest_layer_;
-                Layer* lowest_layer_;
+                Layers::Layer* highest_layer_;
+                Layers::Layer* lowest_layer_;
 
             public:
                 LayerStack();
@@ -21,13 +25,16 @@ namespace Sniffer {
                 };
 
                 void add_layer(
-                        Layer* layer,
+                        Layers::Layer* layer,
                         Position pos = Position::TOP,
-                        Layer* existing = nullptr);
+                        Layers::Layer* existing = nullptr);
 
-                void remove_layer(Layer* layer);
+                void remove_layer(Layers::Layer* layer);
 
-                void handle_receive(SniffedPacket* packet);
+                void handle_reception(
+                        SniffedPacket& packet,
+                        Sniffer::Communications::Serialization::SerializedObject acc,
+                        int next_header_id);
         };
     }
 }

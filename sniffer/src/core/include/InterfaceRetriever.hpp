@@ -4,16 +4,16 @@
 #include <vector>
 
 #include "Interface.hpp"
-#include "IpAddressFactory.hpp"
+#include "../addressing/include/IpAddressFactory.hpp"
 
 namespace Sniffer {
     namespace Core {
         class InterfaceRetriever {
             protected:
-                IpAddressFactory ip_addr_factory_;
+                Addressing::IpAddressFactory ip_addr_factory_;
 
             public:
-                InterfaceRetriever(const IpAddressFactory& factory)
+                InterfaceRetriever(const Addressing::IpAddressFactory& factory)
                     : ip_addr_factory_{factory}
                 {}
 
