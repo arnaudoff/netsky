@@ -5,15 +5,23 @@
 #include <string>
 
 #include "HeaderFactory.hpp"
+#include "Header.hpp"
 
 namespace Sniffer {
     namespace Protocols {
         namespace Headers {
             template<typename T>
             class HeaderFactoryRegistrator : public HeaderFactory {
-                HeaderFactoryRegistrator(const std::string& type_name) {
-                    get_map()->insert(std::make_pair(type_name, &create_header<T>));
-                }
+                public:
+                    using func_ptr_type =
+                        std::unique_ptr<Header> (*)(int, Sniffer::Core::SniffedPacket&);
+
+                    void register_header(const std::string& type_name) {
+                        get_map()->insert(
+                                std::pair<std::string, func_ptr_type>(
+                                    type_name,
+                                    &Header::create_header<T>));
+                    }
             };
         }
     }

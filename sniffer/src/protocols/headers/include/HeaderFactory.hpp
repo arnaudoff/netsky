@@ -5,12 +5,7 @@
 #include <memory>
 
 #include "Header.hpp"
-
-namespace Sniffer {
-    namespace Core {
-        class SniffedPacket;
-    }
-}
+#include "../../../core/include/SniffedPacket.hpp"
 
 namespace Sniffer {
     namespace Protocols {
@@ -19,20 +14,21 @@ namespace Sniffer {
                 private:
                     using SniffedPacket = Sniffer::Core::SniffedPacket;
 
-                    using map_t = std::map<
+                    using map_type = std::map<
                         std::string,
-                        std::unique_ptr<Header> (*)(const SniffedPacket*)>;
+                        std::unique_ptr<Header> (*)(int, SniffedPacket&)>;
 
-                    map_t* map_;
+                    map_type* map_;
 
                 protected:
-                    map_t get_map();
+                    map_type* get_map();
 
                 public:
                     std::unique_ptr<Header> create_instance(
-                            const std::string& type_name,
-                            const SniffedPacket* packet);
-            }
+                            const std::string& class_name,
+                            int length,
+                            SniffedPacket& packet);
+            };
         }
     }
 }
