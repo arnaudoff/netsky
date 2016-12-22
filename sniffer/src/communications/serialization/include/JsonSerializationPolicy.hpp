@@ -2,7 +2,7 @@
 #define JSON_SERIALIZATION_POLICY_HPP_
 
 #include <memory>
-#include <nlohmann/json.hpp>
+#include <json.hpp>
 
 namespace Sniffer {
     namespace Communications {

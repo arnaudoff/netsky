@@ -14,6 +14,7 @@ set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
 set(SOURCE_CODE_DIR src)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(INCLUDE_DESTINATION_PATH "include")
 
 # Configure a header file to pass some of the CMake settings
 # to the source code
@@ -22,13 +23,13 @@ configure_file("${PROJECT_SOURCE_DIR}/${SOURCE_CODE_DIR}/SnifferConfig.hpp.in"
                "${PROJECT_BINARY_DIR}/SnifferConfig.hpp")
 
 # Add the binary tree to the search path for include files
-# so that SnifferConfig.h is found
+# so that SnifferConfig.hpp is found
 
 include_directories("${PROJECT_BINARY_DIR}")
 
-# Add header-only libraries to the binary tree
+# Load the installation script for the third party libraries
 
-include_directories(vendor/include)
+include(vendor/install.cmake)
 
 # Deal with the core library of the sniffer
 
@@ -52,5 +53,6 @@ add_subdirectory("${SOURCE_CODE_DIR}/protocols")
 add_subdirectory("${SOURCE_CODE_DIR}/utils")
 
 add_executable (sniffer ${SOURCE_CODE_DIR}/Startup.cpp)
-target_link_libraries(sniffer sniffer-comms sniffer-core sniffer-proto
+target_link_libraries(sniffer PUBLIC websocketpp nlohmann_json spdlog
+    sniffer-comms sniffer-core sniffer-proto
     sniffer-utils)
