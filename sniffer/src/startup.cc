@@ -112,5 +112,4 @@ int main() {
 
     server->start(config_manager.get_value<int>("server", "port"));
     return 0;
-
 }

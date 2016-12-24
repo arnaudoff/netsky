@@ -1,0 +1,37 @@
+#ifndef INTERNET_HEADER_FORMAT_HPP_
+#define INTERNET_HEADER_FORMAT_HPP_
+
+#include <netinet/in.h>  // in_addr
+#include <sys/types.h>
+
+// https://tools.ietf.org/html/rfc791#section-3.1
+
+namespace sniffer {
+
+namespace protocols {
+
+namespace headers {
+
+namespace formats {
+
+struct Internet {
+    u_char version_internet_header_length;
+    u_char type_of_service;
+    u_short total_length;
+    u_short identification;
+    u_short offset;
+    u_char time_to_live;
+    u_char protocol;
+    u_short checksum;
+    struct in_addr source_address, destination_address;
+};
+
+} // namespace formats
+
+} // namespace headers
+
+} // namespace protocols
+
+} // namespace sniffer
+
+#endif // INTERNET_HEADER_FORMAT_HPP_
