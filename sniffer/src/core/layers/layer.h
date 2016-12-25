@@ -1,74 +1,84 @@
-#ifndef LAYER_HPP_
-#define LAYER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-#include <vector>
+#ifndef SNIFFER_SRC_CORE_LAYERS_LAYER_H_
+#define SNIFFER_SRC_CORE_LAYERS_LAYER_H_
+
 #include <memory>
-#include <boost/iterator/indirect_iterator.hpp>
+#include <vector>
 
-#include "../../../communications/serialization/include/SerializedObject.hpp"
-#include "../../include/ReceptionHandler.hpp"
-#include "../../../protocols/headers/metadata/include/HeaderMetadata.hpp"
+#include <boost/iterator/indirect_iterator.hpp>  // NOLINT
 
-namespace Sniffer {
-    namespace Protocols {
-        namespace Headers {
-            class HeaderFactory;
-        }
-    }
+#include "common/serialization/serialized_object.h"
+#include "core/reception_handler.h"
+#include "protocols/headers/metadata/header_metadata.h"
 
-    namespace Core {
-        class SniffedPacket;
+namespace sniffer {
 
-        namespace Layers {
-            class Layer {
-                private:
-                    using HeaderMetadata =
-                        Sniffer::Protocols::Headers::Metadata::HeaderMetadata;
+namespace core {
 
-                    using HeaderMetadataCollection =
-                        std::vector<std::unique_ptr<HeaderMetadata>>;
+namespace layers {
 
-                    Layer* lower_layer_;
-                    Layer* upper_layer_;
-                    HeaderMetadataCollection supported_headers_;
+class Layer {
+ public:
+  using SupportedHeadersIterator =
+      boost::indirect_iterator<HeaderMetadataCollection::iterator,
+                               const HeaderMetadata>;
 
-                protected:
-                    ReceptionHandler reception_handler_;
+  Layer(const SerializationMgr& serializer,
+        const sniffer::protocols::headers::HeaderFactory& hf);
 
-                public:
-                    Layer(const SerializationMgr& serializer,
-                          const Sniffer::Protocols::Headers::HeaderFactory& hf);
+  virtual ~Layer() {}
 
-                    virtual void handle_reception(
-                            SniffedPacket& packet,
-                            Communications::Serialization::SerializedObject acc,
-                            int next_header_id) = 0;
+  virtual void HandleReception(
+      sniffer::common::serialization::SerializedObject acc, int next_header_id,
+      SniffedPacket* packet) = 0;
 
-                    Layer* get_lower_layer() const;
+  Layer* lower_layer() const;
 
-                    void set_lower_layer(Layer* layer);
+  void set_lower_layer(Layer* layer);
 
-                    Layer* get_upper_layer() const;
+  Layer* upper_layer() const;
 
-                    void set_upper_layer(Layer* layer);
+  void set_upper_layer(Layer* layer);
 
-                    using SupportedHeadersIterator =
-                        boost::indirect_iterator<
-                            HeaderMetadataCollection::iterator,
-                            const HeaderMetadata>;
+  SupportedHeadersIterator begin() const;
 
-                    SupportedHeadersIterator begin();
+  SupportedHeadersIterator end() const;
 
-                    SupportedHeadersIterator end();
+  void set_supported_headers(HeaderMetadataCollection&& headers);
 
-                    void set_supported_headers(
-                            HeaderMetadataCollection&& headers);
+ protected:
+  ReceptionHandler reception_handler_;
 
-                    virtual ~Layer() {};
-            };
+ private:
+  using HeaderMetadata = sniffer::protocols::headers::metadata::HeaderMetadata;
+  using HeaderMetadataCollection = std::vector<std::unique_ptr<HeaderMetadata>>;
 
-        }
-    }
-}
+  Layer* lower_layer_;
+  Layer* upper_layer_;
+  HeaderMetadataCollection supported_headers_;
+};
 
-#endif
+}  // namespace layers
+
+}  // namespace core
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_CORE_LAYERS_LAYER_H_

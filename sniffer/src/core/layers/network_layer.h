@@ -1,26 +1,45 @@
-#ifndef NETWORK_LAYER_HPP_
-#define NETWORK_LAYER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-#include "Layer.hpp"
+#ifndef SNIFFER_SRC_CORE_LAYERS_NETWORK_LAYER_H_
+#define SNIFFER_SRC_CORE_LAYERS_NETWORK_LAYER_H_
 
-namespace Sniffer {
-    namespace Core {
-        class SniffedPacket;
+#include "core/layers/layer.h"
 
-        namespace Layers {
-            class NetworkLayer : public Layer {
-                public:
-                    NetworkLayer(
-                          const SerializationMgr& serializer,
-                          const Sniffer::Protocols::Headers::HeaderFactory& hf);
+namespace sniffer {
 
-                    virtual void handle_reception(
-                            SniffedPacket& packet,
-                            Communications::Serialization::SerializedObject acc,
-                            int next_header_id) override;
-            };
-        }
-    }
-}
+namespace core {
 
-#endif
+namespace layers {
+
+class NetworkLayer : public Layer {
+ public:
+  NetworkLayer(const SerializationMgr& serializer,
+               const sniffer::protocols::headers::HeaderFactory& hf);
+
+  void HandleReception(sniffer::common::serialization::SerializedObject acc,
+                       int next_header_id, SniffedPacket* packet) override;
+};
+
+}  // namespace layers
+
+}  // namespace core
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_CORE_LAYERS_NETWORK_LAYER_H_
