@@ -1,23 +1,42 @@
-#include "include/SniffedPacket.hpp"
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-using namespace Sniffer::Core;
+#include "core/sniffed_packet.h"
+
+namespace sniffer {
+
+namespace core {
 
 /**
  * @brief Constructs a SniffedPacket object.
  *
  * @param data A pointer to the beginning of an array of bytes.
+ *
  * @param body Designates where the body of the packet begins.
  */
-SniffedPacket::SniffedPacket(
-        const u_char* data,
-        PacketRegion body)
+SniffedPacket::SniffedPacket(const u_char* data, PacketRegion body)
     : data_{data} {
-    body_.offset = body.offset;
-    body_.length = body.length;
+  body_.offset = body.offset;
+  body_.length = body.length;
 
-    // Since we literally haven't formed any header or trailer yet.
-    header_.length = 0;
-    trailer_.length = 0;
+  // Since we literally haven't formed any header or trailer yet.
+  header_.length = 0;
+  trailer_.length = 0;
 }
 
 /**
@@ -27,16 +46,16 @@ SniffedPacket::SniffedPacket(
  *
  * @return An observing raw pointer to the beginning of the header.
  */
-const u_char* SniffedPacket::extract_header(int header_length) {
-    // Form a "frame" for the header
-    header_.offset = body_.offset;
-    header_.length = header_length;
+const u_char* SniffedPacket::ExtractHeader(int header_length) {
+  // Form a "frame" for the header
+  header_.offset = body_.offset;
+  header_.length = header_length;
 
-    // Reduce the length of the body to account for the formed "frame"
-    body_.offset += header_length;
-    body_.length -= header_length;
+  // Reduce the length of the body to account for the formed "frame"
+  body_.offset += header_length;
+  body_.length -= header_length;
 
-    return &(data_[header_.offset]);
+  return &(data_[header_.offset]);
 }
 
 /**
@@ -46,15 +65,15 @@ const u_char* SniffedPacket::extract_header(int header_length) {
  *
  * @return An observing raw pointer to the beginning of the trailer.
  */
-const u_char* SniffedPacket::extract_trailer(int trailer_length) {
-    // Reduce the length of the body to account for the trailer "frame"
-    body_.length -= trailer_length;
+const u_char* SniffedPacket::ExtractTrailer(int trailer_length) {
+  // Reduce the length of the body to account for the trailer "frame"
+  body_.length -= trailer_length;
 
-    // Form a "frame" for the trailer
-    trailer_.offset = body_.offset + body_.length;
-    trailer_.length = trailer_length;
+  // Form a "frame" for the trailer
+  trailer_.offset = body_.offset + body_.length;
+  trailer_.length = trailer_length;
 
-    return &(data_[trailer_.offset]);
+  return &(data_[trailer_.offset]);
 }
 
 /**
@@ -66,6 +85,10 @@ const u_char* SniffedPacket::extract_trailer(int trailer_length) {
  *
  * @return A pointer to the bytes after the byte_offset.
  */
-const u_char* SniffedPacket::peek(int byte_offset) {
-    return &(data_[header_.offset + byte_offset]);
+const u_char* SniffedPacket::Peek(int byte_offset) {
+  return &(data_[header_.offset + byte_offset]);
 }
+
+}  // namespace core
+
+}  // namespace sniffer

@@ -1,51 +1,71 @@
-#ifndef PCAP_PACKET_SNIFFER_HPP_
-#define PCAP_PACKET_SNIFFER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef SNIFFER_SRC_CORE_PCAP_PACKET_SNIFFER_H_
+#define SNIFFER_SRC_CORE_PCAP_PACKET_SNIFFER_H_
 
 #include <pcap/pcap.h>
 
-#include "PacketSniffer.hpp"
+#include <string>
+#include <vector>
 
-namespace Sniffer {
-    namespace Core {
-        class PcapPacketSniffer : public PacketSniffer {
-            private:
-                pcap_t* handle_;
+#include "core/packet_sniffer.h"
 
-                bpf_u_int32 subnet_mask_;
+namespace sniffer {
 
-                bpf_u_int32 network_;
+namespace core {
 
-                struct bpf_program parsed_filters_;
+class PcapPacketSniffer : public PacketSniffer {
+ public:
+  PcapPacketSniffer(std::vector<std::string> interfaces,
+                    std::vector<std::string> filters,
+                    std::vector<std::string> shared,
+                    const ConfigurationMgr& config, const LayerStack& stack,
+                    Server* server);
 
-                virtual void prepare_interface() override;
+  ~PcapPacketSniffer() override;
 
-                virtual void parse_filters() override;
+ private:
+  pcap_t* handle_;
 
-                virtual void apply_filters() override;
+  bpf_u_int32 subnet_mask_;
 
-                virtual void sniff() override;
+  bpf_u_int32 network_;
 
-                static void on_packet_received(
-                        u_char* args,
-                        const struct pcap_pkthdr* header,
-                        const u_char* packet);
+  struct bpf_program parsed_filters_;
 
-                void on_packet_received_internal(
-                        const struct pcap_pkthdr* header,
-                        const u_char* packet);
+  void PrepareInterfaces() override;
 
-            public:
-                PcapPacketSniffer(
-                        Server* server,
-                        std::vector<std::string> interfaces,
-                        std::vector<std::string> filters,
-                        std::vector<std::string> shared,
-                        const ConfigurationMgr& config,
-                        const LayerStack& stack);
+  void ParseFilters() override;
 
-                ~PcapPacketSniffer() override;
-        };
-    }
-}
+  void ApplyFilters() override;
 
-#endif
+  void Sniff() override;
+
+  static void OnPacketReceived(u_char* args, const struct pcap_pkthdr* header,
+                               const u_char* packet);
+
+  void OnPacketReceivedInternal(const struct pcap_pkthdr* header,
+                                const u_char* packet);
+};
+
+}  // namespace core
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_CORE_PCAP_PACKET_SNIFFER_H_

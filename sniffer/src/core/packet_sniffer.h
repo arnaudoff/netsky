@@ -1,59 +1,70 @@
-#ifndef PACKET_SNIFFER_HPP_
-#define PACKET_SNIFFER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef SNIFFER_SRC_CORE_PACKET_SNIFFER_H_
+#define SNIFFER_SRC_CORE_PACKET_SNIFFER_H_
 
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
 
-#include "PolicyBindings.hpp"
-#include "LayerStack.hpp"
+#include "LayerStack.h"
+// #include "PolicyBindings.h"
 
-namespace Sniffer {
-    namespace Communications {
-        class Server;
-    }
-}
+namespace sniffer {
 
-namespace Sniffer {
-    namespace Core {
-        class PacketSniffer {
-            protected:
-                using Server = Sniffer::Communications::Server;
+namespace core {
 
-                Server* server_;
+class PacketSniffer {
+ public:
+  PacketSniffer(std::vector<std::string> interfaces,
+                std::vector<std::string> filters,
+                std::vector<std::string> shared, const ConfigurationMgr& config,
+                const LayerStack& stack, Server* server);
 
-                std::vector<std::string> interfaces_;
+  virtual ~PacketSniffer() {}
 
-                std::vector<std::string> filters_;
+  void Start();
 
-                std::vector<std::string> shared_;
+ protected:
+  std::vector<std::string> interfaces_;
 
-                ConfigurationMgr config_manager_;
+  std::vector<std::string> filters_;
 
-                LayerStack stack_;
+  std::vector<std::string> shared_;
 
-                virtual void prepare_interface() = 0;
+  ConfigurationMgr config_manager_;
 
-                virtual void parse_filters() = 0;
+  LayerStack stack_;
 
-                virtual void apply_filters() = 0;
+  Server* server_;
 
-                virtual void sniff() = 0;
+  virtual void PrepareInterfaces() = 0;
 
-            public:
-                PacketSniffer(
-                        Server* server,
-                        std::vector<std::string> interfaces,
-                        std::vector<std::string> filters,
-                        std::vector<std::string> shared,
-                        const ConfigurationMgr& config,
-                        const LayerStack& stack);
+  virtual void ParseFilters() = 0;
 
-                void start();
+  virtual void ApplyFilters() = 0;
 
-                virtual ~PacketSniffer() {};
-        };
-    }
-}
+  virtual void Sniff() = 0;
+};
 
-#endif
+}  // namespace core
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_CORE_PACKET_SNIFFER_H_

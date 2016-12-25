@@ -8,6 +8,10 @@
 #include "../../communications/serialization/include/SerializationManager.hpp"
 #include "../../communications/serialization/include/JsonSerializationPolicy.hpp"
 
+namespace sniffer {
+
+}
+
 typedef Sniffer::Utils::ConfigurationManager<
     Sniffer::Utils::FileStoragePolicy,
     Sniffer::Utils::JsonFormattingPolicy> ConfigurationMgr;

@@ -1,46 +1,66 @@
-#ifndef SERVER_HPP_
-#define SERVER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
+#ifndef SNIFFER_SRC_CORE_SERVER_H_
+#define SNIFFER_SRC_CORE_SERVER_H_
+
+#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <memory>
 
-#include "../../core/include/PolicyBindings.hpp"
-#include "../../core/include/PacketSniffer.hpp"
-#include "ConnectionData.hpp"
+#include "common/policy_bindings.h"
+#include "core/connection_data.h"
+#include "core/packet_sniffer.h"
 
-namespace Sniffer {
-    namespace Communications {
-        class Server {
-            using PacketSniffer = Sniffer::Core::PacketSniffer;
+namespace sniffer {
 
-            protected:
-                std::unique_ptr<PacketSniffer> sniffer_;
-                ConfigurationMgr config_manager_;
-                int session_id_;
+namespace core {
 
-            public:
-                Server(const ConfigurationMgr& manager);
+class Server {
+ public:
+  explicit Server(const ConfigurationMgr& manager);
 
-                void set_sniffer(std::unique_ptr<PacketSniffer> sniffer);
+  virtual ~Server() {}
 
-                PacketSniffer* get_sniffer() const;
+  void set_sniffer(std::unique_ptr<PacketSniffer> sniffer);
 
-                ConfigurationMgr get_config_manager() const;
+  PacketSniffer* sniffer() const;
 
-                virtual void start(uint16_t port) = 0;
+  ConfigurationMgr config_manager() const;
 
-                virtual void stop() = 0;
+  virtual void Start(uint16_t port) = 0;
 
-                virtual void unicast(
-                        const ConnectionData& connection, const std::string& msg) = 0;
+  virtual void Stop() = 0;
 
-                virtual void broadcast(const std::string& message) = 0;
+  virtual void Unicast(const ConnectionData& connection,
+                       const std::string& msg) = 0;
 
-                virtual ~Server() {}
-        };
-    }
-}
+  virtual void Broadcast(const std::string& message) = 0;
 
-#endif
+ protected:
+  std::unique_ptr<PacketSniffer> sniffer_;
+  ConfigurationMgr config_manager_;
+  int session_id_;
+};
+
+}  // namespace core
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_CORE_SERVER_H_

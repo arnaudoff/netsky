@@ -1,45 +1,65 @@
-#ifndef INTERFACE_HPP_
-#define INTERFACE_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef SNIFFER_SRC_CORE_INTERFACE_H_
+#define SNIFFER_SRC_CORE_INTERFACE_H_
 
 #include <sys/socket.h>
-#include <vector>
-#include <string>
+
 #include <memory>
+#include <string>
+#include <vector>
 
-#include "InterfaceAddress.hpp"
+#include "common/serialization/serializable_entity.h"
+#include "common/serialization/serialized_object.h"
+#include "core/interface_address.h"
 
-#include "../../communications/serialization/include/SerializedObject.hpp"
-#include "../../communications/serialization/include/SerializableEntity.hpp"
+namespace sniffer {
 
-namespace Sniffer {
-    namespace Core {
-        class Interface :
-                public Communications::Serialization::SerializableEntity {
-            private:
-                std::string name_;
-                std::string description_;
-                std::vector<InterfaceAddress> addresses_;
+namespace core {
 
-            public:
-                Interface(const char* name, const char* desc);
+class Interface : public sniffer::common::serialization::SerializableEntity {
+ public:
+  Interface(const char* name, const char* desc);
 
-                std::string get_name() const;
+  ~Interface() override;
 
-                std::string get_description() const;
+  std::string name() const;
 
-                void set_addresses(std::vector<InterfaceAddress> addresses);
+  std::string description() const;
 
-                std::vector<InterfaceAddress> get_addresses() const;
+  void set_addresses(std::vector<InterfaceAddress> addresses);
 
-                virtual Communications::Serialization::SerializedObject serialize(
-                        const SerializationMgr& serializer) const override;
+  std::vector<InterfaceAddress> addresses() const;
 
-                virtual std::string get_entity_name() const override;
+  sniffer::common::serialization::SerializedObject Serialize(
+      const SerializationMgr& serializer) const override;
 
-                ~Interface() override;
+  std::string entity_name() const override;
 
-        };
-    }
-}
+ private:
+  std::string name_;
+  std::string description_;
+  std::vector<InterfaceAddress> addresses_;
+};
 
-#endif
+}  // namespace core
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_CORE_INTERFACE_H_
