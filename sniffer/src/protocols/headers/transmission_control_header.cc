@@ -1,38 +1,57 @@
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "protocols/headers/transmission_control_header.h"
+
 #include <netinet/in.h>
-#include <sstream>
+
 #include <memory>
+#include <sstream>
 
-#include "include/TransmissionControlHeader.hpp"
+namespace sniffer {
 
-using namespace Sniffer::Core;
-using namespace Sniffer::Protocols;
-using namespace Sniffer::Protocols::Headers;
-using namespace Sniffer::Protocols::Headers::Formats;
-using namespace Sniffer::Communications::Serialization;
+namespace protocols {
+
+namespace headers {
 
 HeaderFactoryRegistrator<TransmissionControlHeader>
-    TransmissionControlHeader::registrator_ {};
+    TransmissionControlHeader::registrator_{};
 
 /**
  * @brief Constructs a TCP header of length length from a SniffedPacket by re-
  * interpreting the internal byte array of the SniffedPacket.
  *
  * @param length The length of the header to extract in bytes.
- * @param packet A reference to a SniffedPacket object.
+ *
+ * @param packet A pointer to a SniffedPacket object.
  */
-TransmissionControlHeader::TransmissionControlHeader(
-        int length,
-        SniffedPacket& packet)
+TransmissionControlHeader::TransmissionControlHeader(int length,
+                                                     SniffedPacket* packet)
     : Header{length},
-    data_{(const struct TransmissionControl*)(packet.extract_header(length))}
-    /*
-    if (size_ < 20) {
-        std::ostringstream exception_message;
-        exception_message << "Invalid TCP header length: " <<
-            size_ << " bytes.";
-        throw std::out_of_range { exception_message.str() };
-    }
-    */
+      data_{(const struct TransmissionControl*)(packet.ExtractHeader(length))}
+/*
+if (size_ < 20) {
+    std::ostringstream exception_message;
+    exception_message << "Invalid TCP header length: " <<
+        size_ << " bytes.";
+    throw std::out_of_range { exception_message.str() };
+}
+*/
 {}
 
 /**
@@ -40,8 +59,8 @@ TransmissionControlHeader::TransmissionControlHeader(
  *
  * @param name A name which to use for the TransmissionControlHeader class.
  */
-void TransmissionControlHeader::register_class(const std::string& name) {
-    registrator_.register_header(name);
+void TransmissionControlHeader::RegisterClass(const std::string& name) {
+  registrator_.RegisterHeader(name);
 }
 
 /**
@@ -49,8 +68,8 @@ void TransmissionControlHeader::register_class(const std::string& name) {
  *
  * @return The offset.
  */
-u_char TransmissionControlHeader::get_offset() const {
-    return (data_->offset_x2 & 0xf0) >> 4;
+u_char TransmissionControlHeader::offset() const {
+  return (data_->offset_x2 & 0xf0) >> 4;
 }
 
 /**
@@ -58,8 +77,8 @@ u_char TransmissionControlHeader::get_offset() const {
  *
  * @return The source port
  */
-u_int16_t TransmissionControlHeader::get_source_port() const {
-    return ntohs(data_->source_port);
+u_int16_t TransmissionControlHeader::source_port() const {
+  return ntohs(data_->source_port);
 }
 
 /**
@@ -67,8 +86,8 @@ u_int16_t TransmissionControlHeader::get_source_port() const {
  *
  * @return The destination port
  */
-u_int16_t TransmissionControlHeader::get_destination_port() const {
-    return ntohs(data_->destination_port);
+u_int16_t TransmissionControlHeader::destination_port() const {
+  return ntohs(data_->destination_port);
 }
 
 /**
@@ -76,8 +95,8 @@ u_int16_t TransmissionControlHeader::get_destination_port() const {
  *
  * @return The sequence number.
  */
-int TransmissionControlHeader::get_sequence_number() const {
-    return data_->sequence_number;
+int TransmissionControlHeader::sequence_number() const {
+  return data_->sequence_number;
 }
 
 /**
@@ -85,13 +104,11 @@ int TransmissionControlHeader::get_sequence_number() const {
  *
  * @return The acknowledgment number.
  */
-int TransmissionControlHeader::get_acknowledgment_number() const {
-    return data_->acknowledgment_number;
+int TransmissionControlHeader::acknowledgment_number() const {
+  return data_->acknowledgment_number;
 }
 
-int TransmissionControlHeader::get_next_header_id() const {
-    return 0;
-}
+int TransmissionControlHeader::next_header_id() const { return 0; }
 
 /**
  * @brief Defines the entity name for the class that is used when serializing
@@ -99,9 +116,7 @@ int TransmissionControlHeader::get_next_header_id() const {
  *
  * @return The name of the entity.
  */
-std::string TransmissionControlHeader::get_entity_name() const {
-    return "tcp";
-}
+std::string TransmissionControlHeader::entity_name() const { return "tcp"; }
 
 /**
  * @brief Serializes a TransmissionControlHeader object into an object of
@@ -111,15 +126,20 @@ std::string TransmissionControlHeader::get_entity_name() const {
  *
  * @return A serialized version of the fields in the TCP header.
  */
-SerializedObject TransmissionControlHeader::serialize(
-        const SerializationMgr& serializer) const {
-    auto obj = serializer.create_object();
+SerializedObject TransmissionControlHeader::Serialize(
+    const SerializationMgr& serializer) const {
+  auto obj = serializer.create_object();
 
-    serializer.set_value<u_int16_t>(obj, "src", get_source_port());
-    serializer.set_value<u_int16_t>(obj, "dst", get_destination_port());
-    // TODO: Extract to base...
-    serializer.set_value<int>(obj, "length", get_length());
+  serializer.SetValue<u_int16_t>(obj, "src", source_port());
+  serializer.SetValue<u_int16_t>(obj, "dst", destination_port());
+  // TODO(arnaudoff): Extract to base..
+  serializer.SetValue<int>(obj, "length", length());
 
-    return obj;
+  return obj;
 }
 
+}  // namespace headers
+
+}  // namespace protocols
+
+}  // namespace sniffer

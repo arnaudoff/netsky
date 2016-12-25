@@ -1,7 +1,27 @@
-#ifndef TRANSMISSION_CONTROL_HEADER_HPP_
-#define TRANSMISSION_CONTROL_HEADER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
 
 #include <sys/types.h>
+
+#include <string>
 
 #define TH_FIN 0x01
 #define TH_SYN 0x02
@@ -11,51 +31,54 @@
 #define TH_URG 0x20
 #define TH_ECE 0x40
 #define TH_CWR 0x80
-#define TH_FLAGS (TH_FIN|TH_SYN|TH_RST|TH_ACK|TH_URG|TH_ECE|TH_CWR)
+#define TH_FLAGS (TH_FIN | TH_SYN | TH_RST | TH_ACK | TH_URG | TH_ECE | TH_CWR)
 
-#include "Header.hpp"
-#include "HeaderFactoryRegistrator.hpp"
-#include "../../../core/include/SniffedPacket.hpp"
-#include "../formats/TransmissionControl.hpp"
+#include "core/sniffed_packet.h"
+#include "protocols/headers/header.h"
+#include "protocols/headers/header_factory_registrator.h"
+#include "protocols/headers/transmission_control.h"
 
-namespace Sniffer {
-    namespace Protocols {
-        namespace Headers {
-            class TransmissionControlHeader : public Header {
-                private:
-                    static HeaderFactoryRegistrator<TransmissionControlHeader>
-                        registrator_;
+namespace sniffer {
 
-                    const Formats::TransmissionControl* data_;
+namespace protocols {
 
-                public:
-                    TransmissionControlHeader(
-                            int length,
-                            Sniffer::Core::SniffedPacket& packet);
+namespace headers {
 
-                    static void register_class(const std::string& name);
+class TransmissionControlHeader : public Header {
+ public:
+  TransmissionControlHeader(int length, sniffer::core::SniffedPacket* packet);
 
-                    u_int16_t get_source_port() const;
+  ~TransmissionControlHeader() {}
 
-                    u_int16_t get_destination_port() const;
+  static void RegisterClass(const std::string& name);
 
-                    int get_sequence_number() const;
+  u_int16_t source_port() const;
 
-                    int get_acknowledgment_number() const;
+  u_int16_t destination_port() const;
 
-                    u_char get_offset() const;
+  int sequence_number() const;
 
-                    virtual int get_next_header_id() const override;
+  int acknowledgment_number() const;
 
-                    virtual Communications::Serialization::SerializedObject
-                        serialize(const SerializationMgr& serializer) const override;
+  u_char offset() const;
 
-                    virtual std::string get_entity_name() const override;
+  int next_header_id() const override;
 
-                    ~TransmissionControlHeader() {};
-            };
-        }
-    }
-}
+  sniffer::common::serialization::SerializedObject Serialize(
+      const SerializationMgr& serializer) const override;
 
-#endif
+  std::string entity_name() const override;
+
+ private:
+  static HeaderFactoryRegistrator<TransmissionControlHeader> registrator_;
+
+  const Formats::TransmissionControl* data_;
+};
+
+}  // namespace headers
+
+}  // namespace protocols
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_

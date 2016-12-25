@@ -1,68 +1,92 @@
-#ifndef INTERNET_HEADER_HPP_
-#define INTERNET_HEADER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_INTERNET_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_HEADERS_INTERNET_HEADER_H_
 
 #include <sys/types.h>
 #include <string>
 
-#define IP_RF 0x8000            /* reserved fragment flag */
-#define IP_DF 0x4000            /* dont fragment flag */
-#define IP_MF 0x2000            /* more fragments flag */
-#define IP_OFFMASK 0x1fff       /* mask for fragmenting bits */
+#define IP_RF 0x8000      /* reserved fragment flag */
+#define IP_DF 0x4000      /* dont fragment flag */
+#define IP_MF 0x2000      /* more fragments flag */
+#define IP_OFFMASK 0x1fff /* mask for fragmenting bits */
 
-#include "Header.hpp"
-#include "HeaderFactoryRegistrator.hpp"
-#include "../../../core/include/SniffedPacket.hpp"
-#include "../formats/Internet.hpp"
+#include "core/sniffed_packet.h"
+#include "protocols/headers/formats/internet.h"
+#include "protocols/headers/header.h"
+#include "protocols/headers/header_factory_registrato.h"
 
-namespace Sniffer {
-    namespace Protocols {
-        namespace Headers {
-            class InternetHeader : public Header {
-                private:
-                    static HeaderFactoryRegistrator<InternetHeader> registrator_;
+namespace sniffer {
 
-                    const Formats::Internet* data_;
+namespace protocols {
 
-                public:
-                    InternetHeader(int length, Sniffer::Core::SniffedPacket& packet);
+namespace headers {
 
-                    static void register_class(const std::string& name);
+class InternetHeader : public Header {
+ public:
+  InternetHeader(int length, sniffer::core::SniffedPacket* packet);
 
-                    u_char get_version() const;
+  ~InternetHeader() {}
 
-                    u_char get_header_length() const;
+  static void RegisterClass(const std::string& name);
 
-                    u_char get_type_of_service() const;
+  u_char version() const;
 
-                    u_short get_total_length() const;
+  u_char header_length() const;
 
-                    u_short get_identification() const;
+  u_char type_of_service() const;
 
-                    u_char get_flags() const;
+  u_short total_length() const;
 
-                    u_short get_fragment_offset() const;
+  u_short identification() const;
 
-                    u_short get_time_to_live() const;
+  u_char flags() const;
 
-                    u_char get_protocol() const;
+  u_short fragment_offset() const;
 
-                    u_short get_header_checksum() const;
+  u_short time_to_live() const;
 
-                    char* get_source_address() const;
+  u_char protocol() const;
 
-                    char* get_destination_address() const;
+  u_short header_checksum() const;
 
-                    virtual int get_next_header_id() const override;
+  char* source_address() const;
 
-                    virtual Communications::Serialization::SerializedObject
-                        serialize(const SerializationMgr& serializer) const override;
+  char* destination_address() const;
 
-                    virtual std::string get_entity_name() const override;
+  int next_header_id() const override;
 
-                    ~InternetHeader() {};
-            };
-        }
-    }
-}
+  sniffer::common::serialization::SerializedObject Serialize(
+      const SerializationMgr& serializer) const override;
 
-#endif
+  std::string entity_name() const override;
+
+ private:
+  static HeaderFactoryRegistrator<InternetHeader> registrator_;
+
+  const formats::Internet* data_;
+};
+
+}  // namespace headers
+
+}  // namespace protocols
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_INTERNET_HEADER_H_

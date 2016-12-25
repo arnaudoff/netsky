@@ -1,45 +1,65 @@
-#ifndef PROTOCOL_HEADER_HPP_
-#define PROTOCOL_HEADER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-#include "../../../communications/serialization/include/SerializableEntity.hpp"
-#include "../../core/include/PolicyBindings.hpp"
+#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_H_
 
-namespace Sniffer {
-    namespace Core {
-        class SniffedPacket;
-    }
-}
+#include <memory>
+#include <string>
 
-namespace Sniffer {
-    namespace Protocols {
-        namespace Headers {
-            class Header : public Communications::Serialization::SerializableEntity {
-                private:
-                    int length_;
+#include "common/policy_bindings.h"
+#include "common/serialization/serializable_entity.h"
 
-                public:
-                    Header(int length);
+namespace sniffer {
 
-                    template<typename T>
-                    static std::unique_ptr<Header> create_header(
-                            int length,
-                            Sniffer::Core::SniffedPacket& packet) {
-                        return std::make_unique<T>(length, packet);
-                    }
+namespace protocols {
 
-                    int get_length() const;
+namespace headers {
 
-                    virtual int get_next_header_id() const = 0;
+class Header : public sniffer::common::serialization::SerializableEntity {
+ public:
+  explicit Header(int length);
 
-                    virtual Communications::Serialization::SerializedObject
-                        serialize(const SerializationMgr& serializer) const = 0;
+  virtual ~Header();
 
-                    virtual std::string get_entity_name() const = 0;
+  template <typename T>
+  static std::unique_ptr<Header> CreateHeader(
+      int length, sniffer::core::SniffedPacket* packet) {
+    return std::make_unique<T>(length, packet);
+  }
 
-                    virtual ~Header();
-            };
-        }
-    }
-}
+  int length() const;
 
-#endif
+  virtual int next_header_id() const = 0;
+
+  virtual sniffer::common::serialization::SerializedObject Serialize(
+      const SerializationMgr& serializer) const = 0;
+
+  virtual std::string entity_name() const = 0;
+
+ private:
+  int length_;
+};
+
+}  // namespace headers
+
+}  // namespace protocols
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_H_

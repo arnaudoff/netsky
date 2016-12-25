@@ -1,49 +1,70 @@
-#ifndef ETHERNET_HEADER_HPP_
-#define ETHERNET_HEADER_HPP_
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_
 
 #include <sys/types.h>
 #include <string>
 
-#include "Header.hpp"
-#include "HeaderFactoryRegistrator.hpp"
-#include "../../../core/include/SniffedPacket.hpp"
-#include "../formats/Ethernet.hpp"
+#include "core/sniffed_packet.h"
+#include "protocols/headers/formats/ethernet.h"
+#include "protocols/headers/header.h"
+#include "protocols/headers/header_factory_registrator.h"
 
-namespace Sniffer {
-    namespace Protocols {
-        namespace Headers {
-            class EthernetHeader : public Header {
-                private:
-                    static constexpr int ADDRESS_LENGTH = 6;
-                    static HeaderFactoryRegistrator<EthernetHeader> registrator_;
+namespace sniffer {
 
-                    const Formats::Ethernet* data_;
+namespace protocols {
 
-                public:
-                    EthernetHeader(
-                            int length,
-                            Sniffer::Core::SniffedPacket& packet);
+namespace headers {
 
-                    static void register_class(const std::string& name);
+class EthernetHeader : public Header {
+ public:
+  EthernetHeader(int length, sniffer::core::SniffedPacket* packet);
 
-                    std::string get_destination_address() const;
+  ~EthernetHeader() {}
 
-                    std::string get_source_address() const;
+  static void RegisterClass(const std::string& name);
 
-                    u_short get_ether_type() const;
+  std::string destination_address() const;
 
-                    virtual int get_next_header_id() const override;
+  std::string source_address() const;
 
-                    virtual std::string get_entity_name() const override;
+  u_short ether_type() const;
 
-                    virtual Communications::Serialization::SerializedObject
-                        serialize(const SerializationMgr& serializer)
-                        const override;
+  int next_header_id() const override;
 
-                    ~EthernetHeader() {};
-            };
-        }
-    }
-}
+  std::string entity_name() const override;
 
-#endif
+  sniffer::common::serialization::SerializedObject Serialize(
+      const SerializationMgr& serializer) const override;
+
+ private:
+  static constexpr int ADDRESS_LENGTH = 6;
+  static HeaderFactoryRegistrator<EthernetHeader> registrator_;
+
+  const formats::Ethernet* data_;
+};
+
+}  // namespace headers
+
+}  // namespace protocols
+
+}  // namespace sniffer
+
+#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_

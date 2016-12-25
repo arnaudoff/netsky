@@ -1,33 +1,53 @@
+/*
+ * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <arpa/inet.h>
+
 #include <sstream>
 
-#include "include/InternetHeader.hpp"
+#include "protocols/headers/internet_header.h"
 
-using namespace Sniffer::Core;
-using namespace Sniffer::Communications::Serialization;
-using namespace Sniffer::Protocols::Headers;
-using namespace Sniffer::Protocols::Headers::Formats;
+namespace sniffer {
 
-HeaderFactoryRegistrator<InternetHeader> InternetHeader::registrator_ {};
+namespace protocols {
+
+namespace headers {
+
+HeaderFactoryRegistrator<InternetHeader> InternetHeader::registrator_{};
 
 /**
  * @brief Constructs an Internet header from a SniffedPacket, reinterpreting
  * the internal byte array of the SniffedPacket object.
  *
  * @param length The length of the header to extract in bytes.
- * @param packet A reference to a SnifffedPacket object.
+ * @param packet A pointer to a SnifffedPacket object.
  */
-InternetHeader::InternetHeader(int length, SniffedPacket& packet)
+InternetHeader::InternetHeader(int length, SniffedPacket* packet)
     : Header{length},
-    data_{(const struct Internet*)(packet.extract_header(length))} {
-    /*
-    if (size_ < 20) {
-        std::ostringstream exception_message;
-        exception_message << "Invalid IP header length: " << size_ << " bytes.";
-        throw std::out_of_range { exception_message.str() };
-    }
-    data_ = (const struct Internet*)(packet.extract_header());
-    */
+      data_{(const struct Internet*)(packet.ExtractHeader(length))} {
+  /*
+  if (size_ < 20) {
+      std::ostringstream exception_message;
+      exception_message << "Invalid IP header length: " << size_ << " bytes.";
+      throw std::out_of_range { exception_message.str() };
+  }
+  data_ = (const struct Internet*)(packet.extract_header());
+  */
 }
 
 /**
@@ -35,8 +55,8 @@ InternetHeader::InternetHeader(int length, SniffedPacket& packet)
  *
  * @param name A name which to use for the InternetHeader class.
  */
-void InternetHeader::register_class(const std::string& name) {
-    registrator_.register_header(name);
+void InternetHeader::RegisterClass(const std::string& name) {
+  registrator_.RegisterHeader(name);
 }
 
 /**
@@ -45,8 +65,8 @@ void InternetHeader::register_class(const std::string& name) {
  * @return The version which is encoded into the VIHL field of the packet
  * header.
  */
-u_char InternetHeader::get_version() const {
-    return data_->version_internet_header_length >> 4;
+u_char InternetHeader::version() const {
+  return data_->version_internet_header_length >> 4;
 }
 
 /**
@@ -54,8 +74,8 @@ u_char InternetHeader::get_version() const {
  *
  * @return A pointer to the beginning of the source IP address.
  */
-char* InternetHeader::get_source_address() const {
-    return inet_ntoa(data_->source_address);
+char* InternetHeader::source_address() const {
+  return inet_ntoa(data_->source_address);
 }
 
 /**
@@ -63,8 +83,8 @@ char* InternetHeader::get_source_address() const {
  *
  * @return A pointer to the beginning of the destination IP address.
  */
-char* InternetHeader::get_destination_address() const {
-    return inet_ntoa(data_->destination_address);
+char* InternetHeader::destination_address() const {
+  return inet_ntoa(data_->destination_address);
 }
 
 /**
@@ -72,9 +92,7 @@ char* InternetHeader::get_destination_address() const {
  *
  * @return The value of the Protocol field of the packet, i.e TCP or UDP.
  */
-int InternetHeader::get_next_header_id() const {
-    return data_->protocol;
-}
+int InternetHeader::next_header_id() const { return data_->protocol; }
 
 /**
  * @brief Defines the entity name for the class that is used when serializing
@@ -82,9 +100,7 @@ int InternetHeader::get_next_header_id() const {
  *
  * @return The name of the entity.
  */
-std::string InternetHeader::get_entity_name() const {
-    return "internet";
-}
+std::string InternetHeader::entity_name() const { return "internet"; }
 
 /**
  * @brief Serializes an InternetHeader object into an object of type defined
@@ -94,17 +110,24 @@ std::string InternetHeader::get_entity_name() const {
  *
  * @return A serialized version of the fields in the Interner Protocol header.
  */
-SerializedObject InternetHeader::serialize(const SerializationMgr& serializer) const {
-    auto obj = serializer.create_object();
+SerializedObject InternetHeader::Serialize(
+    const SerializationMgr& serializer) const {
+  auto obj = serializer.create_object();
 
-    // TODO: Extract the upper_layer stuff into the Header and call the base
-    // implementation from here.
-    serializer.set_value<u_char>(obj, "version", get_version());
-    serializer.set_value<u_char>(obj, "upper_layer", get_next_header_id());
-    serializer.set_value<char*>(obj, "src", get_source_address());
-    serializer.set_value<char*>(obj, "dst", get_destination_address());
-    serializer.set_value<int>(obj, "length", get_length());
+  // TODO(arnaudoff): Extract the upper_layer stuff into the Header and call the
+  // base
+  // implementation from here.
+  serializer.SetValue<u_char>(obj, "version", version());
+  serializer.SetValue<u_char>(obj, "upper_layer", next_header_id());
+  serializer.SetValue<char*>(obj, "src", source_address());
+  serializer.SetValue<char*>(obj, "dst", destination_address());
+  serializer.SetValue<int>(obj, "length", length());
 
-    return obj;
+  return obj;
 }
 
+}  // namespace headers
+
+}  // namespace protocols
+
+}  // namespace sniffer
