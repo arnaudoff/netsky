@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_COMMON_SERIALIZATION_SERIALIZABLE_ENTITY_H_
-#define SNIFFER_SRC_COMMON_SERIALIZATION_SERIALIZABLE_ENTITY_H_
+#ifndef SNIFFER_SRC_COMMON_INCLUDE_COMMON_SERIALIZATION_SERIALIZABLE_ENTITY_H_
+#define SNIFFER_SRC_COMMON_INCLUDE_COMMON_SERIALIZATION_SERIALIZABLE_ENTITY_H_
 
 #include <sys/types.h>
 #include <string>
 
-// #include "../../../core/include/PolicyBindings.hpp"
-#include "serialized_object.h"
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
 
 namespace sniffer {
 
@@ -33,7 +33,7 @@ namespace serialization {
 
 class SerializableEntity {
  public:
-  virtual SerializedObject serialize(
+  virtual SerializedObject Serialize(
       const SerializationMgr& serializer) const = 0;
 
   virtual ~SerializableEntity() {}
@@ -47,4 +47,4 @@ class SerializableEntity {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_COMMON_SERIALIZATION_SERIALIZABLE_ENTITY_H_
+#endif  // SNIFFER_SRC_COMMON_INCLUDE_COMMON_SERIALIZATION_SERIALIZABLE_ENTITY_H_

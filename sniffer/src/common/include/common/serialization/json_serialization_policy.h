@@ -16,13 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_COMMON_SERIALIZATION_JSON_SERIALIZATION_POLICY_H_
-#define SNIFFER_SRC_COMMON_SERIALIZATION_JSON_SERIALIZATION_POLICY_H_
+#ifndef SNIFFER_SRC_COMMON_INCLUDE_COMMON_SERIALIZATION_JSON_SERIALIZATION_POLICY_H_
+#define SNIFFER_SRC_COMMON_INCLUDE_COMMON_SERIALIZATION_JSON_SERIALIZATION_POLICY_H_
 
 #include <memory>
 #include <string>
 
-#include <nlohmann/json.hpp>  // NOLINT
+#include "json.hpp"
+
+#include "common/serialization/serialized_object.h"
 
 namespace sniffer {
 
@@ -34,16 +36,15 @@ template <class T>
 class JsonSerializationPolicy {
  public:
   T Create() const {
-    json empty_obj = json::object();
+    nlohmann::json empty_obj = nlohmann::json::object();
 
     T obj{empty_obj.dump()};
 
     return obj;
   }
 
-  bool ObjectExists(const SerializedObject& data,
-                    const std::string& object) const {
-    auto json_obj = json::parse(data.data());
+  bool ObjectExists(const T& serialized_obj, const std::string& object) const {
+    auto json_obj = nlohmann::json::parse(serialized_obj.data());
 
     if (json_obj.find(object) != json_obj.end()) {
       return true;
@@ -52,46 +53,48 @@ class JsonSerializationPolicy {
     return false;
   }
 
-  bool IsEmpty(const SerializedObject& obj) const {
-    auto json_obj = json::parse(obj.data());
+  bool IsEmpty(const T& serialized_obj) const {
+    auto json_obj = nlohmann::json::parse(serialized_obj.data());
     return json_obj.empty();
   }
 
   template <typename U>
-  U ExtractValue(const T& data, const std::string& object,
+  U ExtractValue(const T& serialized_obj, const std::string& object,
                  const std::string& key) const {
-    auto json_obj = json::parse(data.data());
+    auto json_obj = nlohmann::json::parse(serialized_obj.data());
     return json_obj[object][key].template get<U>();
   }
 
   template <typename U>
-  void SetValue(const std::string& key, U value, T* object) const {
-    auto json_obj = json::parse(object->data());
+  void SetValue(const std::string& key, U value, T* serialized_obj) const {
+    auto json_obj = nlohmann::json::parse(serialized_obj->data());
 
     json_obj[key] = value;
 
-    object->set_data(json_obj.dump());
+    serialized_obj->set_data(json_obj.dump());
   }
 
-  void SetObject(const std::string& key, const T& obj, T* parent_obj) const {
-    auto json_pobj = json::parse(parent_obj.data());
-    auto json_obj = json::parse(obj.data());
+  void SetObject(const std::string& key, const T& serialized_obj,
+                 T* serialized_parent_obj) const {
+    auto json_pobj = nlohmann::json::parse(serialized_parent_obj->data());
+    auto json_obj = nlohmann::json::parse(serialized_obj.data());
     json_pobj[key] = json_obj;
 
-    parent_obj.set_data(json_pobj.dump());
+    serialized_parent_obj->set_data(json_pobj.dump());
   }
 
-  void AppendObject(const std::string& key, const T& obj, T* parent_obj) const {
-    auto json_pobj = json::parse(parent_obj->data());
-    auto json_obj = json::parse(obj.data());
+  void AppendObject(const std::string& key, const T& serialized_obj,
+                    T* serialized_parent_obj) const {
+    auto json_pobj = nlohmann::json::parse(serialized_parent_obj->data());
+    auto json_obj = nlohmann::json::parse(serialized_obj.data());
 
     if (!json_pobj.count(key)) {
-      json_pobj[key] = json::array();
+      json_pobj[key] = nlohmann::json::array();
     }
 
     json_pobj[key].push_back(json_obj);
 
-    parent_obj->set_data(json_pobj.dump());
+    serialized_parent_obj->set_data(json_pobj.dump());
   }
 };
 
@@ -101,4 +104,4 @@ class JsonSerializationPolicy {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_COMMON_SERIALIZATION_JSON_SERIALIZATION_POLICY_H_
+#endif  // SNIFFER_SRC_COMMON_INCLUDE_COMMON_SERIALIZATION_JSON_SERIALIZATION_POLICY_H_
