@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "./ipv6_address.h"
+#include "common/addressing/ipv6_address.h"
 
 #include <cstring>
 

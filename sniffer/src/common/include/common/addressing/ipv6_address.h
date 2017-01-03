@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_COMMON_ADDRESSING_IPV6_ADDRESS_H_
-#define SNIFFER_SRC_COMMON_ADDRESSING_IPV6_ADDRESS_H_
+#ifndef SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IPV6_ADDRESS_H_
+#define SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IPV6_ADDRESS_H_
 
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-#include "./ip_address.h"
+#include "common/addressing/ip_address.h"
 
 namespace sniffer {
 
@@ -52,4 +52,4 @@ class Ipv6Address : public IpAddress {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_COMMON_ADDRESSING_IPV6_ADDRESS_H_
+#endif  // SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IPV6_ADDRESS_H_

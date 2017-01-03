@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "./ipv4_address.h"
+#include "common/addressing/ipv4_address.h"
 
 #include <cstring>
 
@@ -50,6 +50,7 @@ Ipv4Address& Ipv4Address::operator=(const Ipv4Address& other) {
 
 Ipv4Address::~Ipv4Address() { delete[] buffer_; }
 
+// TODO(arnaudoff): Refactor this crap
 char* Ipv4Address::data() const { return buffer_; }
 
 }  // namespace addressing

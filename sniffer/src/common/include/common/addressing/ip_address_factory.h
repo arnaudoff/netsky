@@ -16,18 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_COMMON_ADDRESSING_IP_ADDRESS_FACTORY_H_
-#define SNIFFER_SRC_COMMON_ADDRESSING_IP_ADDRESS_FACTORY_H_
+#ifndef SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IP_ADDRESS_FACTORY_H_
+#define SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IP_ADDRESS_FACTORY_H_
 
 #include <sys/socket.h>
 #include <memory>
-#include "./ip_address.h"
 
 namespace sniffer {
 
 namespace common {
 
 namespace addressing {
+
+class IpAddress;
 
 class IpAddressFactory {
  public:
@@ -40,4 +41,4 @@ class IpAddressFactory {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_COMMON_ADDRESSING_IP_ADDRESS_FACTORY_H_
+#endif  // SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IP_ADDRESS_FACTORY_H_

@@ -16,15 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "./ip_address_factory.h"
+#include "common/addressing/ip_address_factory.h"
 
 #include <memory>
 
-#include <spdlog/spdlog.h>  // NOLINT
-
-#include "./ip_address.h"
-#include "./ipv4_address.h"
-#include "./ipv6_address.h"
+#include "common/addressing/ip_address.h"
+#include "common/addressing/ipv4_address.h"
+#include "common/addressing/ipv6_address.h"
+#include "common/extensions/make_unique.h"
 
 namespace sniffer {
 
@@ -33,6 +32,16 @@ namespace common {
 namespace addressing {
 
 // Effective Modern C++, Meyers, p.119 & p.124
+
+/**
+ * @brief A factory method returning a concrete IpAddress with ownership given
+ * to the caller of the method.
+ *
+ * @param sockaddr A pointer to a sockaddr struct containing the IP.
+ *
+ * @return A concrete instance of an IpAddress child based on the
+ * sockaddr->sa_family field.
+ */
 std::unique_ptr<IpAddress> IpAddressFactory::Parse(struct sockaddr* sockaddr) {
   if (sockaddr) {
     switch (sockaddr->sa_family) {
