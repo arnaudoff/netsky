@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "protocols/headers/internet_header.h"
+
 #include <arpa/inet.h>
 
 #include <sstream>
 
-#include "protocols/headers/internet_header.h"
+#include "protocols/headers/formats/internet.h"
+#include "protocols/sniffed_packet.h"
 
 namespace sniffer {
 
@@ -35,11 +38,12 @@ HeaderFactoryRegistrator<InternetHeader> InternetHeader::registrator_{};
  * the internal byte array of the SniffedPacket object.
  *
  * @param length The length of the header to extract in bytes.
+ *
  * @param packet A pointer to a SnifffedPacket object.
  */
 InternetHeader::InternetHeader(int length, SniffedPacket* packet)
     : Header{length},
-      data_{(const struct Internet*)(packet.ExtractHeader(length))} {
+      data_{(const formats::Internet*)(packet->ExtractHeader(length))} {
   /*
   if (size_ < 20) {
       std::ostringstream exception_message;
@@ -110,18 +114,18 @@ std::string InternetHeader::entity_name() const { return "internet"; }
  *
  * @return A serialized version of the fields in the Interner Protocol header.
  */
-SerializedObject InternetHeader::Serialize(
-    const SerializationMgr& serializer) const {
-  auto obj = serializer.create_object();
+sniffer::common::serialization::SerializedObject InternetHeader::Serialize(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto obj = serializer.CreateObject();
 
   // TODO(arnaudoff): Extract the upper_layer stuff into the Header and call the
   // base
   // implementation from here.
-  serializer.SetValue<u_char>(obj, "version", version());
-  serializer.SetValue<u_char>(obj, "upper_layer", next_header_id());
-  serializer.SetValue<char*>(obj, "src", source_address());
-  serializer.SetValue<char*>(obj, "dst", destination_address());
-  serializer.SetValue<int>(obj, "length", length());
+  serializer.SetValue<u_char>("version", version(), &obj);
+  serializer.SetValue<u_char>("upper_layer", next_header_id(), &obj);
+  serializer.SetValue<char*>("src", source_address(), &obj);
+  serializer.SetValue<char*>("dst", destination_address(), &obj);
+  serializer.SetValue<int>("length", length(), &obj);
 
   return obj;
 }

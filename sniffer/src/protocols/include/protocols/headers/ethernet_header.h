@@ -16,14 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_
-#define SNIFFER_SRC_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_
 
 #include <sys/types.h>
 #include <string>
 
-#include "core/sniffed_packet.h"
-#include "protocols/headers/formats/ethernet.h"
 #include "protocols/headers/header.h"
 #include "protocols/headers/header_factory_registrator.h"
 
@@ -33,9 +31,15 @@ namespace protocols {
 
 namespace headers {
 
+namespace formats {
+
+struct Ethernet;
+
+}  // namespace formats
+
 class EthernetHeader : public Header {
  public:
-  EthernetHeader(int length, sniffer::core::SniffedPacket* packet);
+  EthernetHeader(int length, SniffedPacket* packet);
 
   ~EthernetHeader() {}
 
@@ -52,7 +56,8 @@ class EthernetHeader : public Header {
   std::string entity_name() const override;
 
   sniffer::common::serialization::SerializedObject Serialize(
-      const SerializationMgr& serializer) const override;
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const override;
 
  private:
   static constexpr int ADDRESS_LENGTH = 6;
@@ -67,4 +72,4 @@ class EthernetHeader : public Header {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_ETHERNET_HEADER_H_

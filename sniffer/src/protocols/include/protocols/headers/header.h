@@ -16,18 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_H_
-#define SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_H_
 
 #include <memory>
 #include <string>
 
+#include "common/extensions/make_unique.h"
 #include "common/policy_bindings.h"
 #include "common/serialization/serializable_entity.h"
 
 namespace sniffer {
 
 namespace protocols {
+
+class SniffedPacket;
 
 namespace headers {
 
@@ -38,8 +41,8 @@ class Header : public sniffer::common::serialization::SerializableEntity {
   virtual ~Header();
 
   template <typename T>
-  static std::unique_ptr<Header> CreateHeader(
-      int length, sniffer::core::SniffedPacket* packet) {
+  static std::unique_ptr<Header> CreateHeader(int length,
+                                              SniffedPacket* packet) {
     return std::make_unique<T>(length, packet);
   }
 
@@ -48,7 +51,8 @@ class Header : public sniffer::common::serialization::SerializableEntity {
   virtual int next_header_id() const = 0;
 
   virtual sniffer::common::serialization::SerializedObject Serialize(
-      const SerializationMgr& serializer) const = 0;
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const = 0;
 
   virtual std::string entity_name() const = 0;
 
@@ -62,4 +66,4 @@ class Header : public sniffer::common::serialization::SerializableEntity {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_H_

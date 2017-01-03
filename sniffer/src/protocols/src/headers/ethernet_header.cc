@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "protocols/headers/ethernet_header.h"
+
 #include <iomanip>
 #include <sstream>
 
-#include "protocols/headers/ethernet_header.h"
+#include "protocols/headers/formats/ethernet.h"
+#include "protocols/sniffed_packet.h"
 
 namespace sniffer {
 
@@ -39,7 +42,7 @@ HeaderFactoryRegistrator<EthernetHeader> EthernetHeader::registrator_{};
  */
 EthernetHeader::EthernetHeader(int length, SniffedPacket* packet)
     : Header{length},
-      data_{(const struct Ethernet*)(packet.ExtractHeader(length))} {}
+      data_{(const formats::Ethernet*)(packet->ExtractHeader(length))} {}
 
 /**
  * @brief Registers the header class into the global HeaderFactory registry.
@@ -118,13 +121,13 @@ std::string EthernetHeader::entity_name() const { return "ethernet"; }
  *
  * @return A serialized version of the fields in the Ethernet header.
  */
-SerializedObject EthernetHeader::Serialize(
-    const SerializationMgr& serializer) const {
-  auto obj = serializer.create_object();
+sniffer::common::serialization::SerializedObject EthernetHeader::Serialize(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto obj = serializer.CreateObject();
 
-  serializer.SetValue<std::string>(obj, "dest", destination_address());
-  serializer.SetValue<std::string>(obj, "src", source_address());
-  serializer.SetValue<u_short>(obj, "ether_type", ether_type());
+  serializer.SetValue<std::string>("dest", destination_address(), &obj);
+  serializer.SetValue<std::string>("src", source_address(), &obj);
+  serializer.SetValue<u_short>("ether_type", ether_type(), &obj);
 
   return obj;
 }

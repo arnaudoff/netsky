@@ -17,7 +17,9 @@
  */
 
 #include "protocols/headers/header_factory.h"
+
 #include "protocols/headers/header.h"
+#include "protocols/sniffed_packet.h"
 
 namespace sniffer {
 
@@ -25,17 +27,17 @@ namespace protocols {
 
 namespace headers {
 
-using map_type = std::map<std::string, std::unique_ptr<Header> (*)(
-                                           int, sniffer::core::SniffedPacket*)>;
+using RegistryMap =
+    std::map<std::string, std::unique_ptr<Header> (*)(int, SniffedPacket*)>;
 
 /**
  * @brief Lazy loads the internal registry map.
  *
  * @return The internal registry map.
  */
-map_type* HeaderFactory::map() {
+RegistryMap* HeaderFactory::map() {
   if (!map_) {
-    map_ = new map_type;
+    map_ = new RegistryMap;
   }
 
   return map_;
@@ -55,7 +57,7 @@ map_type* HeaderFactory::map() {
  */
 std::unique_ptr<Header> HeaderFactory::CreateInstance(
     const std::string& class_name, int length, SniffedPacket* packet) {
-  map_type::iterator it = map()->find(class_name);
+  RegistryMap::iterator it = map()->find(class_name);
   if (it == map()->end()) {
     return nullptr;
   }

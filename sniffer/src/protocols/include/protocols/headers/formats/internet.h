@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_FORMATS_INTERNET_H_
-#define SNIFFER_SRC_PROTOCOLS_HEADERS_FORMATS_INTERNET_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_FORMATS_INTERNET_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_FORMATS_INTERNET_H_
 
 #include <netinet/in.h>  // in_addr
 #include <sys/types.h>
@@ -51,4 +51,4 @@ struct Internet {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_FORMATS_INTERNET_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_FORMATS_INTERNET_H_

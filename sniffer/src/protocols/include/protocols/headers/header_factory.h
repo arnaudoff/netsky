@@ -16,37 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_FACTORY_H_
-#define SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_FACTORY_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_FACTORY_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_FACTORY_H_
 
 #include <map>
 #include <memory>
 #include <string>
 
-#include "core/sniffed_packet.h"
-#include "protocols/headers/header.h"
-
 namespace sniffer {
 
 namespace protocols {
 
+class SniffedPacket;
+
 namespace headers {
 
+class Header;
+
 class HeaderFactory {
+  using RegistryMap =
+      std::map<std::string, std::unique_ptr<Header> (*)(int, SniffedPacket*)>;
+
  public:
   std::unique_ptr<Header> CreateInstance(const std::string& class_name,
-                                         int length,
-                                         sniffer::core::SniffedPacket* packet);
+                                         int length, SniffedPacket* packet);
 
  protected:
-  map_type* map();
+  RegistryMap* map();
 
  private:
-  using map_type =
-      std::map<std::string,
-               std::unique_ptr<Header> (*)(int, sniffer::core::SniffedPacket*)>;
-
-  map_type* map_;
+  RegistryMap* map_;
 };
 
 }  // namespace headers
@@ -55,4 +54,4 @@ class HeaderFactory {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_FACTORY_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_FACTORY_H_

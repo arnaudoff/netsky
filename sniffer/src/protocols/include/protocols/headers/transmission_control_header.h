@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
-#define SNIFFER_SRC_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
 
 #include <sys/types.h>
 
@@ -33,10 +33,8 @@
 #define TH_CWR 0x80
 #define TH_FLAGS (TH_FIN | TH_SYN | TH_RST | TH_ACK | TH_URG | TH_ECE | TH_CWR)
 
-#include "core/sniffed_packet.h"
 #include "protocols/headers/header.h"
 #include "protocols/headers/header_factory_registrator.h"
-#include "protocols/headers/transmission_control.h"
 
 namespace sniffer {
 
@@ -44,9 +42,15 @@ namespace protocols {
 
 namespace headers {
 
+namespace formats {
+
+struct TransmissionControl;
+
+}  // namespace formats
+
 class TransmissionControlHeader : public Header {
  public:
-  TransmissionControlHeader(int length, sniffer::core::SniffedPacket* packet);
+  TransmissionControlHeader(int length, SniffedPacket* packet);
 
   ~TransmissionControlHeader() {}
 
@@ -65,14 +69,15 @@ class TransmissionControlHeader : public Header {
   int next_header_id() const override;
 
   sniffer::common::serialization::SerializedObject Serialize(
-      const SerializationMgr& serializer) const override;
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const override;
 
   std::string entity_name() const override;
 
  private:
   static HeaderFactoryRegistrator<TransmissionControlHeader> registrator_;
 
-  const Formats::TransmissionControl* data_;
+  const formats::TransmissionControl* data_;
 };
 
 }  // namespace headers
@@ -81,4 +86,4 @@ class TransmissionControlHeader : public Header {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_

@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_INTERNET_HEADER_H_
-#define SNIFFER_SRC_PROTOCOLS_HEADERS_INTERNET_HEADER_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_INTERNET_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_INTERNET_HEADER_H_
 
 #include <sys/types.h>
 #include <string>
@@ -27,10 +27,8 @@
 #define IP_MF 0x2000      /* more fragments flag */
 #define IP_OFFMASK 0x1fff /* mask for fragmenting bits */
 
-#include "core/sniffed_packet.h"
-#include "protocols/headers/formats/internet.h"
 #include "protocols/headers/header.h"
-#include "protocols/headers/header_factory_registrato.h"
+#include "protocols/headers/header_factory_registrator.h"
 
 namespace sniffer {
 
@@ -38,9 +36,14 @@ namespace protocols {
 
 namespace headers {
 
+namespace formats {
+
+struct Internet;
+}
+
 class InternetHeader : public Header {
  public:
-  InternetHeader(int length, sniffer::core::SniffedPacket* packet);
+  InternetHeader(int length, SniffedPacket* packet);
 
   ~InternetHeader() {}
 
@@ -73,7 +76,8 @@ class InternetHeader : public Header {
   int next_header_id() const override;
 
   sniffer::common::serialization::SerializedObject Serialize(
-      const SerializationMgr& serializer) const override;
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const override;
 
   std::string entity_name() const override;
 
@@ -89,4 +93,4 @@ class InternetHeader : public Header {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_INTERNET_HEADER_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_INTERNET_HEADER_H_

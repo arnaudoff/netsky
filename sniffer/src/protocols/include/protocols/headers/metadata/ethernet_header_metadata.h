@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_
-#define SNIFFER_SRC_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_
 
 #include <sys/types.h>
 
 #include <string>
 
-#include "protocols/headers/metadata/ethernet_header_metadata.h"
+#include "protocols/headers/metadata/header_metadata.h"
 
 namespace sniffer {
 
@@ -47,4 +47,4 @@ class EthernetHeaderMetadata : public HeaderMetadata {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_

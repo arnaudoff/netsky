@@ -23,6 +23,10 @@
 #include <memory>
 #include <sstream>
 
+#include "protocols/headers/formats/transmission_control.h"
+#include "protocols/headers/header_factory_registrator.h"
+#include "protocols/sniffed_packet.h"
+
 namespace sniffer {
 
 namespace protocols {
@@ -43,7 +47,8 @@ HeaderFactoryRegistrator<TransmissionControlHeader>
 TransmissionControlHeader::TransmissionControlHeader(int length,
                                                      SniffedPacket* packet)
     : Header{length},
-      data_{(const struct TransmissionControl*)(packet.ExtractHeader(length))}
+      data_{
+          (const formats::TransmissionControl*)(packet->ExtractHeader(length))}
 /*
 if (size_ < 20) {
     std::ostringstream exception_message;
@@ -126,14 +131,15 @@ std::string TransmissionControlHeader::entity_name() const { return "tcp"; }
  *
  * @return A serialized version of the fields in the TCP header.
  */
-SerializedObject TransmissionControlHeader::Serialize(
-    const SerializationMgr& serializer) const {
-  auto obj = serializer.create_object();
+sniffer::common::serialization::SerializedObject
+TransmissionControlHeader::Serialize(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto obj = serializer.CreateObject();
 
-  serializer.SetValue<u_int16_t>(obj, "src", source_port());
-  serializer.SetValue<u_int16_t>(obj, "dst", destination_port());
+  serializer.SetValue<u_int16_t>("src", source_port(), &obj);
+  serializer.SetValue<u_int16_t>("dst", destination_port(), &obj);
   // TODO(arnaudoff): Extract to base..
-  serializer.SetValue<int>(obj, "length", length());
+  serializer.SetValue<int>("length", length(), &obj);
 
   return obj;
 }

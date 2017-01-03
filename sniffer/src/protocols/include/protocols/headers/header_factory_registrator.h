@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_FACTORY_REGISTRATOR_H_
-#define SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_FACTORY_REGISTRATOR_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_FACTORY_REGISTRATOR_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_FACTORY_REGISTRATOR_H_
 
 #include <memory>
 #include <string>
@@ -35,11 +35,10 @@ namespace headers {
 template <typename T>
 class HeaderFactoryRegistrator : public HeaderFactory {
  public:
-  using func_ptr_type =
-      std::unique_ptr<Header> (*)(int, sniffer::core::SniffedPacket*);
+  using FunctionPointerType = std::unique_ptr<Header> (*)(int, SniffedPacket*);
 
   void RegisterHeader(const std::string& type_name) {
-    map()->insert(std::pair<std::string, func_ptr_type>(
+    map()->insert(std::pair<std::string, FunctionPointerType>(
         type_name, &Header::CreateHeader<T>));
   }
 };
@@ -50,4 +49,4 @@ class HeaderFactoryRegistrator : public HeaderFactory {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_HEADERS_HEADER_FACTORY_REGISTRATOR_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_HEADER_FACTORY_REGISTRATOR_H_
