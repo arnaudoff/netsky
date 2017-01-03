@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Copyright (C) 2017  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -16,36 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_SNIFFED_PACKET_H_
-#define SNIFFER_SRC_CORE_SNIFFED_PACKET_H_
-
-#include <memory>
-
-#include "core/packet_region.h"
-
 namespace sniffer {
 
-namespace core {
+namespace protocols {
 
-class SniffedPacket {
- public:
-  SniffedPacket(const u_char* data, PacketRegion body);
+PacketRegion::PacketRegion() : offset{0}, length{0} {}
 
-  const u_char* ExtractHeader(int header_length);
+PacketRegion::PacketRegion(int offset, int length)
+    : offset{offset}, length{length} {}
 
-  const u_char* ExtractTrailer(int trailer_length);
+}  // namespace protocols
 
-  const u_char* Peek(int byte_offset);
-
- private:
-  PacketRegion header_;
-  PacketRegion body_;
-  PacketRegion trailer_;
-
-  const u_char* data_;
-};
-
-}  // namespace core
 }  // namespace sniffer
-
-#endif  // SNIFFER_SRC_CORE_SNIFFED_PACKET_H_

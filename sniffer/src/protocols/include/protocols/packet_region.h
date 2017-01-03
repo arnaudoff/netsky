@@ -16,24 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_PACKET_REGION_H_
-#define SNIFFER_SRC_CORE_PACKET_REGION_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_PACKET_REGION_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_PACKET_REGION_H_
 
 namespace sniffer {
 
-namespace core {
+namespace protocols {
 
 struct PacketRegion {
+  PacketRegion();
+
+  PacketRegion(int offset, int length);
+
   int offset;
   int length;
-
-  PacketRegion() : offset{0}, length{0} {}
-
-  PacketRegion(int offset, int length) : offset{offset}, length{length} {}
 };
 
-}  // namespace core
+}  // namespace protocols
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_PACKET_REGION_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_PACKET_REGION_H_

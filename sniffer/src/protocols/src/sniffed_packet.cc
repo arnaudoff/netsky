@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "core/sniffed_packet.h"
+#include "protocols/sniffed_packet.h"
+#include "protocols/packet_region.h"
 
 namespace sniffer {
 
-namespace core {
+namespace protocols {
 
 /**
  * @brief Constructs a SniffedPacket object.
@@ -89,6 +90,6 @@ const u_char* SniffedPacket::Peek(int byte_offset) {
   return &(data_[header_.offset + byte_offset]);
 }
 
-}  // namespace core
+}  // namespace protocols
 
 }  // namespace sniffer

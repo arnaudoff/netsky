@@ -1,3 +1,12 @@
 [submodule "sniffer/vendor/websocketpp"]
 	path = sniffer/vendor/websocketpp
 	url = https://github.com/zaphoyd/websocketpp
+[submodule "sniffer/src/vendor/websocketpp"]
+	path = sniffer/src/vendor/websocketpp
+	url = https://github.com/zaphoyd/websocketpp
+[submodule "sniffer/src/vendor/nlohmann_json"]
+	path = sniffer/src/vendor/nlohmann_json
+	url = https://github.com/nlohmann/json
+[submodule "sniffer/src/vendor/spdlog"]
+	path = sniffer/src/vendor/spdlog
+	url = https://github.com/gabime/spdlog
