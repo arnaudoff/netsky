@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "./configuration.h"
+#include "common/config/configuration.h"
 
 namespace sniffer {
 

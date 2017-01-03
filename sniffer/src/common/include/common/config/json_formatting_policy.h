@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_COMMON_CONFIG_JSON_FORMATTING_POLICY_H_
-#define SNIFFER_SRC_COMMON_CONFIG_JSON_FORMATTING_POLICY_H_
+#ifndef SNIFFER_SRC_COMMON_INCLUDE_COMMON_CONFIG_JSON_FORMATTING_POLICY_H_
+#define SNIFFER_SRC_COMMON_INCLUDE_COMMON_CONFIG_JSON_FORMATTING_POLICY_H_
 
 #include <memory>
 #include <string>
 
-#include <nlohmann/json.hpp>
+#include "json.hpp"
 
 namespace sniffer {
 
@@ -60,4 +60,4 @@ class JsonFormattingPolicy {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_COMMON_CONFIG_JSON_FORMATTING_POLICY_H_
+#endif  // SNIFFER_SRC_COMMON_INCLUDE_COMMON_CONFIG_JSON_FORMATTING_POLICY_H_
