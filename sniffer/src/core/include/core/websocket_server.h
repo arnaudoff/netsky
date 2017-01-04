@@ -16,61 +16,72 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_WEBSOCKET_SERVER_H_
-#define SNIFFER_SRC_CORE_WEBSOCKET_SERVER_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_H_
 
+#include <map>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
+
+#include "websocketpp/config/asio_no_tls.hpp"
+#include "websocketpp/server.hpp"
+
+#include "common/policy_bindings.h"
 #include "core/server.h"
-
-#include <map>     // NOLINT
-#include <memory>  // NOLINT
-#include <string>  // NOLINT
-
-#include <websocketpp/common/thread.hpp>       // NOLINT
-#include <websocketpp/config/asio_no_tls.hpp>  // NOLINT
-#include <websocketpp/server.hpp>              // NOLINT
-
-#include "core/websocket_server_action_handler.h"
 
 namespace sniffer {
 
 namespace core {
 
-using websocketpp::connection_hdl;
-using websocketpp::lib::placeholders::_1;
-using websocketpp::lib::placeholders::_2;
-using websocketpp::lib::bind;
-using websocketpp::lib::thread;
+class WebSocketServerEventHandler;
 
 class WebSocketServer : public Server {
  public:
-  WebSocketServer(const ConfigurationMgr& manager,
-                  std::unique_ptr<WebSocketServerActionHandler> handler);
+  WebSocketServer(
+      const sniffer::common::config::ConfigurationMgr& config_manager,
+      std::unique_ptr<WebSocketServerEventHandler> handler);
 
-  ~WebSocketServer() {}
+  ~WebSocketServer(){};
 
   void Start(uint16_t port) override;
 
   void Stop() override;
 
-  void Unicast(const ConnectionData& con_data, const std::string& msg) override;
+  void Unicast(int connection_id, const std::string& msg) override;
 
-  void Broadcast(const std::string& message) override;
+  void AddConnection(int connection_id) override;
 
-  void AddConnection(connection_hdl handle);
+  void RemoveConnection(int connection_id) override;
 
-  void RemoveConnection(connection_hdl handle);
+  void AddClient(websocketpp::connection_hdl handle);
 
-  ConnectionData GetConnectionDataFromHandle(connection_hdl hdl);
+  void RemoveClient(websocketpp::connection_hdl handle);
+
+  int GetConnectionIdFromHandle(websocketpp::connection_hdl handle) const;
+
+  bool CompareClients(const websocketpp::connection_hdl& first_handle,
+                      const websocketpp::connection_hdl& second_handle) const;
+
+  int next_connection_id() const;
 
  private:
-  typedef websocketpp::server<websocketpp::config::asio> server_t;
-  typedef std::map<connection_hdl, ConnectionData,
-                   std::owner_less<connection_hdl>>
-      connection_list_t;
+  websocketpp::server<websocketpp::config::asio> server_;
 
-  std::unique_ptr<WebSocketServerActionHandler> action_handler_;
-  server_t server_;
-  connection_list_t connections_;
+  std::unique_ptr<WebSocketServerEventHandler> event_handler_;
+
+  std::map<int, websocketpp::connection_hdl> ws_connections_map_;
+
+  // https://channel9.msdn.com/posts/C-and-Beyond-2012-Herb-Sutter-You-dont-know-blank-and-blank
+
+  mutable std::mutex ws_connections_map_lock_;
+
+  int next_connection_id_;
+
+  mutable std::mutex next_connection_id_lock_;
+
+  mutable std::mutex connections_lock_;
 
   void Run(uint16_t port);
 };
@@ -79,4 +90,4 @@ class WebSocketServer : public Server {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_WEBSOCKET_SERVER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_H_
