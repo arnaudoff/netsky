@@ -18,21 +18,53 @@
 
 #include "core/server_commands/server_command.h"
 
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
+#include "core/server.h"
+
 namespace sniffer {
 
 namespace core {
 
 namespace server_commands {
 
-ServerCommand::ServerCommand(const std::string& name, Server* server,
-                             const SerializationMgr& serializer)
+/**
+ * @brief Constructs a ServerCommand object with a name, e.g. "start-sniffer",
+ * a pointer to a Server object (which is the object to invoke the command on)
+ * and a SerializationMgr that is to be used when matching the command.
+ *
+ * @param name The name of the command
+ *
+ * @param server The Server object for which the command is registered
+ *
+ * @param serializer The SerializationMgr to use
+ */
+ServerCommand::ServerCommand(
+    const std::string& name, Server* server,
+    const sniffer::common::serialization::SerializationMgr& serializer)
     : name_{name}, server_{server}, serializer_{serializer} {}
 
+/**
+ * @brief Retrieves the name with which the command was registered
+ *
+ * @return The name of the command
+ */
 std::string ServerCommand::name() const { return name_; }
 
+/**
+ * @brief Checks whether a certain message is a "command" message, e.g.
+ *
+ * { 'start-sniffer': { 'interfaces': ['eth0', 'wlan0'] } }
+ *
+ * would match for a command registered with name 'start-sniffer'.
+ *
+ * @param data The raw data to match
+ *
+ * @return True if matches, false otherwise.
+ */
 bool ServerCommand::Matches(const std::string& data) const {
-  Serialization::SerializedObject data_obj{data};
-  return serializer_.object_exists(data_obj, name());
+  sniffer::common::serialization::SerializedObject data_obj{data};
+  return serializer_.ObjectExists(data_obj, name());
 }
 
 }  // namespace server_commands

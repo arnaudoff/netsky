@@ -16,13 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_SERVER_COMMANDS_START_PACKET_SNIFFER_COMMAND_H_
-#define SNIFFER_SRC_CORE_SERVER_COMMANDS_START_PACKET_SNIFFER_COMMAND_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_START_SNIFFER_COMMAND_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_START_SNIFFER_COMMAND_H_
 
 #include <map>
 #include <string>
 #include <vector>
 
+#include "common/policy_bindings.h"
 #include "core/layer_stack.h"
 #include "core/server_commands/server_command.h"
 
@@ -32,17 +33,19 @@ namespace core {
 
 namespace server_commands {
 
-class StartPacketSnifferCommand : public ServerCommand {
+class StartSnifferCommand : public ServerCommand {
  public:
-  StartPacketSnifferCommand(Server* server, const SerializationMgr& serializer,
-                            const LayerStack& ls);
+  StartSnifferCommand(
+      Server* server,
+      const sniffer::common::serialization::SerializationMgr& serializer,
+      const LayerStack& ls);
 
-  ~StartPacketSnifferCommand() {}
+  ~StartSnifferCommand() {}
 
   std::map<std::string, std::vector<std::string>> ParseArguments(
       const std::string& data) const override;
 
-  void Execute(const ConnectionData& connection_data,
+  void Execute(int connection_id,
                std::map<std::string, std::vector<std::string>> args) override;
 
  private:
@@ -55,4 +58,4 @@ class StartPacketSnifferCommand : public ServerCommand {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_SERVER_COMMANDS_START_PACKET_SNIFFER_COMMAND_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_START_SNIFFER_COMMAND_H_

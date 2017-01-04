@@ -16,17 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "core/server_commands/retrieve_interfaces_command.h"
+#include "core/server_commands/kill_command.h"
 
 #include <map>
-#include <memory>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "common/policy_bindings.h"
-#include "core/interface_retriever.h"
-#include "core/response_models/retrieve_interfaces_response_model.h"
 #include "core/server.h"
 
 namespace sniffer {
@@ -35,28 +31,41 @@ namespace core {
 
 namespace server_commands {
 
-RetrieveInterfacesCommand::RetrieveInterfacesCommand(
+/**
+ * @brief Constructs a KillServerCommand object.
+ *
+ * @param server A pointer to a Server object.
+ *
+ * @param serializer The SerializationManager to use for parsing the arguments.
+ */
+KillCommand::KillCommand(
     Server* server,
-    const sniffer::common::serialization::SerializationMgr& serializer,
-    std::unique_ptr<InterfaceRetriever> retriever)
-    : ServerCommand{"retrieve-interfaces", server, serializer},
-      interface_retriever_{std::move(retriever)} {}
+    const sniffer::common::serialization::SerializationMgr& serializer)
+    : ServerCommand{"kill", server, serializer} {}
 
-std::map<std::string, std::vector<std::string>>
-RetrieveInterfacesCommand::ParseArguments(const std::string& data) const {
+/**
+ * @brief Parses the arguments for the kill command.
+ *
+ * @param data The raw data message.
+ *
+ * @return An empty map; so far kill requires no arguments.
+ */
+std::map<std::string, std::vector<std::string>> KillCommand::ParseArguments(
+    const std::string& data) const {
   std::map<std::string, std::vector<std::string>> arguments{};
   return arguments;
 }
 
-void RetrieveInterfacesCommand::Execute(
+/**
+ * @brief Stops the underlying implementation of a Server.
+ *
+ * @param connection_id Unused, kept to keep up with the interface.
+ *
+ * @param args Also unused.
+ */
+void KillCommand::Execute(
     int connection_id, std::map<std::string, std::vector<std::string>> args) {
-  auto interfaces = interface_retriever_->Retrieve();
-
-  sniffer::core::response_models::RetrieveInterfacesResponseModel model{
-      interfaces};
-  auto model_obj = model.Serialize(serializer_);
-
-  server_->Unicast(connection_id, model_obj.data());
+  server_->Stop();
 }
 
 }  // namespace server_commands

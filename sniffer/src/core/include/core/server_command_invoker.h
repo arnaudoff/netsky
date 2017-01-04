@@ -16,36 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_SERVER_COMMAND_INVOKER_H_
-#define SNIFFER_SRC_CORE_SERVER_COMMAND_INVOKER_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMAND_INVOKER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMAND_INVOKER_H_
 
 #include <string>
 #include <unordered_set>
-
-#include "core/connection_data.h"
-#include "core/server_command.h"
 
 namespace sniffer {
 
 namespace core {
 
+namespace server_commands {
+
+class ServerCommand;
+
+}  // namespace server_commands
+
 class ServerCommandInvoker {
  private:
-  std::unordered_set<commands::ServerCommand*> server_commands_;
+  std::unordered_set<server_commands::ServerCommand*> server_commands_;
 
  public:
   ServerCommandInvoker() {}
 
   ~ServerCommandInvoker() {}
 
-  void AddCommand(commands::ServerCommand* command);
+  void AddCommand(server_commands::ServerCommand* command);
 
-  void Invoke(const ConnectionData& con_data,
-              const std::string& received_message);
+  void Invoke(int connection_id, const std::string& received_message);
 };
 
 }  // namespace core
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_SERVER_COMMAND_INVOKER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMAND_INVOKER_H_

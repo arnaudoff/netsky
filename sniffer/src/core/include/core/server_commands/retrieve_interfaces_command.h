@@ -16,34 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_SERVER_COMMANDS_RETRIEVE_INTERFACES_COMMAND_H_
-#define SNIFFER_SRC_CORE_SERVER_COMMANDS_RETRIEVE_INTERFACES_COMMAND_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_RETRIEVE_INTERFACES_COMMAND_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_RETRIEVE_INTERFACES_COMMAND_H_
 
 #include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "core/interface_retriever.h"
+#include "common/policy_bindings.h"
 #include "core/server_commands/server_command.h"
 
 namespace sniffer {
 
 namespace core {
 
+class InterfaceRetriever;
+
 namespace server_commands {
 
 class RetrieveInterfacesCommand : public ServerCommand {
  public:
-  RetrieveInterfacesCommand(Server* server, const SerializationMgr& serializer,
-                            std::unique_ptr<InterfaceRetriever> retriever);
+  RetrieveInterfacesCommand(
+      Server* server,
+      const sniffer::common::serialization::SerializationMgr& serializer,
+      std::unique_ptr<InterfaceRetriever> retriever);
 
   ~RetrieveInterfacesCommand() {}
 
   std::map<std::string, std::vector<std::string>> ParseArguments(
       const std::string& data) const override;
 
-  void Execute(const ConnectionData& connection_data,
+  void Execute(int connection_id,
                std::map<std::string, std::vector<std::string>> args) override;
 
  private:
@@ -56,4 +60,4 @@ class RetrieveInterfacesCommand : public ServerCommand {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_SERVER_COMMANDS_RETRIEVE_INTERFACES_COMMAND_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_RETRIEVE_INTERFACES_COMMAND_H_

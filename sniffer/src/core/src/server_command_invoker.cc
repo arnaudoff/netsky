@@ -18,22 +18,34 @@
 
 #include "core/server_command_invoker.h"
 
-#include <spdlog/spdlog.h>
+#include "core/server_commands/server_command.h"
 
 namespace sniffer {
 
 namespace core {
 
-void ServerCommandInvoker::AddCommand(ServerCommand* command) {
+/**
+ * @brief Adds a ServerCommand to the internal list of commands.
+ *
+ * @param command Pointer to a ServerCommand object that is the command to add
+ */
+void ServerCommandInvoker::AddCommand(server_commands::ServerCommand* command) {
   server_commands_.insert(command);
 }
 
-void ServerCommandInvoker::Invoke(const ConnectionData& con_data,
+/**
+ * @brief Iterates over the list of registered commands and if it matches,
+ * executes it by passing it the client for which to execute it and the command
+ * arguments.
+ *
+ * @param connection_id A connection ID representing the client session
+ * @param message
+ */
+void ServerCommandInvoker::Invoke(int connection_id,
                                   const std::string& message) {
   for (auto command : server_commands_) {
     if (command->Matches(message)) {
-      spdlog::get("console")->info("Executing command: {0}", command->name());
-      command->Execute(con_data, command->Parse(message));
+      command->Execute(connection_id, command->ParseArguments(message));
     }
   }
 }

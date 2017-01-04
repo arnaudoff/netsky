@@ -16,26 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_SERVER_COMMANDS_SERVER_COMMAND_H_
-#define SNIFFER_SRC_CORE_SERVER_COMMANDS_SERVER_COMMAND_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_SERVER_COMMAND_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_SERVER_COMMAND_H_
 
 #include <map>
 #include <string>
 #include <vector>
 
-#include "common/serialization/serialized_object.h"
-#include "core/server.h"
+#include "common/policy_bindings.h"
 
 namespace sniffer {
 
 namespace core {
 
+class Server;
+
 namespace server_commands {
 
 class ServerCommand {
  public:
-  ServerCommand(const std::string& name, Server* server,
-                const SerializationMgr& serializer);
+  ServerCommand(
+      const std::string& name, Server* server,
+      const sniffer::common::serialization::SerializationMgr& serializer);
 
   virtual ~ServerCommand() {}
 
@@ -47,7 +49,7 @@ class ServerCommand {
       const std::string& data) const = 0;
 
   virtual void Execute(
-      const ConnectionData& connection_data,
+      int connection_id,
       std::map<std::string, std::vector<std::string>> args) = 0;
 
  protected:
@@ -55,7 +57,7 @@ class ServerCommand {
 
   Server* server_;
 
-  SerializationMgr serializer_;
+  sniffer::common::serialization::SerializationMgr serializer_;
 };
 
 }  // namespace server_commands
@@ -64,4 +66,4 @@ class ServerCommand {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_SERVER_COMMANDS_SERVER_COMMAND_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_SERVER_COMMAND_H_

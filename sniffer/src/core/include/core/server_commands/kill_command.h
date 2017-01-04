@@ -16,7 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "core/server_commands/kill_server_command.h"
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_KILL_COMMAND_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_KILL_COMMAND_H_
+
+#include <map>
+#include <string>
+#include <vector>
+
+#include "common/policy_bindings.h"
+#include "core/server_commands/server_command.h"
 
 namespace sniffer {
 
@@ -24,24 +32,25 @@ namespace core {
 
 namespace server_commands {
 
-KillServerCommand::KillServerCommand(Server* server,
-                                     const SerializationMgr& serializer)
-    : ServerCommand{"kill", server, serializer} {}
+class KillCommand : public ServerCommand {
+ public:
+  KillCommand(
+      Server* server,
+      const sniffer::common::serialization::SerializationMgr& serializer);
 
-std::map<std::string, std::vector<std::string>>
-KillServerCommand::ParseArguments(const std::string& data) const {
-  std::map<std::string, std::vector<std::string>> arguments{};
-  return arguments;
-}
+  ~KillCommand() {}
 
-void KillServerCommand::Execute(
-    const ConnectionData& con_data,
-    std::map<std::string, std::vector<std::string>> args) {
-  server_->stop();
-}
+  std::map<std::string, std::vector<std::string>> ParseArguments(
+      const std::string& data) const override;
+
+  void Execute(int connection_id,
+               std::map<std::string, std::vector<std::string>> args) override;
+};
 
 }  // namespace server_commands
 
 }  // namespace core
 
 }  // namespace sniffer
+
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_KILL_COMMAND_H_
