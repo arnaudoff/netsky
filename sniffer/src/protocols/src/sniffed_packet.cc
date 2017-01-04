@@ -17,6 +17,7 @@
  */
 
 #include "protocols/sniffed_packet.h"
+
 #include "protocols/packet_region.h"
 
 namespace sniffer {

@@ -70,6 +70,24 @@ void Server::Broadcast(const std::string& message) {
   }
 }
 
+/**
+ * @brief Adds a connection to the set of connections.
+ *
+ * @param connection_id The ID of the connection that uniquely identifies it.
+ */
+void Server::AddConnection(int connection_id) {
+  connections_.insert(connection_id);
+}
+
+/**
+ * @brief Removes a connection from the set of connections.
+ *
+ * @param connection_id The connection ID to remove.
+ */
+void Server::RemoveConnection(int connection_id) {
+  connections_.erase(connection_id);
+}
+
 }  // namespace core
 
 }  // namespace sniffer

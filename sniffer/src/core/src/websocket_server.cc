@@ -145,7 +145,7 @@ void WebSocketServer::Unicast(int connection_id, const std::string& message) {
  */
 void WebSocketServer::AddConnection(int connection_id) {
   std::lock_guard<std::mutex> guard(connections_lock_);
-  connections_.insert(connection_id);
+  Server::AddConnection(connection_id);
 }
 
 /**
@@ -159,7 +159,7 @@ void WebSocketServer::AddConnection(int connection_id) {
  */
 void WebSocketServer::RemoveConnection(int connection_id) {
   std::lock_guard<std::mutex> guard(connections_lock_);
-  connections_.erase(connection_id);
+  Server::RemoveConnection(connection_id);
 }
 
 /**
