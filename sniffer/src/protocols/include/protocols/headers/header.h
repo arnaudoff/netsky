@@ -22,7 +22,10 @@
 #include <memory>
 #include <string>
 
+#if __cplusplus < 201402L
 #include "common/extensions/make_unique.h"
+#endif
+
 #include "common/policy_bindings.h"
 #include "common/serialization/serializable_entity.h"
 

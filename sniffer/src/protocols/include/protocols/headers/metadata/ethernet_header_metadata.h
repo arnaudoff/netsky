@@ -36,7 +36,7 @@ namespace metadata {
 class EthernetHeaderMetadata : public HeaderMetadata {
  public:
   EthernetHeaderMetadata(int id, std::string name, int size,
-                         bool has_variable_length, int length_field_offset = 0);
+                         bool has_variable_length, int length_field_offset);
 };
 
 }  // namespace metadata
