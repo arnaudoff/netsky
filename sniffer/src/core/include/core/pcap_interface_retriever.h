@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_PCAP_INTERFACE_RETRIEVER_H_
-#define SNIFFER_SRC_CORE_PCAP_INTERFACE_RETRIEVER_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_PCAP_INTERFACE_RETRIEVER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_PCAP_INTERFACE_RETRIEVER_H_
 
-#include <string>
 #include <vector>
 
+#include "common/addressing/ip_address_factory.h"
+#include "core/interface.h"
 #include "core/interface_retriever.h"
 
 namespace sniffer {
@@ -31,14 +32,13 @@ namespace core {
 class PcapInterfaceRetriever : public InterfaceRetriever {
  public:
   PcapInterfaceRetriever(
-      const sniffer::common::addressing::IpAddressFactory& factory)
-      : InterfaceRetriever{factory} {}
+      const sniffer::common::addressing::IpAddressFactory& factory);
 
-  std::vector<Interface> retrieve() override;
+  std::vector<Interface> Retrieve() override;
 };
 
 }  // namespace core
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_PCAP_INTERFACE_RETRIEVER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_PCAP_INTERFACE_RETRIEVER_H_

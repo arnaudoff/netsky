@@ -18,14 +18,29 @@
 
 #include "core/server.h"
 
+#include <memory>
+#include <set>
 #include <utility>
+
+#include "common/policy_bindings.h"
+#include "core/packet_sniffer.h"
 
 namespace sniffer {
 
 namespace core {
 
-Server::Server(const ConfigurationMgr& manager)
-    : config_manager_{manager}, session_id_{0} {}
+/**
+ * @brief Constructs a Server object.
+ *
+ * @param manager The configuration manager to use for the server.
+ */
+Server::Server(const sniffer::common::config::ConfigurationMgr& manager)
+    : config_manager_{manager} {}
+
+/**
+ * @brief Destructs a Server object.
+ */
+Server::~Server() {}
 
 void Server::set_sniffer(std::unique_ptr<PacketSniffer> sniffer) {
   sniffer_ = std::move(sniffer);
@@ -33,7 +48,27 @@ void Server::set_sniffer(std::unique_ptr<PacketSniffer> sniffer) {
 
 PacketSniffer* Server::sniffer() const { return sniffer_.get(); }
 
-ConfigurationMgr Server::config_manager() const { return config_manager_; }
+sniffer::common::config::ConfigurationMgr Server::config_manager() const {
+  return config_manager_;
+}
+
+/**
+ * @brief Retrieves all stored connections on the server since it's started
+ *
+ * @return A set of integers representing the connection IDs
+ */
+std::set<int> Server::connections() const { return connections_; }
+
+/**
+ * @brief Sends the specified message to all currently connected clients
+ *
+ * @param message The message to send
+ */
+void Server::Broadcast(const std::string& message) {
+  for (auto connection : connections_) {
+    Unicast(connection, message);
+  }
+}
 
 }  // namespace core
 

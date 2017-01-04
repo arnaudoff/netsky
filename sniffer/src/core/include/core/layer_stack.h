@@ -16,14 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_LAYER_STACK_H_
-#define SNIFFER_SRC_CORE_LAYER_STACK_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_LAYER_STACK_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_LAYER_STACK_H_
 
 #include "common/serialization/serialized_object.h"
 
 namespace sniffer {
 
+namespace protocols {
+
+class SniffedPacket;
+
+}  // namespace protocols
+
 namespace core {
+
+namespace layers {
+
+class Layer;
+
+}  // namespace layers
 
 class LayerStack {
  public:
@@ -31,21 +43,22 @@ class LayerStack {
 
   LayerStack();
 
-  void AddLayer(layers::Layer* layer, Position pos = Position::TOP,
-                layers::Layer* existing = nullptr);
+  void AddLayer(layers::Layer* layer, layers::Layer* existing = nullptr,
+                Position pos = Position::TOP);
 
   void RemoveLayer(layers::Layer* layer);
 
   void HandleReception(sniffer::common::serialization::SerializedObject acc,
-                       int next_header_id, SniffedPacket* packet);
+                       int next_header_id,
+                       sniffer::protocols::SniffedPacket* packet);
 
  private:
-  Layers::Layer* highest_layer_;
-  Layers::Layer* lowest_layer_;
+  layers::Layer* highest_layer_;
+  layers::Layer* lowest_layer_;
 };
 
 }  // namespace core
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_LAYER_STACK_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_LAYER_STACK_H_

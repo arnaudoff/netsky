@@ -18,29 +18,52 @@
 
 #include "core/pcap_packet_sniffer.h"
 
+#include <pcap/pcap.h>
+
 #include <algorithm>
 #include <iterator>
 #include <sstream>
+#include <string>
+#include <vector>
 
 #include <spdlog/spdlog.h>  // NOLINT
 
+#include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
-#include "core/packet_region.h"
 #include "core/server.h"
-#include "core/sniffed_packet.h"
 #include "core/sniffer_exception.h"
+#include "protocols/packet_region.h"
+#include "protocols/sniffed_packet.h"
 
 namespace sniffer {
 
 namespace core {
 
-PcapPacketSniffer::PcapPacketSniffer(std::vector<std::string> interfaces,
-                                     std::vector<std::string> filters,
-                                     std::vector<std::string> shared,
-                                     const ConfigurationMgr& config,
-                                     const LayerStack& stack, Server* server)
+/**
+ * @brief Constructs a packet sniffer based on libpcap.
+ *
+ * @param interfaces The interfaces to sniff on
+ *
+ * @param filters Filters to apply
+ *
+ * @param shared List of users to share the sniffing session with
+ *
+ * @param config An instance of a configuration manager
+ *
+ * @param stack The layerstack to use for the packet parsing process
+ *
+ * @param server A pointer to the server which to use for transmission
+ */
+PcapPacketSniffer::PcapPacketSniffer(
+    std::vector<std::string> interfaces, std::vector<std::string> filters,
+    std::vector<std::string> shared,
+    const sniffer::common::config::ConfigurationMgr& config,
+    const LayerStack& stack, Server* server)
     : PacketSniffer(interfaces, filters, shared, config, stack, server) {}
 
+/**
+ * @brief Prepares the physical interfaces to sniff on
+ */
 void PcapPacketSniffer::PrepareInterfaces() {
   char error_buffer[PCAP_ERRBUF_SIZE];
 
@@ -72,6 +95,9 @@ void PcapPacketSniffer::PrepareInterfaces() {
   }
 }
 
+/**
+ * @brief Parses any filters by passing them to pcap_compile
+ */
 void PcapPacketSniffer::ParseFilters() {
   std::ostringstream filters;
   std::copy(filters_.begin(), filters_.end() - 1,
@@ -87,6 +113,9 @@ void PcapPacketSniffer::ParseFilters() {
   }
 }
 
+/**
+ * @brief Applies the filters by pcap_setfilter
+ */
 void PcapPacketSniffer::ApplyFilters() {
   if (pcap_setfilter(handle_, &parsed_filters_) == -1) {
     std::ostringstream exception_message;
@@ -98,10 +127,13 @@ void PcapPacketSniffer::ApplyFilters() {
   }
 }
 
+/**
+ * @brief Encapsulates a call to pcap_loop
+ */
 void PcapPacketSniffer::Sniff() {
   pcap_loop(handle_,
             config_manager_.ExtractValue<int>("sniffer", "packets_count"),
-            OnPacketReceived, reinterpret_cast<u_char*>(this);
+            OnPacketReceived, reinterpret_cast<u_char*>(this));
 }
 
 void PcapPacketSniffer::OnPacketReceived(u_char* args,
@@ -111,18 +143,29 @@ void PcapPacketSniffer::OnPacketReceived(u_char* args,
       ->OnPacketReceivedInternal(header, packet);
 }
 
+/**
+ * @brief An internal callback called by the static one expected by libpcap
+ *
+ * @param header Pointer to a pcap_pkthdr which is some header metadata
+ *
+ * @param packet Pointer to the beginning of a packet
+ */
 void PcapPacketSniffer::OnPacketReceivedInternal(
     const struct pcap_pkthdr* header, const u_char* packet) {
-  PacketRegion body{0, static_cast<int>(header->caplen)};
+  sniffer::protocols::PacketRegion body{0, static_cast<int>(header->caplen)};
 
-  SniffedPacket packet_obj{packet, body};
-  SerializedObject accumulator_obj{"{}"};
+  sniffer::protocols::SniffedPacket packet_obj{packet, body};
+  sniffer::common::serialization::SerializedObject accumulator_obj{"{}"};
 
   // http://www.tcpdump.org/linktypes.html
-  stack_.HandleReception(accumulator_obj, 1, packet_obj);
-  server_->broadcast(accumulator_obj.data());
+  stack_.HandleReception(accumulator_obj, 1, &packet_obj);
+  server_->Broadcast(accumulator_obj.data());
 }
 
+/**
+ * @brief Destructs the libpcap-specific packet sniffer by applying the
+ * libpcap-native freeing functions.
+ */
 PcapPacketSniffer::~PcapPacketSniffer() {
   pcap_freecode(&parsed_filters_);
   pcap_close(handle_);

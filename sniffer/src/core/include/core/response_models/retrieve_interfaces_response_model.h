@@ -16,12 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_RESPONSE_MODELS_RETRIEVE_INTERFACES_RESPONSE_MODEL_H_
-#define SNIFFER_SRC_CORE_RESPONSE_MODELS_RETRIEVE_INTERFACES_RESPONSE_MODEL_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_RESPONSE_MODELS_RETRIEVE_INTERFACES_RESPONSE_MODEL_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_RESPONSE_MODELS_RETRIEVE_INTERFACES_RESPONSE_MODEL_H_
 
 #include <string>
 #include <vector>
 
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
 #include "core/interface.h"
 #include "core/response_models/response_model.h"
 
@@ -33,17 +35,19 @@ namespace response_models {
 
 class RetrieveInterfacesResponseModel : public ResponseModel {
  public:
-  explicit RetrieveInterfacesResponseModel(std::vector<Interface> interfaces);
+  explicit RetrieveInterfacesResponseModel(
+      std::vector<sniffer::core::Interface> interfaces);
 
   ~RetrieveInterfacesResponseModel() override;
 
-  Serialization::SerializedObject serialize(
-      const SerializationMgr& serializer) const override;
+  sniffer::common::serialization::SerializedObject Serialize(
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const override;
 
   std::string entity_name() const override;
 
  private:
-  std::vector<Core::Interface> interfaces_;
+  std::vector<sniffer::core::Interface> interfaces_;
 };
 
 }  // namespace response_models
@@ -52,4 +56,4 @@ class RetrieveInterfacesResponseModel : public ResponseModel {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_RESPONSE_MODELS_RETRIEVE_INTERFACES_RESPONSE_MODEL_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_RESPONSE_MODELS_RETRIEVE_INTERFACES_RESPONSE_MODEL_H_

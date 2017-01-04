@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_INTERFACE_RETRIEVER_EXCEPTION_H_
-#define SNIFFER_SRC_CORE_INTERFACE_RETRIEVER_EXCEPTION_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_RETRIEVER_EXCEPTION_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_RETRIEVER_EXCEPTION_H_
 
 #include <exception>
 #include <string>
@@ -41,4 +41,4 @@ class InterfaceRetrieverException : public std::exception {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_INTERFACE_RETRIEVER_EXCEPTION_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_RETRIEVER_EXCEPTION_H_

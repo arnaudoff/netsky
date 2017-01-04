@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_INTERFACE_RETRIEVER_H_
-#define SNIFFER_SRC_CORE_INTERFACE_RETRIEVER_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_RETRIEVER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_RETRIEVER_H_
 
 #include <vector>
 
@@ -30,17 +30,18 @@ namespace core {
 
 class InterfaceRetriever {
  public:
-  explicit InterfaceRetriever(const Addressing::IpAddressFactory& factory)
+  explicit InterfaceRetriever(
+      const sniffer::common::addressing::IpAddressFactory& factory)
       : ip_addr_factory_{factory} {}
 
   virtual std::vector<Interface> Retrieve() = 0;
 
  protected:
-  Addressing::IpAddressFactory ip_addr_factory_;
+  sniffer::common::addressing::IpAddressFactory ip_addr_factory_;
 };
 
 }  // namespace core
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_INTERFACE_RETRIEVER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_RETRIEVER_H_

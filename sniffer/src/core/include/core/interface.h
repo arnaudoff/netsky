@@ -16,15 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_INTERFACE_H_
-#define SNIFFER_SRC_CORE_INTERFACE_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_H_
 
-#include <sys/socket.h>
-
-#include <memory>
 #include <string>
 #include <vector>
 
+#include "common/policy_bindings.h"
 #include "common/serialization/serializable_entity.h"
 #include "common/serialization/serialized_object.h"
 #include "core/interface_address.h"
@@ -48,7 +46,8 @@ class Interface : public sniffer::common::serialization::SerializableEntity {
   std::vector<InterfaceAddress> addresses() const;
 
   sniffer::common::serialization::SerializedObject Serialize(
-      const SerializationMgr& serializer) const override;
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const override;
 
   std::string entity_name() const override;
 
@@ -62,4 +61,4 @@ class Interface : public sniffer::common::serialization::SerializableEntity {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_INTERFACE_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_INTERFACE_H_

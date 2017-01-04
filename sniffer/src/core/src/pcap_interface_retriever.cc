@@ -24,14 +24,20 @@
 #include <utility>
 #include <vector>
 
-#include <spdlog/spdlog.h>  // NOLINT
+#include "spdlog/spdlog.h"  // NOLINT
 
+#include "common/addressing/ip_address.h"
+#include "common/addressing/ip_address_factory.h"
 #include "core/interface.h"
 #include "core/interface_retriever_exception.h"
 
 namespace sniffer {
 
 namespace core {
+
+PcapInterfaceRetriever::PcapInterfaceRetriever(
+    const sniffer::common::addressing::IpAddressFactory& factory)
+    : InterfaceRetriever{factory} {}
 
 std::vector<Interface> PcapInterfaceRetriever::Retrieve() {
   spdlog::get("console")->info("Retrieving pcap interfaces..");

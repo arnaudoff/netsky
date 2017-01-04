@@ -18,6 +18,12 @@
 
 #include "core/interface.h"
 
+#include <string>
+
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
+#include "core/interface_address.h"
+
 namespace sniffer {
 
 namespace core {
@@ -41,20 +47,20 @@ std::vector<InterfaceAddress> Interface::addresses() const {
   return addresses_;
 }
 
-SerializedObject Interface::Serialize(
-    const SerializationMgr& serializer) const {
-  auto obj = serializer.create_object();
-  serializer.SetValue<std::string>(obj, "name", name_);
+sniffer::common::serialization::SerializedObject Interface::Serialize(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", name_, &obj);
 
   if (!description_.empty()) {
-    serializer.SetValue<std::string>(obj, "description", description_);
+    serializer.SetValue<std::string>("description", description_, &obj);
   }
 
   for (const auto addr : addresses_) {
     auto addr_obj = addr.Serialize(serializer);
 
     if (!serializer.IsEmpty(addr_obj)) {
-      serializer.AppendObject(obj, "addresses", addr_obj);
+      serializer.AppendObject("addresses", addr_obj, &obj);
     }
   }
 

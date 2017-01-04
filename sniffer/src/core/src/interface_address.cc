@@ -18,12 +18,16 @@
 
 #include "core/interface_address.h"
 
+#include "common/addressing/ip_address.h"
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
+
 namespace sniffer {
 
 namespace core {
 
-InterfaceAddress::InterfaceAddress(ip_addr_t addr, ip_addr_t bcast,
-                                   ip_addr_t dst, ip_addr_t netmask)
+InterfaceAddress::InterfaceAddress(IpAddressType addr, IpAddressType bcast,
+                                   IpAddressType dst, IpAddressType netmask)
     : address_{addr},
       broadcast_address_{bcast},
       destination_address_{dst},
@@ -31,50 +35,58 @@ InterfaceAddress::InterfaceAddress(ip_addr_t addr, ip_addr_t bcast,
 
 InterfaceAddress::~InterfaceAddress() {}
 
-void InterfaceAddress::set_address(ip_addr_t addr) { address_ = addr; }
+void InterfaceAddress::set_address(IpAddressType addr) { address_ = addr; }
 
-IpAddress* InterfaceAddress::address() const { return address_.get(); }
+sniffer::common::addressing::IpAddress* InterfaceAddress::address() const {
+  return address_.get();
+}
 
-void InterfaceAddress::set_broadcast_address(ip_addr_t bcast) {
+void InterfaceAddress::set_broadcast_address(IpAddressType bcast) {
   broadcast_address_ = bcast;
 }
 
-IpAddress* InterfaceAddress::broadcast_address() const {
+sniffer::common::addressing::IpAddress* InterfaceAddress::broadcast_address()
+    const {
   return broadcast_address_.get();
 }
 
-void InterfaceAddress::set_destination_address(ip_addr_t dst) {
+void InterfaceAddress::set_destination_address(IpAddressType dst) {
   destination_address_ = dst;
 }
 
-IpAddress* InterfaceAddress::destination_address() const {
+sniffer::common::addressing::IpAddress* InterfaceAddress::destination_address()
+    const {
   return destination_address_.get();
 }
 
-void InterfaceAddress::set_netmask(ip_addr_t netmask) { netmask_ = netmask; }
+void InterfaceAddress::set_netmask(IpAddressType netmask) {
+  netmask_ = netmask;
+}
 
-IpAddress* InterfaceAddress::netmask() const { return netmask_.get(); }
+sniffer::common::addressing::IpAddress* InterfaceAddress::netmask() const {
+  return netmask_.get();
+}
 
-SerializedObject InterfaceAddress::Serialize(
-    const SerializationMgr& serializer) const {
-  auto obj = serializer.create_object();
+sniffer::common::serialization::SerializedObject InterfaceAddress::Serialize(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto obj = serializer.CreateObject();
 
   if (address_) {
-    serializer.SetValue<const char*>(obj, "addr", address_->data());
+    serializer.SetValue<const char*>("addr", address_->data(), &obj);
   }
 
   if (broadcast_address_) {
-    serializer.SetValue<const char*>(obj, "bcast_addr",
-                                     broadcast_address_->data());
+    serializer.SetValue<const char*>("bcast_addr", broadcast_address_->data(),
+                                     &obj);
   }
 
   if (destination_address_) {
-    serializer.SetValue<const char*>(obj, "dst_addr",
-                                     destination_address_->data());
+    serializer.SetValue<const char*>("dst_addr", destination_address_->data(),
+                                     &obj);
   }
 
   if (netmask_) {
-    serializer.SetValue<const char*>(obj, "netmask", netmask_->data());
+    serializer.SetValue<const char*>("netmask", netmask_->data(), &obj);
   }
 
   return obj;

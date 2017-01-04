@@ -16,14 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_PCAP_PACKET_SNIFFER_H_
-#define SNIFFER_SRC_CORE_PCAP_PACKET_SNIFFER_H_
-
-#include <pcap/pcap.h>
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_PCAP_PACKET_SNIFFER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_PCAP_PACKET_SNIFFER_H_
 
 #include <string>
 #include <vector>
 
+#include <pcap/pcap.h>
+
+#include "common/policy_bindings.h"
 #include "core/packet_sniffer.h"
 
 namespace sniffer {
@@ -35,8 +36,8 @@ class PcapPacketSniffer : public PacketSniffer {
   PcapPacketSniffer(std::vector<std::string> interfaces,
                     std::vector<std::string> filters,
                     std::vector<std::string> shared,
-                    const ConfigurationMgr& config, const LayerStack& stack,
-                    Server* server);
+                    const sniffer::common::config::ConfigurationMgr& config,
+                    const LayerStack& stack, Server* server);
 
   ~PcapPacketSniffer() override;
 
@@ -68,4 +69,4 @@ class PcapPacketSniffer : public PacketSniffer {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_PCAP_PACKET_SNIFFER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_PCAP_PACKET_SNIFFER_H_

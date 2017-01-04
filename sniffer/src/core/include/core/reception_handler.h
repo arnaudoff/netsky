@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_RECEPTION_HANDLER_H_
-#define SNIFFER_SRC_CORE_RECEPTION_HANDLER_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_RECEPTION_HANDLER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_RECEPTION_HANDLER_H_
 
 #include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
@@ -25,21 +25,33 @@
 
 namespace sniffer {
 
+namespace protocols {
+
+class SniffedPacket;
+
+}  // namespace protocols
+
 namespace core {
+
+namespace layers {
+
+class Layer;
+
+}  // namespace layers
 
 class ReceptionHandler {
  public:
   ReceptionHandler(
-      const SerializationMgr& manager,
+      const sniffer::common::serialization::SerializationMgr& manager,
       const sniffer::protocols::headers::HeaderFactory& header_factory,
       layers::Layer* layer);
 
   void Handle(sniffer::common::serialization::SerializedObject acc,
-              int next_header_id, SniffedPacket* packet);
+              int next_header_id, sniffer::protocols::SniffedPacket* packet);
 
  private:
   layers::Layer* layer_;
-  SerializationMgr serializer_;
+  sniffer::common::serialization::SerializationMgr serializer_;
   sniffer::protocols::headers::HeaderFactory header_factory_;
 };
 
@@ -47,4 +59,4 @@ class ReceptionHandler {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_RECEPTION_HANDLER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_RECEPTION_HANDLER_H_

@@ -16,17 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
+#include <vector>
+
+#include "common/policy_bindings.h"
+#include "core/layer_stack.h"
 #include "core/packet_sniffer.h"
+#include "core/server.h"
 
 namespace sniffer {
 
 namespace core {
 
-PacketSniffer::PacketSniffer(std::vector<std::string> interfaces,
-                             std::vector<std::string> filters,
-                             std::vector<std::string> shared,
-                             const ConfigurationMgr& config,
-                             const LayerStack& stack, Server* server)
+PacketSniffer::PacketSniffer(
+    std::vector<std::string> interfaces, std::vector<std::string> filters,
+    std::vector<std::string> shared,
+    const sniffer::common::config::ConfigurationMgr& config,
+    const LayerStack& stack, Server* server)
     : interfaces_{interfaces},
       filters_{filters},
       shared_{shared},

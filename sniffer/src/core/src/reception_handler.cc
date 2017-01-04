@@ -23,7 +23,14 @@
 #include <algorithm>
 #include <string>
 
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
+
 #include "core/layers/layer.h"
+
+#include "protocols/headers/header.h"
+#include "protocols/headers/header_factory.h"
+#include "protocols/sniffed_packet.h"
 
 namespace sniffer {
 
@@ -41,9 +48,10 @@ namespace core {
  * @param layer A raw pointer to the current layer for which the handler is
  * is acting upon.
  */
-ReceptionHandler::ReceptionHandler(const SerializationMgr& serializer,
-                                   const HeaderFactory& header_factory,
-                                   Layer* layer)
+ReceptionHandler::ReceptionHandler(
+    const sniffer::common::serialization::SerializationMgr& serializer,
+    const sniffer::protocols::headers::HeaderFactory& header_factory,
+    layers::Layer* layer)
     : serializer_{serializer}, header_factory_{header_factory}, layer_{layer} {}
 
 /**
@@ -56,26 +64,32 @@ ReceptionHandler::ReceptionHandler(const SerializationMgr& serializer,
  *
  * @param packet A raw pointer to the packet to interpret.
  */
-void ReceptionHandler::Handle(SerializedObject accumulator_obj,
-                              int next_header_id, SniffedPacket* packet) {
+void ReceptionHandler::Handle(
+    sniffer::common::serialization::SerializedObject accumulator_obj,
+    int next_header_id, sniffer::protocols::SniffedPacket* packet) {
+  auto& supported_headers = layer_->supported_headers();
+
   // Check if the current layer contains this header ID as supported
-  auto header = std::find_if(
-      layer_->begin(), layer_->end(),
-      [next_header_id](const auto& hm) { return hm.id() == next_header_id; });
+  auto header_metadata =
+      std::find_if(supported_headers.begin(), supported_headers.end(),
+                   [next_header_id](const auto& hm) {
+                     return hm.get()->id() == next_header_id;
+                   });
 
   // The layer has metadata for a header with such an ID
-  if (header != layer_->end()) {
-    std::string name = header->name();
+  if (header_metadata != supported_headers.end()) {
+    std::string name = header_metadata->get()->name();
 
     // In order to initialize the header, we need to know its exact length.
     int length = 0;
-    if (header->HasVariableLength()) {
+    if (header_metadata->get()->has_variable_length()) {
       // In this case, we have to peek into the raw data before forming
-      const u_char* len_field = packet->Peek(header->length_field_offset());
-      length = header->CalculateLength(len_field);
+      const u_char* len_field =
+          packet->Peek(header_metadata->get()->length_field_offset());
+      length = header_metadata->get()->CalculateLength(len_field);
     } else {
       // Otherwise this is a casual fixed-length header such as Ethernet
-      length = header->length();
+      length = header_metadata->get()->length();
     }
 
     // Now that we have the name and the size of the header, create an
@@ -85,10 +99,10 @@ void ReceptionHandler::Handle(SerializedObject accumulator_obj,
     // Finally, serialize the parsed fields of the header and append
     // the generated object to the accumulating object.
     auto serialized_obj = header_instance->Serialize(serializer_);
-    serializer_.SetObject(accumulator_obj, name, serialized_obj);
+    serializer_.SetObject(name, serialized_obj, &accumulator_obj);
 
     // Continue up the layer stack
-    Layer* upper_layer = layer_->upper_layer();
+    layers::Layer* upper_layer = layer_->upper_layer();
     if (upper_layer) {
       upper_layer->HandleReception(accumulator_obj,
                                    header_instance->next_header_id(), packet);

@@ -16,25 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_PACKET_SNIFFER_H_
-#define SNIFFER_SRC_CORE_PACKET_SNIFFER_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_PACKET_SNIFFER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_PACKET_SNIFFER_H_
 
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "LayerStack.h"
-// #include "PolicyBindings.h"
+#include "common/policy_bindings.h"
+#include "core/layer_stack.h"
 
 namespace sniffer {
 
 namespace core {
 
+class Server;
+
 class PacketSniffer {
  public:
   PacketSniffer(std::vector<std::string> interfaces,
                 std::vector<std::string> filters,
-                std::vector<std::string> shared, const ConfigurationMgr& config,
+                std::vector<std::string> shared,
+                const sniffer::common::config::ConfigurationMgr& config,
                 const LayerStack& stack, Server* server);
 
   virtual ~PacketSniffer() {}
@@ -48,7 +51,7 @@ class PacketSniffer {
 
   std::vector<std::string> shared_;
 
-  ConfigurationMgr config_manager_;
+  sniffer::common::config::ConfigurationMgr config_manager_;
 
   LayerStack stack_;
 
@@ -67,4 +70,4 @@ class PacketSniffer {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_PACKET_SNIFFER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_PACKET_SNIFFER_H_

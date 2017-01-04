@@ -18,6 +18,10 @@
 
 #include "core/response_models/retrieve_interfaces_response_model.h"
 
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
+#include "core/interface.h"
+
 namespace sniffer {
 
 namespace core {
@@ -28,13 +32,14 @@ RetrieveInterfacesResponseModel::RetrieveInterfacesResponseModel(
     std::vector<Interface> interfaces)
     : interfaces_{interfaces} {}
 
-SerializedObject RetrieveInterfacesResponseModel::serialize(
-    const SerializationMgr& serializer) const {
-  auto obj = serializer.create_object();
+sniffer::common::serialization::SerializedObject
+RetrieveInterfacesResponseModel::Serialize(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto obj = serializer.CreateObject();
 
   for (const auto& iface : interfaces_) {
-    auto iface_obj = iface.serialize(serializer);
-    serializer.AppendObject(obj, entity_name(), iface_obj);
+    auto iface_obj = iface.Serialize(serializer);
+    serializer.AppendObject(entity_name(), iface_obj, &obj);
   }
 
   return obj;

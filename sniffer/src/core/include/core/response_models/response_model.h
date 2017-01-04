@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_RESPONSE_MODELS_RESPONSE_MODEL_H_
-#define SNIFFER_SRC_CORE_RESPONSE_MODELS_RESPONSE_MODEL_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_RESPONSE_MODELS_RESPONSE_MODEL_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_RESPONSE_MODELS_RESPONSE_MODEL_H_
 
 #include <string>
 
+#include "common/policy_bindings.h"
 #include "common/serialization/serializable_entity.h"
 #include "common/serialization/serialized_object.h"
 
@@ -30,10 +31,12 @@ namespace core {
 
 namespace response_models {
 
-class ResponseModel : public Serialization::SerializableEntity {
+class ResponseModel
+    : public sniffer::common::serialization::SerializableEntity {
  public:
-  virtual Serialization::SerializedObject serialize(
-      const SerializationMgr& serializer) const = 0;
+  virtual sniffer::common::serialization::SerializedObject Serialize(
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const = 0;
 
   virtual ~ResponseModel() {}
 
@@ -46,4 +49,4 @@ class ResponseModel : public Serialization::SerializableEntity {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_RESPONSE_MODELS_RESPONSE_MODEL_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_RESPONSE_MODELS_RESPONSE_MODEL_H_
