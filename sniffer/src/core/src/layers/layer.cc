@@ -23,7 +23,11 @@
 #include <utility>
 #include <vector>
 
-#include <boost/iterator/indirect_iterator.hpp>  // NOLINT
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
+#include "protocols/headers/header_factory.h"
+#include "protocols/headers/metadata/header_metadata.h"
+#include "protocols/sniffed_packet.h"
 
 namespace sniffer {
 
@@ -31,16 +35,11 @@ namespace core {
 
 namespace layers {
 
-using HeaderMetadataCollection = std::vector<std::unique_ptr<HeaderMetadata>>;
-
-using SupportedHeadersIterator =
-    boost::indirect_iterator<HeaderMetadataCollection::iterator,
-                             const HeaderMetadata>;
-
-Layer::Layer(const SerializationMgr& serializer, const HeaderFactory& hfactory)
+Layer::Layer(const sniffer::common::serialization::SerializationMgr& serializer,
+             const sniffer::protocols::headers::HeaderFactory& hfactory)
     : lower_layer_{NULL},
       upper_layer_{NULL},
-      reception_handler_{this, serializer, hfactory} {};
+      reception_handler_{serializer, hfactory, this} {};
 
 Layer* Layer::lower_layer() const { return lower_layer_; }
 
@@ -50,17 +49,16 @@ Layer* Layer::upper_layer() const { return upper_layer_; }
 
 void Layer::set_upper_layer(Layer* layer) { upper_layer_ = layer; }
 
-SupportedHeadersIterator Layer::begin() const {
-  return std::begin(supported_headers_);
-}
-
-SupportedHeadersIterator Layer::end() const {
-  return std::end(supported_headers_);
+const std::vector<
+    std::unique_ptr<sniffer::protocols::headers::metadata::HeaderMetadata>>&
+Layer::supported_headers() const {
+  return supported_headers_;
 }
 
 // wtf?
 void Layer::set_supported_headers(
-    std::vector<std::unique_ptr<HeaderMetadata>>&& headers) {
+    std::vector<std::unique_ptr<
+        sniffer::protocols::headers::metadata::HeaderMetadata>>&& headers) {
   supported_headers_ = std::move(headers);
 }
 

@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_LAYERS_NETWORK_LAYER_H_
-#define SNIFFER_SRC_CORE_LAYERS_NETWORK_LAYER_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_LAYERS_NETWORK_LAYER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_LAYERS_NETWORK_LAYER_H_
 
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
 #include "core/layers/layer.h"
 
 namespace sniffer {
@@ -29,11 +31,13 @@ namespace layers {
 
 class NetworkLayer : public Layer {
  public:
-  NetworkLayer(const SerializationMgr& serializer,
-               const sniffer::protocols::headers::HeaderFactory& hf);
+  NetworkLayer(
+      const sniffer::common::serialization::SerializationMgr& serializer,
+      const sniffer::protocols::headers::HeaderFactory& hf);
 
   void HandleReception(sniffer::common::serialization::SerializedObject acc,
-                       int next_header_id, SniffedPacket* packet) override;
+                       int next_header_id,
+                       sniffer::protocols::SniffedPacket* packet) override;
 };
 
 }  // namespace layers
@@ -42,4 +46,4 @@ class NetworkLayer : public Layer {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_LAYERS_NETWORK_LAYER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_LAYERS_NETWORK_LAYER_H_

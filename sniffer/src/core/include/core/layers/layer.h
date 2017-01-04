@@ -16,19 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_LAYERS_LAYER_H_
-#define SNIFFER_SRC_CORE_LAYERS_LAYER_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_LAYERS_LAYER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_LAYERS_LAYER_H_
 
 #include <memory>
 #include <vector>
 
-#include <boost/iterator/indirect_iterator.hpp>  // NOLINT
-
+#include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
 #include "core/reception_handler.h"
 #include "protocols/headers/metadata/header_metadata.h"
 
 namespace sniffer {
+
+namespace protocols {
+
+class SniffedPacket;
+
+namespace headers {
+
+class HeaderFactory;
+
+namespace metadata {
+
+class HeaderMetadata;
+
+}  // namespace metadata
+
+}  // namespace headers
+
+}  // namespace protocols
 
 namespace core {
 
@@ -36,18 +53,14 @@ namespace layers {
 
 class Layer {
  public:
-  using SupportedHeadersIterator =
-      boost::indirect_iterator<HeaderMetadataCollection::iterator,
-                               const HeaderMetadata>;
-
-  Layer(const SerializationMgr& serializer,
+  Layer(const sniffer::common::serialization::SerializationMgr& serializer,
         const sniffer::protocols::headers::HeaderFactory& hf);
 
   virtual ~Layer() {}
 
   virtual void HandleReception(
       sniffer::common::serialization::SerializedObject acc, int next_header_id,
-      SniffedPacket* packet) = 0;
+      sniffer::protocols::SniffedPacket* packet) = 0;
 
   Layer* lower_layer() const;
 
@@ -57,22 +70,25 @@ class Layer {
 
   void set_upper_layer(Layer* layer);
 
-  SupportedHeadersIterator begin() const;
+  const std::vector<
+      std::unique_ptr<sniffer::protocols::headers::metadata::HeaderMetadata>>&
+  supported_headers() const;
 
-  SupportedHeadersIterator end() const;
-
-  void set_supported_headers(HeaderMetadataCollection&& headers);
+  void set_supported_headers(
+      std::vector<std::unique_ptr<
+          sniffer::protocols::headers::metadata::HeaderMetadata>>&& headers);
 
  protected:
   ReceptionHandler reception_handler_;
 
  private:
-  using HeaderMetadata = sniffer::protocols::headers::metadata::HeaderMetadata;
-  using HeaderMetadataCollection = std::vector<std::unique_ptr<HeaderMetadata>>;
-
   Layer* lower_layer_;
+
   Layer* upper_layer_;
-  HeaderMetadataCollection supported_headers_;
+
+  std::vector<
+      std::unique_ptr<sniffer::protocols::headers::metadata::HeaderMetadata>>
+      supported_headers_;
 };
 
 }  // namespace layers
@@ -81,4 +97,4 @@ class Layer {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_LAYERS_LAYER_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_LAYERS_LAYER_H_

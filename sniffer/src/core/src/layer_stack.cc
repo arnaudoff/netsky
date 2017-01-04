@@ -17,7 +17,10 @@
  */
 
 #include "core/layer_stack.h"
+
+#include "common/serialization/serialized_object.h"
 #include "core/layers/layer.h"
+#include "protocols/sniffed_packet.h"
 
 namespace sniffer {
 
@@ -38,15 +41,15 @@ LayerStack::LayerStack() : highest_layer_{nullptr}, lowest_layer_{nullptr} {}
  */
 void LayerStack::HandleReception(
     sniffer::common::serialization::SerializedObject accumulator,
-    int next_header, SniffedPacket* packet) {
+    int next_header, sniffer::protocols::SniffedPacket* packet) {
   if (lowest_layer_) {
     lowest_layer_->HandleReception(accumulator, next_header, packet);
   }
   // else throw
 }
 
-void LayerStack::AddLayer(LayerStack::Position position, Layer* layer,
-                          Layer* existing_layer) {
+void LayerStack::AddLayer(layers::Layer* layer, layers::Layer* existing_layer,
+                          LayerStack::Position position) {
   layer->set_lower_layer(nullptr);
   layer->set_upper_layer(nullptr);
 
@@ -60,7 +63,7 @@ void LayerStack::AddLayer(LayerStack::Position position, Layer* layer,
         break;
       }
       case LayerStack::Position::ABOVE: {
-        Layer* previous_upper_layer = existing_layer->upper_layer();
+        layers::Layer* previous_upper_layer = existing_layer->upper_layer();
         layer->set_upper_layer(previous_upper_layer);
         layer->set_lower_layer(existing_layer);
         existing_layer->set_upper_layer(layer);
@@ -74,7 +77,7 @@ void LayerStack::AddLayer(LayerStack::Position position, Layer* layer,
         break;
       }
       case LayerStack::Position::BELOW: {
-        Layer* previous_lower_layer = existing_layer->lower_layer();
+        layers::Layer* previous_lower_layer = existing_layer->lower_layer();
         layer->set_lower_layer(previous_lower_layer);
         layer->set_upper_layer(existing_layer);
         existing_layer->set_lower_layer(layer);
@@ -94,7 +97,7 @@ void LayerStack::AddLayer(LayerStack::Position position, Layer* layer,
   }
 }
 
-void LayerStack::RemoveLayer(Layer* layer) {
+void LayerStack::RemoveLayer(layers::Layer* layer) {
   if (layer == highest_layer_) {
     highest_layer_ = layer->lower_layer();
 
