@@ -60,7 +60,7 @@ class ConfigurationManager : public StoragePolicy<Configuration>,
   }
 
  private:
-  static constexpr auto config_path = "../config/config.";
+  static constexpr auto config_path = "../../config/config.";
 };
 
 }  // namespace config

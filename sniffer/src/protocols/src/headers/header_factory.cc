@@ -19,6 +19,7 @@
 #include "protocols/headers/header_factory.h"
 
 #include "protocols/headers/header.h"
+#include "protocols/headers/header_factory_exception.h"
 #include "protocols/sniffed_packet.h"
 
 namespace sniffer {
@@ -59,7 +60,9 @@ std::unique_ptr<Header> HeaderFactory::CreateInstance(
     const std::string& class_name, int length, SniffedPacket* packet) {
   RegistryMap::iterator it = map()->find(class_name);
   if (it == map()->end()) {
-    return nullptr;
+    throw HeaderFactoryException{
+        "Cannot instantiate a header that is not registered in the global "
+        "registry."};
   }
 
   return it->second(length, packet);

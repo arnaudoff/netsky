@@ -93,11 +93,13 @@ void StartSnifferCommand::Execute(
   auto filters = args["filters"];
   auto shared = args["shared"];
 
-  std::unique_ptr<PacketSniffer> sniffer{
-      new PcapPacketSniffer{interfaces, filters, shared,
-                            server_->config_manager(), layer_stack_, server_}};
+  std::unique_ptr<PacketSniffer> sniffer = std::make_unique<PcapPacketSniffer>(
+      interfaces, filters, shared, server_->config_manager(), layer_stack_,
+      server_);
 
   server_->set_sniffer(std::move(sniffer));
+
+  server_->sniffer()->Start();
 }
 
 }  // namespace server_commands

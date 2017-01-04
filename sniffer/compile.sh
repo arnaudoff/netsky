@@ -1,3 +1,3 @@
 mkdir build
 
-cd build && cmake ../src
+cd build && cmake -DCMAKE_BUILD_TYPE=Debug ../src
