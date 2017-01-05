@@ -22,8 +22,9 @@
 #include <sys/types.h>
 #include <string>
 
+#include "registry.h"
+
 #include "protocols/headers/header.h"
-#include "protocols/headers/header_factory_registrator.h"
 
 namespace sniffer {
 
@@ -43,8 +44,6 @@ class EthernetHeader : public Header {
 
   ~EthernetHeader() {}
 
-  static void RegisterClass(const std::string& name);
-
   std::string destination_address() const;
 
   std::string source_address() const;
@@ -61,10 +60,11 @@ class EthernetHeader : public Header {
 
  private:
   static constexpr int ADDRESS_LENGTH = 6;
-  static HeaderFactoryRegistrator<EthernetHeader> registrator_;
 
   const formats::Ethernet* data_;
 };
+
+REGISTER_SUBCLASS(Header, EthernetHeader, int, SniffedPacket*)
 
 }  // namespace headers
 

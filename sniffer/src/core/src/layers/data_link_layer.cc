@@ -20,7 +20,6 @@
 
 #include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
-#include "protocols/headers/header_factory.h"
 #include "protocols/sniffed_packet.h"
 
 namespace sniffer {
@@ -30,9 +29,8 @@ namespace core {
 namespace layers {
 
 DataLinkLayer::DataLinkLayer(
-    const sniffer::common::serialization::SerializationMgr& mgr,
-    const sniffer::protocols::headers::HeaderFactory& hfactory)
-    : Layer{mgr, hfactory} {}
+    const sniffer::common::serialization::SerializationMgr& mgr)
+    : Layer{mgr} {}
 
 void DataLinkLayer::HandleReception(
     sniffer::common::serialization::SerializedObject acc, int next_header_id,

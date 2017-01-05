@@ -32,6 +32,7 @@ add_library(netsky-core
 target_include_directories(netsky-core PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${SPDLOG_INCLUDE_DIR}>
+  $<BUILD_INTERFACE:${CPPREGPATTERN_INCLUDE_DIR}>
   $<BUILD_INTERFACE:${WEBSOCKETPP_INCLUDE_DIR}>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
@@ -44,9 +45,20 @@ target_compile_features(netsky-core
   PUBLIC cxx_decltype_auto
   PRIVATE cxx_variadic_templates)
 
+# The header registry works when all of the headers to be constructed are linked
+# directly to the executable. Since they are in an external library, the
+# linker must be forced to load all of the symbols in that library.
+
+if (APPLE)
+  set(NETSKY_PROTOCOLS_LIB -Wl,-force_load netsky-protocols)
+else()
+  set(NETSKY_PROTOCOLS_LIB
+      -Wl,--whole-archive netsky-protocols -Wl,--no-whole-archive)
+endif()
+
 # Depend on a library that we defined in the top-level file
 
-target_link_libraries(netsky-core netsky-common netsky-protocols
+target_link_libraries(netsky-core netsky-common ${NETSKY_PROTOCOLS_LIB}
   boost-system websocketpp spdlog pcap ${CMAKE_THREAD_LIBS_INIT})
 
 # 'make install' to the correct location

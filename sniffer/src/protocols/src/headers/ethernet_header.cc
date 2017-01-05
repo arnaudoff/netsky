@@ -30,28 +30,16 @@ namespace protocols {
 
 namespace headers {
 
-HeaderFactoryRegistrator<EthernetHeader> EthernetHeader::registrator_{};
-
 /**
  * @brief Constructs an Ethernet header from a SniffedPacket, reinterpreting
  * the internal byte array of the SniffedPacket object.
  *
  * @param length The length of the header to extract in bytes.
- *
  * @param packet A pointer to a SniffedPacket object.
  */
 EthernetHeader::EthernetHeader(int length, SniffedPacket* packet)
-    : Header{length},
-      data_{(const formats::Ethernet*)(packet->ExtractHeader(length))} {}
-
-/**
- * @brief Registers the header class into the global HeaderFactory registry.
- *
- * @param name A name which to use for the EthernetHeader class.
- */
-void EthernetHeader::RegisterClass(const std::string& name) {
-  registrator_.RegisterHeader(name);
-}
+    : Header{length, packet},
+      data_{(const formats::Ethernet*)(packet_->ExtractHeader(length_))} {}
 
 /**
  * @brief Retrieves the destination MAC address.

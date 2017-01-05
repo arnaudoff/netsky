@@ -27,8 +27,9 @@
 #define IP_MF 0x2000      /* more fragments flag */
 #define IP_OFFMASK 0x1fff /* mask for fragmenting bits */
 
+#include "registry.h"
+
 #include "protocols/headers/header.h"
-#include "protocols/headers/header_factory_registrator.h"
 
 namespace sniffer {
 
@@ -39,15 +40,14 @@ namespace headers {
 namespace formats {
 
 struct Internet;
-}
+
+}  // namespace formats
 
 class InternetHeader : public Header {
  public:
   InternetHeader(int length, SniffedPacket* packet);
 
   ~InternetHeader() {}
-
-  static void RegisterClass(const std::string& name);
 
   u_char version() const;
 
@@ -69,9 +69,9 @@ class InternetHeader : public Header {
 
   u_short header_checksum() const;
 
-  char* source_address() const;
+  const char* source_address() const;
 
-  char* destination_address() const;
+  const char* destination_address() const;
 
   int next_header_id() const override;
 
@@ -82,10 +82,10 @@ class InternetHeader : public Header {
   std::string entity_name() const override;
 
  private:
-  static HeaderFactoryRegistrator<InternetHeader> registrator_;
-
   const formats::Internet* data_;
 };
+
+REGISTER_SUBCLASS(Header, InternetHeader, int, SniffedPacket*)
 
 }  // namespace headers
 

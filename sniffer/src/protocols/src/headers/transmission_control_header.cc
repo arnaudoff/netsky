@@ -24,7 +24,6 @@
 #include <sstream>
 
 #include "protocols/headers/formats/transmission_control.h"
-#include "protocols/headers/header_factory_registrator.h"
 #include "protocols/sniffed_packet.h"
 
 namespace sniffer {
@@ -33,39 +32,26 @@ namespace protocols {
 
 namespace headers {
 
-HeaderFactoryRegistrator<TransmissionControlHeader>
-    TransmissionControlHeader::registrator_{};
-
 /**
  * @brief Constructs a TCP header of length length from a SniffedPacket by re-
  * interpreting the internal byte array of the SniffedPacket.
  *
  * @param length The length of the header to extract in bytes.
- *
  * @param packet A pointer to a SniffedPacket object.
  */
 TransmissionControlHeader::TransmissionControlHeader(int length,
                                                      SniffedPacket* packet)
-    : Header{length},
-      data_{
-          (const formats::TransmissionControl*)(packet->ExtractHeader(length))}
-/*
-if (size_ < 20) {
-    std::ostringstream exception_message;
-    exception_message << "Invalid TCP header length: " <<
-        size_ << " bytes.";
-    throw std::out_of_range { exception_message.str() };
-}
-*/
-{}
-
-/**
- * @brief Registers the header class into the global HeaderFactory registry.
- *
- * @param name A name which to use for the TransmissionControlHeader class.
- */
-void TransmissionControlHeader::RegisterClass(const std::string& name) {
-  registrator_.RegisterHeader(name);
+    : Header{length, packet},
+      data_{(const formats::TransmissionControl*)(packet_->ExtractHeader(
+          length_))} {
+  /*
+  if (size_ < 20) {
+      std::ostringstream exception_message;
+      exception_message << "Invalid TCP header length: " <<
+          size_ << " bytes.";
+      throw std::out_of_range { exception_message.str() };
+  }
+  */
 }
 
 /**
@@ -113,6 +99,7 @@ int TransmissionControlHeader::acknowledgment_number() const {
   return data_->acknowledgment_number;
 }
 
+// TODO(arnaudoff)
 int TransmissionControlHeader::next_header_id() const { return 0; }
 
 /**

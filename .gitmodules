@@ -10,3 +10,6 @@
 [submodule "sniffer/src/vendor/spdlog"]
 	path = sniffer/src/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "sniffer/src/vendor/cppregpattern"]
+	path = sniffer/src/vendor/cppregpattern
+	url = https://github.com/psalvaggio/cppregpattern

@@ -21,15 +21,15 @@
 #include <sys/types.h>
 
 #include <algorithm>
+#include <memory>
 #include <string>
+
+#include "registry.h"
 
 #include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
-
 #include "core/layers/layer.h"
-
 #include "protocols/headers/header.h"
-#include "protocols/headers/header_factory.h"
 #include "protocols/sniffed_packet.h"
 
 namespace sniffer {
@@ -41,27 +41,20 @@ namespace core {
  *
  * @param serializer A const reference to the SerializationMgr to use while
  * serializing values into accumulated object.
- *
- * @param header_factory A const reference to a HeaderFactory to use in order to
- * construct the correct header objects.
- *
  * @param layer A raw pointer to the current layer for which the handler is
  * is acting upon.
  */
 ReceptionHandler::ReceptionHandler(
     const sniffer::common::serialization::SerializationMgr& serializer,
-    const sniffer::protocols::headers::HeaderFactory& header_factory,
     layers::Layer* layer)
-    : serializer_{serializer}, header_factory_{header_factory}, layer_{layer} {}
+    : serializer_{serializer}, layer_{layer} {}
 
 /**
  * @brief Handles the reception of a SniffedPacket.
  *
  * @param accumulator_obj A reference to a SerializedObject that is used
  * as accumulator for storage of the interpreted fields while going up the stack
- *
  * @param next_header_id An integer that is mapped to the header type.
- *
  * @param packet A raw pointer to the packet to interpret.
  */
 void ReceptionHandler::Handle(
@@ -94,7 +87,11 @@ void ReceptionHandler::Handle(
 
     // Now that we have the name and the size of the header, create an
     // object of its type and pass it the raw data.
-    auto header_instance = header_factory_.CreateInstance(name, length, packet);
+    std::unique_ptr<sniffer::protocols::headers::Header> header_instance{
+        registry::Registry<sniffer::protocols::headers::Header, int,
+                           sniffer::protocols::SniffedPacket*>::Create(name,
+                                                                       length,
+                                                                       packet)};
 
     // Finally, serialize the parsed fields of the header and append
     // the generated object to the accumulating object.

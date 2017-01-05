@@ -32,8 +32,7 @@ namespace layers {
 class ApplicationLayer : public Layer {
  public:
   ApplicationLayer(
-      const sniffer::common::serialization::SerializationMgr& serializer,
-      const sniffer::protocols::headers::HeaderFactory& hf);
+      const sniffer::common::serialization::SerializationMgr& serializer);
 
   void HandleReception(sniffer::common::serialization::SerializedObject acc,
                        int next_header_id,

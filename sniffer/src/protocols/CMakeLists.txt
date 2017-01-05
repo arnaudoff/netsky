@@ -2,7 +2,6 @@ project(netsky-protocols VERSION 0.1 LANGUAGES CXX)
 
 add_library(netsky-protocols
   src/headers/header.cc
-  src/headers/header_factory.cc
   src/headers/ethernet_header.cc
   src/headers/internet_header.cc
   src/headers/transmission_control_header.cc
@@ -20,6 +19,7 @@ add_library(netsky-protocols
 
 target_include_directories(netsky-protocols PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${CPPREGPATTERN_INCLUDE_DIR}>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 

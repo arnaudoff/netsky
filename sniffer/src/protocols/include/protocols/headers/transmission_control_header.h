@@ -33,8 +33,9 @@
 #define TH_CWR 0x80
 #define TH_FLAGS (TH_FIN | TH_SYN | TH_RST | TH_ACK | TH_URG | TH_ECE | TH_CWR)
 
+#include "registry.h"
+
 #include "protocols/headers/header.h"
-#include "protocols/headers/header_factory_registrator.h"
 
 namespace sniffer {
 
@@ -53,8 +54,6 @@ class TransmissionControlHeader : public Header {
   TransmissionControlHeader(int length, SniffedPacket* packet);
 
   ~TransmissionControlHeader() {}
-
-  static void RegisterClass(const std::string& name);
 
   u_int16_t source_port() const;
 
@@ -75,10 +74,10 @@ class TransmissionControlHeader : public Header {
   std::string entity_name() const override;
 
  private:
-  static HeaderFactoryRegistrator<TransmissionControlHeader> registrator_;
-
   const formats::TransmissionControl* data_;
 };
+
+REGISTER_SUBCLASS(Header, TransmissionControlHeader, int, SniffedPacket*)
 
 }  // namespace headers
 

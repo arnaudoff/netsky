@@ -35,8 +35,6 @@ class SniffedPacket;
 
 namespace headers {
 
-class HeaderFactory;
-
 namespace metadata {
 
 class HeaderMetadata;
@@ -53,8 +51,7 @@ namespace layers {
 
 class Layer {
  public:
-  Layer(const sniffer::common::serialization::SerializationMgr& serializer,
-        const sniffer::protocols::headers::HeaderFactory& hf);
+  Layer(const sniffer::common::serialization::SerializationMgr& serializer);
 
   virtual ~Layer() {}
 

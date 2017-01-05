@@ -24,10 +24,32 @@ namespace protocols {
 
 namespace headers {
 
-Header::Header(int length) : length_{length} {}
+/**
+ * @brief Constructs a header object.
+ *
+ * @param length The length of the header
+ * @param packet Pointer to a SniffedPacket object.
+ */
+Header::Header(int length, SniffedPacket* packet)
+    : length_{length}, packet_{packet} {}
 
+/**
+ * @brief Retrieves the length of the header.
+ *
+ * @return The length of the header.
+ */
 int Header::length() const { return length_; }
 
+/**
+ * @brief Gets the pointer to the SniffedPacket object for the header.
+ *
+ * @return The pointer to the SniffedPacket object for the header.
+ */
+const SniffedPacket* Header::packet() const { return packet_; }
+
+/**
+ * @brief Destructs the header.
+ */
 Header::~Header() {}
 
 }  // namespace headers

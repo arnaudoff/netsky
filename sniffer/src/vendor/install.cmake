@@ -104,3 +104,34 @@ if((NOT NLOHMANN_JSON_INCLUDE_DIR) OR (NOT EXISTS ${NLOHMANN_JSON_INCLUDE_DIR}))
   install(EXPORT nlohmann_json-config DESTINATION share/nlohmann_json/cmake)
 
 endif()
+
+if((NOT CPPREGPATTERN_INCLUDE_DIR) OR (NOT EXISTS ${CPPREGPATTERN_INCLUDE_DIR}))
+  # We couldn't find the header file for psalvaggio/cppregpattern or it doesn't exist
+
+  message("Unable to find cppregpattern, cloning...")
+
+  # Clone the submodule under vendor/cppregpattern
+
+  execute_process(COMMAND git submodule update --init -- vendor/cppregpattern
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+  set(CPPREGPATTERN_INCLUDE_DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/cppregpattern/
+    CACHE PATH "cppregpattern include directory")
+
+  install(FILES ${CPPREGPATTERN_INCLUDE_DIR}/registry.h DESTINATION include)
+
+  # Setup a target
+
+  add_library(cppregpattern INTERFACE)
+  target_include_directories(cppregpattern INTERFACE
+    $<BUILD_INTERFACE:${CPPREGPATTERN_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:include>)
+
+  # Export the target
+
+  install(TARGETS cppregpattern EXPORT cppregpattern-config DESTINATION include)
+
+  install(EXPORT cppregpattern-config DESTINATION share/cppregpattern/cmake)
+
+endif()

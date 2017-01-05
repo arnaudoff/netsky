@@ -25,7 +25,6 @@
 
 #include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
-#include "protocols/headers/header_factory.h"
 #include "protocols/headers/metadata/header_metadata.h"
 #include "protocols/sniffed_packet.h"
 
@@ -35,11 +34,10 @@ namespace core {
 
 namespace layers {
 
-Layer::Layer(const sniffer::common::serialization::SerializationMgr& serializer,
-             const sniffer::protocols::headers::HeaderFactory& hfactory)
+Layer::Layer(const sniffer::common::serialization::SerializationMgr& serializer)
     : lower_layer_{NULL},
       upper_layer_{NULL},
-      reception_handler_{serializer, hfactory, this} {};
+      reception_handler_{serializer, this} {};
 
 Layer* Layer::lower_layer() const { return lower_layer_; }
 

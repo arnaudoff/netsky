@@ -31,36 +31,24 @@ namespace protocols {
 
 namespace headers {
 
-HeaderFactoryRegistrator<InternetHeader> InternetHeader::registrator_{};
-
 /**
  * @brief Constructs an Internet header from a SniffedPacket, reinterpreting
  * the internal byte array of the SniffedPacket object.
  *
  * @param length The length of the header to extract in bytes.
- *
- * @param packet A pointer to a SnifffedPacket object.
+ * @param packet A pointer to the SnifffedPacket object.
  */
 InternetHeader::InternetHeader(int length, SniffedPacket* packet)
-    : Header{length},
-      data_{(const formats::Internet*)(packet->ExtractHeader(length))} {
+    : Header{length, packet},
+      data_{(const formats::Internet*)(packet_->ExtractHeader(length_))} {
   /*
   if (size_ < 20) {
       std::ostringstream exception_message;
-      exception_message << "Invalid IP header length: " << size_ << " bytes.";
+      exception_message << "Invalid IP header length: " << size_ << "
+  bytes.";
       throw std::out_of_range { exception_message.str() };
   }
-  data_ = (const struct Internet*)(packet.extract_header());
   */
-}
-
-/**
- * @brief Registers the header class into the global HeaderFactory registry.
- *
- * @param name A name which to use for the InternetHeader class.
- */
-void InternetHeader::RegisterClass(const std::string& name) {
-  registrator_.RegisterHeader(name);
 }
 
 /**
@@ -78,7 +66,7 @@ u_char InternetHeader::version() const {
  *
  * @return A pointer to the beginning of the source IP address.
  */
-char* InternetHeader::source_address() const {
+const char* InternetHeader::source_address() const {
   return inet_ntoa(data_->source_address);
 }
 
@@ -87,7 +75,7 @@ char* InternetHeader::source_address() const {
  *
  * @return A pointer to the beginning of the destination IP address.
  */
-char* InternetHeader::destination_address() const {
+const char* InternetHeader::destination_address() const {
   return inet_ntoa(data_->destination_address);
 }
 
@@ -119,12 +107,11 @@ sniffer::common::serialization::SerializedObject InternetHeader::Serialize(
   auto obj = serializer.CreateObject();
 
   // TODO(arnaudoff): Extract the upper_layer stuff into the Header and call the
-  // base
-  // implementation from here.
+  // base implementation from here.
   serializer.SetValue<u_char>("version", version(), &obj);
   serializer.SetValue<u_char>("upper_layer", next_header_id(), &obj);
-  serializer.SetValue<char*>("src", source_address(), &obj);
-  serializer.SetValue<char*>("dst", destination_address(), &obj);
+  serializer.SetValue<const char*>("src", source_address(), &obj);
+  serializer.SetValue<const char*>("dst", destination_address(), &obj);
   serializer.SetValue<int>("length", length(), &obj);
 
   return obj;

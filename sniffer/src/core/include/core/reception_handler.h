@@ -21,7 +21,6 @@
 
 #include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
-#include "protocols/headers/header_factory.h"
 
 namespace sniffer {
 
@@ -43,7 +42,6 @@ class ReceptionHandler {
  public:
   ReceptionHandler(
       const sniffer::common::serialization::SerializationMgr& manager,
-      const sniffer::protocols::headers::HeaderFactory& header_factory,
       layers::Layer* layer);
 
   void Handle(sniffer::common::serialization::SerializedObject acc,
@@ -52,7 +50,6 @@ class ReceptionHandler {
  private:
   layers::Layer* layer_;
   sniffer::common::serialization::SerializationMgr serializer_;
-  sniffer::protocols::headers::HeaderFactory header_factory_;
 };
 
 }  // namespace core

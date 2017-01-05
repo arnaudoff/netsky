@@ -57,7 +57,6 @@ using sniffer::core::layers::TransportLayer;
 using sniffer::core::layers::ApplicationLayer;
 
 // Headers
-using sniffer::protocols::headers::HeaderFactory;
 using sniffer::protocols::headers::EthernetHeader;
 using sniffer::protocols::headers::InternetHeader;
 using sniffer::protocols::headers::TransmissionControlHeader;
@@ -89,44 +88,40 @@ int main() {
 
   // Initialize factories
 
-  HeaderFactory hfactory;
   IpAddressFactory ip_addr_factory;
 
   // Data link layer specific initializations
 
-  EthernetHeader::RegisterClass("EthernetHeader");
   auto ethernet_metadata = std::make_unique<EthernetHeaderMetadata>(
       1, "EthernetHeader", 14, false, 0);
 
   std::vector<std::unique_ptr<HeaderMetadata>> dll_supported_headers{};
   dll_supported_headers.push_back(std::move(ethernet_metadata));
 
-  DataLinkLayer dll{serializer, hfactory};
+  DataLinkLayer dll{serializer};
   dll.set_supported_headers(std::move(dll_supported_headers));
 
   // Network layer specific initializations
 
-  InternetHeader::RegisterClass("InternetHeader");
   auto internet_metadata =
       std::make_unique<InternetHeaderMetadata>(2, "InternetHeader", 0, true, 0);
   std::vector<std::unique_ptr<HeaderMetadata>> nl_supported_headers{};
   nl_supported_headers.push_back(std::move(internet_metadata));
 
-  NetworkLayer nl{serializer, hfactory};
+  NetworkLayer nl{serializer};
   nl.set_supported_headers(std::move(nl_supported_headers));
 
   // Transport layer specific initialization
 
-  TransmissionControlHeader::RegisterClass("TransmissionControlHeader");
   auto tcp_metadata = std::make_unique<TransmissionControlHeaderMetadata>(
       3, "TransmissionControlHeader", 0, true, 0);
   std::vector<std::unique_ptr<HeaderMetadata>> tl_supported_headers{};
   tl_supported_headers.push_back(std::move(tcp_metadata));
 
-  TransportLayer tl{serializer, hfactory};
+  TransportLayer tl{serializer};
   tl.set_supported_headers(std::move(tl_supported_headers));
 
-  ApplicationLayer al{serializer, hfactory};
+  ApplicationLayer al{serializer};
 
   // Build the protocol stack
 

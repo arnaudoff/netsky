@@ -22,10 +22,6 @@
 #include <memory>
 #include <string>
 
-#if __cplusplus < 201402L
-#include "common/extensions/make_unique.h"
-#endif
-
 #include "common/policy_bindings.h"
 #include "common/serialization/serializable_entity.h"
 
@@ -39,17 +35,13 @@ namespace headers {
 
 class Header : public sniffer::common::serialization::SerializableEntity {
  public:
-  explicit Header(int length);
+  explicit Header(int length, SniffedPacket* packet);
 
   virtual ~Header();
 
-  template <typename T>
-  static std::unique_ptr<Header> CreateHeader(int length,
-                                              SniffedPacket* packet) {
-    return std::make_unique<T>(length, packet);
-  }
-
   int length() const;
+
+  const SniffedPacket* packet() const;
 
   virtual int next_header_id() const = 0;
 
@@ -59,7 +51,9 @@ class Header : public sniffer::common::serialization::SerializableEntity {
 
   virtual std::string entity_name() const = 0;
 
- private:
+ protected:
+  SniffedPacket* packet_;
+
   int length_;
 };
 

@@ -32,8 +32,7 @@ namespace layers {
 class DataLinkLayer : public Layer {
  public:
   DataLinkLayer(
-      const sniffer::common::serialization::SerializationMgr& serializer,
-      const sniffer::protocols::headers::HeaderFactory& hfactory);
+      const sniffer::common::serialization::SerializationMgr& serializer);
 
   void HandleReception(sniffer::common::serialization::SerializedObject acc,
                        int next_header_id,
