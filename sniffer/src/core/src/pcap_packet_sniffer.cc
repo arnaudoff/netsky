@@ -152,13 +152,15 @@ void PcapPacketSniffer::OnPacketReceived(u_char* args,
  */
 void PcapPacketSniffer::OnPacketReceivedInternal(
     const struct pcap_pkthdr* header, const u_char* packet) {
+  spdlog::get("console")->info("Packet received. Length: {0}", header->caplen);
+
   sniffer::protocols::PacketRegion body{0, static_cast<int>(header->caplen)};
 
   sniffer::protocols::SniffedPacket packet_obj{packet, body};
   sniffer::common::serialization::SerializedObject accumulator_obj{"{}"};
 
   // http://www.tcpdump.org/linktypes.html
-  stack_.HandleReception(accumulator_obj, 1, &packet_obj);
+  stack_.HandleReception(1, &packet_obj, &accumulator_obj);
   server_->Broadcast(accumulator_obj.data());
 }
 

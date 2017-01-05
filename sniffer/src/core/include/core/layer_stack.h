@@ -19,9 +19,17 @@
 #ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_LAYER_STACK_H_
 #define SNIFFER_SRC_CORE_INCLUDE_CORE_LAYER_STACK_H_
 
-#include "common/serialization/serialized_object.h"
-
 namespace sniffer {
+
+namespace common {
+
+namespace serialization {
+
+class SerializedObject;
+
+}  // namespace serialization
+
+}  // namespace common
 
 namespace protocols {
 
@@ -48,9 +56,9 @@ class LayerStack {
 
   void RemoveLayer(layers::Layer* layer);
 
-  void HandleReception(sniffer::common::serialization::SerializedObject acc,
-                       int next_header_id,
-                       sniffer::protocols::SniffedPacket* packet);
+  void HandleReception(int next_header_id,
+                       sniffer::protocols::SniffedPacket* packet,
+                       sniffer::common::serialization::SerializedObject* acc);
 
  private:
   layers::Layer* highest_layer_;

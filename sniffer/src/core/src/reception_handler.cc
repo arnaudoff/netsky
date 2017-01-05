@@ -52,14 +52,14 @@ ReceptionHandler::ReceptionHandler(
 /**
  * @brief Handles the reception of a SniffedPacket.
  *
- * @param accumulator_obj A reference to a SerializedObject that is used
- * as accumulator for storage of the interpreted fields while going up the stack
  * @param next_header_id An integer that is mapped to the header type.
  * @param packet A raw pointer to the packet to interpret.
+ * @param accumulator_obj A pointer to the SerializedObject that is used as
+ * accumulator for storage of the interpreted fields while going up the stack.
  */
 void ReceptionHandler::Handle(
-    sniffer::common::serialization::SerializedObject accumulator_obj,
-    int next_header_id, sniffer::protocols::SniffedPacket* packet) {
+    int next_header_id, sniffer::protocols::SniffedPacket* packet,
+    sniffer::common::serialization::SerializedObject* accumulator_obj) {
   auto& supported_headers = layer_->supported_headers();
 
   // Check if the current layer contains this header ID as supported
@@ -96,13 +96,13 @@ void ReceptionHandler::Handle(
     // Finally, serialize the parsed fields of the header and append
     // the generated object to the accumulating object.
     auto serialized_obj = header_instance->Serialize(serializer_);
-    serializer_.SetObject(name, serialized_obj, &accumulator_obj);
+    serializer_.SetObject(name, serialized_obj, accumulator_obj);
 
     // Continue up the layer stack
     layers::Layer* upper_layer = layer_->upper_layer();
     if (upper_layer) {
-      upper_layer->HandleReception(accumulator_obj,
-                                   header_instance->next_header_id(), packet);
+      upper_layer->HandleReception(header_instance->next_header_id(), packet,
+                                   accumulator_obj);
     } else {
       // We have reached the top of the layer stack, nothing more to interpret
       return;

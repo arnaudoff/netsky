@@ -33,9 +33,9 @@ TransportLayer::TransportLayer(
     : Layer{mgr} {}
 
 void TransportLayer::HandleReception(
-    sniffer::common::serialization::SerializedObject acc, int next_header_id,
-    sniffer::protocols::SniffedPacket* packet) {
-  reception_handler_.Handle(acc, next_header_id, packet);
+    int next_header_id, sniffer::protocols::SniffedPacket* packet,
+    sniffer::common::serialization::SerializedObject* acc) {
+  reception_handler_.Handle(next_header_id, packet, acc);
 }
 
 }  // namespace layers

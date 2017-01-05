@@ -20,9 +20,18 @@
 #define SNIFFER_SRC_CORE_INCLUDE_CORE_RECEPTION_HANDLER_H_
 
 #include "common/policy_bindings.h"
-#include "common/serialization/serialized_object.h"
 
 namespace sniffer {
+
+namespace common {
+
+namespace serialization {
+
+class SerializedObject;
+
+}  // namespace serialization
+
+}  // namespace common
 
 namespace protocols {
 
@@ -44,8 +53,8 @@ class ReceptionHandler {
       const sniffer::common::serialization::SerializationMgr& manager,
       layers::Layer* layer);
 
-  void Handle(sniffer::common::serialization::SerializedObject acc,
-              int next_header_id, sniffer::protocols::SniffedPacket* packet);
+  void Handle(int next_header_id, sniffer::protocols::SniffedPacket* packet,
+              sniffer::common::serialization::SerializedObject* acc);
 
  private:
   layers::Layer* layer_;

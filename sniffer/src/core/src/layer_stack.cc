@@ -35,15 +35,15 @@ LayerStack::LayerStack() : highest_layer_{nullptr}, lowest_layer_{nullptr} {}
  * @brief Handles the reception of a SniffedPacket by defering it to the lowest
  * layer of the LayerStack.
  *
+ * @param next_header_id The header ID of the next header.
+ * @param packet A pointer to the SniffedPacket object.
  * @param accumulator The object to use to accumulate the parsed properties.
- * @param next_header The header ID of the next header.
- * @param packet A reference to a SniffedPacket object.
  */
 void LayerStack::HandleReception(
-    sniffer::common::serialization::SerializedObject accumulator,
-    int next_header, sniffer::protocols::SniffedPacket* packet) {
+    int next_header_id, sniffer::protocols::SniffedPacket* packet,
+    sniffer::common::serialization::SerializedObject* accumulator) {
   if (lowest_layer_) {
-    lowest_layer_->HandleReception(accumulator, next_header, packet);
+    lowest_layer_->HandleReception(next_header_id, packet, accumulator);
   }
   // else throw
 }

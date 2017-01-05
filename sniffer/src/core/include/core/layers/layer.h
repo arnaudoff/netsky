@@ -23,11 +23,20 @@
 #include <vector>
 
 #include "common/policy_bindings.h"
-#include "common/serialization/serialized_object.h"
 #include "core/reception_handler.h"
 #include "protocols/headers/metadata/header_metadata.h"
 
 namespace sniffer {
+
+namespace common {
+
+namespace serialization {
+
+class SerializedObject;
+
+}  // namespace serialization
+
+}  // namespace common
 
 namespace protocols {
 
@@ -56,8 +65,8 @@ class Layer {
   virtual ~Layer() {}
 
   virtual void HandleReception(
-      sniffer::common::serialization::SerializedObject acc, int next_header_id,
-      sniffer::protocols::SniffedPacket* packet) = 0;
+      int next_header_id, sniffer::protocols::SniffedPacket* packet,
+      sniffer::common::serialization::SerializedObject* acc) = 0;
 
   Layer* lower_layer() const;
 

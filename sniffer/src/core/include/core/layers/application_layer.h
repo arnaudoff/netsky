@@ -20,7 +20,6 @@
 #define SNIFFER_SRC_CORE_INCLUDE_CORE_LAYERS_APPLICATION_LAYER_H_
 
 #include "common/policy_bindings.h"
-#include "common/serialization/serialized_object.h"
 #include "core/layers/layer.h"
 
 namespace sniffer {
@@ -34,9 +33,9 @@ class ApplicationLayer : public Layer {
   ApplicationLayer(
       const sniffer::common::serialization::SerializationMgr& serializer);
 
-  void HandleReception(sniffer::common::serialization::SerializedObject acc,
-                       int next_header_id,
-                       sniffer::protocols::SniffedPacket* packet) override;
+  void HandleReception(
+      int next_header_id, sniffer::protocols::SniffedPacket* packet,
+      sniffer::common::serialization::SerializedObject* acc) override;
 };
 
 }  // namespace layers
