@@ -42,8 +42,12 @@ PacketSniffer::PacketSniffer(
 
 void PacketSniffer::Start() {
   PrepareInterfaces();
-  ParseFilters();
-  ApplyFilters();
+
+  if (!filters_.empty()) {
+    ParseFilters();
+    ApplyFilters();
+  }
+
   Sniff();
 }
 

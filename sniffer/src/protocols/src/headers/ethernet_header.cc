@@ -18,6 +18,8 @@
 
 #include "protocols/headers/ethernet_header.h"
 
+#include <arpa/inet.h>
+
 #include <iomanip>
 #include <sstream>
 
@@ -84,7 +86,7 @@ std::string EthernetHeader::source_address() const {
  *
  * @return A two-byte value indicating the upper layer protocol that is carried.
  */
-u_short EthernetHeader::ether_type() const { return data_->ether_type; }
+u_short EthernetHeader::ether_type() const { return ntohs(data_->ether_type); }
 
 /**
  * @brief Defines the next_header_id for the upper layer protocol.

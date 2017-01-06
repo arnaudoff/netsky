@@ -103,8 +103,8 @@ int main() {
 
   // Network layer specific initializations
 
-  auto internet_metadata =
-      std::make_unique<InternetHeaderMetadata>(2, "InternetHeader", 0, true, 0);
+  auto internet_metadata = std::make_unique<InternetHeaderMetadata>(
+      0x800, "InternetHeader", 0, true, 0);
   std::vector<std::unique_ptr<HeaderMetadata>> nl_supported_headers{};
   nl_supported_headers.push_back(std::move(internet_metadata));
 
@@ -114,7 +114,7 @@ int main() {
   // Transport layer specific initialization
 
   auto tcp_metadata = std::make_unique<TransmissionControlHeaderMetadata>(
-      3, "TransmissionControlHeader", 0, true, 0);
+      0x06, "TransmissionControlHeader", 0, true, 0);
   std::vector<std::unique_ptr<HeaderMetadata>> tl_supported_headers{};
   tl_supported_headers.push_back(std::move(tcp_metadata));
 
