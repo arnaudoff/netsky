@@ -5,16 +5,19 @@
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Hill(1952)]{Hill1952}
-R.~Hill.
-\newblock {The elastic behaviour of a crystalline aggregate}.
-\newblock \emph{Proceedings of the Physical Society. Section A}, 65:\penalty0
-  349--354, 1952.
+\bibitem[Sanders(2011)]{sanders_practical_2011}
+C.~Sanders.
+\newblock \emph{Practical packet analysis: using {Wireshark} to solve
+  real-world network problems}.
+\newblock No Starch Press, San Francisco, Calif, 2. ed edition, 2011.
+\newblock ISBN 978-1-59327-266-1.
+\newblock OCLC: 755869776.
 
-\bibitem[Kr\"{o}ner(1977)]{Kroner1977}
-E.~Kr\"{o}ner.
-\newblock {Bounds for effective elastic moduli of disordered materials}.
-\newblock \emph{Journal of the Mechanics and Physics of Solids}, 25\penalty0
-  (3):\penalty0 137--155, 1977.
+\bibitem[Tanenbaum and Wetherall(2011)]{tanenbaum_computer_2011}
+A.~S. Tanenbaum and D.~Wetherall.
+\newblock \emph{Computer networks}.
+\newblock Pearson Prentice Hall, Boston, 5th ed edition, 2011.
+\newblock ISBN 978-0-13-212695-3.
+\newblock OCLC: ocn660087726.
 
 \end{thebibliography}
