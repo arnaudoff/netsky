@@ -1,0 +1,41 @@
+% Packages
+
+% Language-related
+
+\usepackage{setspace}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,bulgarian]{babel}
+
+% Others
+
+\usepackage{extsizes}
+\usepackage{blindtext} % Needed for creating dummy text passages
+\usepackage[colorlinks=true,breaklinks,nbulgarian]{hyperref}
+\usepackage[hyphenbreaks]{breakurl}
+\usepackage{xcolor}
+\usepackage{ragged2e}
+\definecolor{c1}{rgb}{0,0,0} % Blue
+\definecolor{c2}{rgb}{0,0.3,0.9} % Light blue
+\definecolor{c3}{rgb}{0.3,0,0.9} % Red blue
+\hypersetup{
+    linkcolor={c1}, % Internal links
+    citecolor={c2}, % Citations
+    urlcolor={c3} % External links/URLs
+}
+
+%\usepackage{cite} % Needed for cite
+
+% Needed for cite and abbrvnat bibliography style
+\usepackage[round,authoryear]{natbib}
+
+% Needed for displaying bibliography and other in the table of contents
+\usepackage[nottoc]{tocbibind}
+
+\usepackage{graphicx} % Needed for \includegraphics
+\usepackage{longtable} % Needed for long tables over pages
+\usepackage{bigstrut} % Needed for the command \bigstrut
+\usepackage{enumerate} % Needed for some options in enumerate
+\usepackage{todonotes} % Needed for todos
+\usepackage{makeidx} % Needed for creating an index
+\makeindex
