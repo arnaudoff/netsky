@@ -121,14 +121,43 @@ std::string TransmissionControlHeader::entity_name() const { return "tcp"; }
 sniffer::common::serialization::SerializedObject
 TransmissionControlHeader::Serialize(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
-  auto obj = serializer.CreateObject();
+  auto root_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", entity_name(), &root_obj);
 
-  serializer.SetValue<u_int16_t>("src", source_port(), &obj);
-  serializer.SetValue<u_int16_t>("dst", destination_port(), &obj);
-  // TODO(arnaudoff): Extract to base..
-  serializer.SetValue<int>("length", length(), &obj);
+  auto dst_port_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "destination_port",
+                                   &dst_port_obj);
 
-  return obj;
+  auto dst_port_value_obj = serializer.CreateObject();
+  serializer.SetValue<u_int16_t>("name", destination_port(),
+                                   &dst_port_value_obj);
+  serializer.SetValue<int>("size", 2, &dst_port_value_obj);
+  serializer.AppendObject("children", dst_port_value_obj, &dst_port_obj);
+
+  auto src_port_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "source_port", &src_port_obj);
+
+  auto src_port_value_obj = serializer.CreateObject();
+  serializer.SetValue<u_int16_t>("name", source_port(),
+                                   &src_port_value_obj);
+  serializer.SetValue<int>("size", 2, &src_port_value_obj);
+  serializer.AppendObject("children", src_port_value_obj, &src_port_obj);
+
+  // TODO(arnaudoff): Extract the length stuff into the
+  // Header and call the base implementation from here.
+  auto length_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "length", &length_obj);
+
+  auto length_value_obj = serializer.CreateObject();
+  serializer.SetValue<u_short>("name", length(), &length_value_obj);
+  serializer.SetValue<u_short>("size", 1, &length_value_obj);
+  serializer.AppendObject("children", length_value_obj, &length_obj);
+
+  serializer.AppendObject("children", dst_port_obj, &root_obj);
+  serializer.AppendObject("children", src_port_obj, &root_obj);
+  serializer.AppendObject("children", length_obj, &root_obj);
+
+  return root_obj;
 }
 
 }  // namespace headers

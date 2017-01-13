@@ -104,17 +104,62 @@ std::string InternetHeader::entity_name() const { return "internet"; }
  */
 sniffer::common::serialization::SerializedObject InternetHeader::Serialize(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
-  auto obj = serializer.CreateObject();
+  auto root_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", entity_name(), &root_obj);
 
-  // TODO(arnaudoff): Extract the upper_layer stuff into the Header and call the
-  // base implementation from here.
-  serializer.SetValue<u_char>("version", version(), &obj);
-  serializer.SetValue<u_char>("upper_layer", next_header_id(), &obj);
-  serializer.SetValue<const char*>("src", source_address(), &obj);
-  serializer.SetValue<const char*>("dst", destination_address(), &obj);
-  serializer.SetValue<int>("length", length(), &obj);
+  auto dst_addr_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "destination_address",
+                                   &dst_addr_obj);
 
-  return obj;
+  auto dst_addr_value_obj = serializer.CreateObject();
+  serializer.SetValue<const char*>("name", destination_address(),
+                                   &dst_addr_value_obj);
+  serializer.SetValue<int>("size", 4, &dst_addr_value_obj);
+  serializer.AppendObject("children", dst_addr_value_obj, &dst_addr_obj);
+
+  auto src_addr_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "source_address", &src_addr_obj);
+
+  auto src_addr_value_obj = serializer.CreateObject();
+  serializer.SetValue<const char*>("name", source_address(),
+                                   &src_addr_value_obj);
+  serializer.SetValue<int>("size", 4, &src_addr_value_obj);
+  serializer.AppendObject("children", src_addr_value_obj, &src_addr_obj);
+
+  auto version_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "version", &version_obj);
+
+  auto version_value_obj = serializer.CreateObject();
+  serializer.SetValue<u_short>("name", version(), &version_value_obj);
+  serializer.SetValue<u_short>("size", 1, &version_value_obj);
+  serializer.AppendObject("children", version_value_obj, &version_obj);
+
+  auto upper_layer_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "upper_layer", &upper_layer_obj);
+
+  auto upper_layer_value_obj = serializer.CreateObject();
+  serializer.SetValue<u_short>("name", next_header_id(),
+                               &upper_layer_value_obj);
+  serializer.SetValue<u_short>("size", 1, &upper_layer_value_obj);
+  serializer.AppendObject("children", upper_layer_value_obj, &upper_layer_obj);
+
+  // TODO(arnaudoff): Extract the length (and upper_layer?) stuff into the
+  // Header and call the base implementation from here.
+  auto length_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "length", &length_obj);
+
+  auto length_value_obj = serializer.CreateObject();
+  serializer.SetValue<u_short>("name", length(), &length_value_obj);
+  serializer.SetValue<u_short>("size", 1, &length_value_obj);
+  serializer.AppendObject("children", length_value_obj, &length_obj);
+
+  serializer.AppendObject("children", dst_addr_obj, &root_obj);
+  serializer.AppendObject("children", src_addr_obj, &root_obj);
+  serializer.AppendObject("children", version_obj, &root_obj);
+  serializer.AppendObject("children", upper_layer_obj, &root_obj);
+  serializer.AppendObject("children", length_obj, &root_obj);
+
+  return root_obj;
 }
 
 }  // namespace headers

@@ -113,13 +113,41 @@ std::string EthernetHeader::entity_name() const { return "ethernet"; }
  */
 sniffer::common::serialization::SerializedObject EthernetHeader::Serialize(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
-  auto obj = serializer.CreateObject();
+  auto root_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", entity_name(), &root_obj);
 
-  serializer.SetValue<std::string>("dest", destination_address(), &obj);
-  serializer.SetValue<std::string>("src", source_address(), &obj);
-  serializer.SetValue<u_short>("ether_type", ether_type(), &obj);
+  auto dst_addr_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "destination_address",
+                                   &dst_addr_obj);
 
-  return obj;
+  auto dst_addr_value_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", destination_address(),
+                                   &dst_addr_value_obj);
+  serializer.SetValue<int>("size", ADDRESS_LENGTH, &dst_addr_value_obj);
+  serializer.AppendObject("children", dst_addr_value_obj, &dst_addr_obj);
+
+  auto src_addr_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "source_address", &src_addr_obj);
+
+  auto src_addr_value_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", source_address(),
+                                   &src_addr_value_obj);
+  serializer.SetValue<int>("size", ADDRESS_LENGTH, &src_addr_value_obj);
+  serializer.AppendObject("children", src_addr_value_obj, &src_addr_obj);
+
+  auto ether_type_obj = serializer.CreateObject();
+  serializer.SetValue<std::string>("name", "ether_type", &ether_type_obj);
+
+  auto ether_type_value_obj = serializer.CreateObject();
+  serializer.SetValue<u_short>("name", ether_type(), &ether_type_value_obj);
+  serializer.SetValue<u_short>("size", 2, &ether_type_value_obj);
+  serializer.AppendObject("children", ether_type_value_obj, &ether_type_obj);
+
+  serializer.AppendObject("children", dst_addr_obj, &root_obj);
+  serializer.AppendObject("children", src_addr_obj, &root_obj);
+  serializer.AppendObject("children", ether_type_obj, &root_obj);
+
+  return root_obj;
 }
 
 }  // namespace headers
