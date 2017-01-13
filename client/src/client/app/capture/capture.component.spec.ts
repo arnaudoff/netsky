@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
+
 import { CaptureModule } from './capture.module';
 
 export function main() {
@@ -18,11 +19,15 @@ export function main() {
           .compileComponents()
           .then(() => {
             let fixture = TestBed.createComponent(TestComponent);
-            let captureDOMElement = fixture.debugElement.children[0].nativeElement;
+            let captureDOMElement =
+              fixture.debugElement.children[0].nativeElement;
 
-            expect(captureDOMElement.querySelectorAll('packet-list').length).toEqual(1);
-            expect(captureDOMElement.querySelectorAll('packet-details').length).toEqual(1);
-            expect(captureDOMElement.querySelectorAll('packet-bytes').length).toEqual(1);
+            expect(captureDOMElement.querySelectorAll('packet-list').length)
+              .toEqual(1);
+            expect(captureDOMElement.querySelectorAll('packet-details').length)
+              .toEqual(1);
+            expect(captureDOMElement.querySelectorAll('packet-payload').length)
+              .toEqual(1);
           });
         }));
     });
@@ -32,5 +37,4 @@ export function main() {
   selector: 'test-cmp',
   template: '<capture></capture>'
 })
-
 class TestComponent {}

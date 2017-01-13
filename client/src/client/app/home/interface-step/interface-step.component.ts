@@ -1,11 +1,13 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferClientService, IInterface, IRetrieveInterfaces }
+import { SnifferClientService, Interface, RetrievedInterfaces }
 from './../../shared/sniffer-client/index';
 
 import { SnifferConfigBuilderService, IConfigurableEntity }
 from './../../shared/sniffer-config-builder/index';
+
+declare var $: any;
 
 /**
  * This class represents the lazy loaded InterfaceStepComponent.
@@ -19,7 +21,7 @@ from './../../shared/sniffer-config-builder/index';
 
 export class InterfaceStepComponent {
   @ViewChild('selectInterfaces') selectElement: ElementRef;
-  private interfaces: Array<IInterface> = [];
+  private interfaces: Array<Interface> = [];
 
   constructor(
       private router: Router,
@@ -34,7 +36,7 @@ export class InterfaceStepComponent {
         .addClass('active')
         .removeClass('disabled');
 
-    this.snifferClientService.interfaces.subscribe((retInterfaces: IRetrieveInterfaces) => {
+    this.snifferClientService.interfaces.subscribe((retInterfaces: RetrievedInterfaces) => {
       for (let entry of retInterfaces.interfaces) {
           this.interfaces.push(entry);
       }
@@ -61,7 +63,7 @@ export class InterfaceStepComponent {
         .addClass('disabled')
         .removeClass('active');
 
-    this.router.navigate(['home/filter']);
+    this.router.navigate(['new/filter']);
   }
 
 }

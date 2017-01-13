@@ -2,13 +2,29 @@ import { join } from 'path';
 import * as slash from 'slash';
 import { argv } from 'yargs';
 
-import { Environments, InjectableDependency } from './seed.config.interfaces';
+import { BuildType, ExtendPackages, InjectableDependency } from './seed.config.interfaces';
+
+/************************* DO NOT CHANGE ************************
+ *
+ * DO NOT make any changes in this file because it will
+ * make your migration to newer versions of the seed harder.
+ *
+ * Your application-specific configurations should be
+ * in project.config.ts. If you need to change any tasks
+ * from "./tasks" overwrite them by creating a task with the
+ * same name in "./projects". For further information take a
+ * look at the documentation:
+ *
+ * 1) https://github.com/mgechev/angular-seed/tree/master/tools
+ * 2) https://github.com/mgechev/angular-seed/wiki
+ *
+ *****************************************************************/
 
 /**
  * The enumeration of available environments.
  * @type {Environments}
  */
-export const ENVIRONMENTS: Environments = {
+export const BUILD_TYPES: BuildType = {
   DEVELOPMENT: 'dev',
   PRODUCTION: 'prod'
 };
@@ -29,10 +45,10 @@ export class SeedConfig {
 
   /**
    * The port where the application will run.
-   * The default port is `1337`, which can be overriden by the  `--port` flag when running `npm start`.
+   * The default port is `5555`, which can be overriden by the  `--port` flag when running `npm start`.
    * @type {number}
    */
-  PORT = argv['port'] || 1337;
+  PORT = argv['port'] || 5555;
 
   /**
    * The root folder of the project (up two levels from the current directory).
@@ -40,10 +56,10 @@ export class SeedConfig {
   PROJECT_ROOT = join(__dirname, '../..');
 
   /**
-   * The current environment.
-   * The default environment is `dev`, which can be overriden by the `--config-env ENV_NAME` flag when running `npm start`.
+   * The current build type.
+   * The default build type is `dev`, which can be overriden by the `--build-type dev|prod` flag when running `npm start`.
    */
-  ENV = getEnvironment();
+  BUILD_TYPE = getBuildType();
 
   /**
    * The flag for the debug option of the application.
@@ -54,23 +70,24 @@ export class SeedConfig {
 
   /**
    * The port where the documentation application will run.
-   * The default docs port is `1338`, which can be overriden by the `--docs-port` flag when running `npm start`.
+   * The default docs port is `4003`, which can be overriden by the `--docs-port` flag when running `npm start`.
    * @type {number}
    */
-  DOCS_PORT = argv['docs-port'] || 1338;
+  DOCS_PORT = argv['docs-port'] || 4003;
 
   /**
    * The port where the unit test coverage report application will run.
-   * The default coverage port is `1339`, which can by overriden by the `--coverage-port` flag when running `npm start`.
+   * The default coverage port is `4004`, which can by overriden by the `--coverage-port` flag when running `npm start`.
    * @type {number}
    */
-  COVERAGE_PORT = argv['coverage-port'] || 1339;
+  COVERAGE_PORT = argv['coverage-port'] || 4004;
 
   /**
   * The path to the coverage output
   * NB: this must match what is configured in ./karma.conf.js
   */
-  COVERAGE_DIR = 'coverage';
+  COVERAGE_DIR = 'coverage_js';
+  COVERAGE_TS_DIR = 'coverage';
 
   /**
    * The path for the base of the application at runtime.
@@ -84,21 +101,7 @@ export class SeedConfig {
    * The base path of node modules.
    * @type {string}
    */
-  NPM_BASE = slash(join(this.APP_BASE, 'node_modules/'));
-
-  /**
-   * The flag for the hot-loader option of the application.
-   * Per default the option is not set, but can be set by the `--hot-loader` flag when running `npm start`.
-   * @type {boolean}
-   */
-  ENABLE_HOT_LOADING = argv['hot-loader'];
-
-  /**
-   * The port where the application will run, if the `hot-loader` option mode is used.
-   * The default hot-loader port is `5578`.
-   * @type {number}
-   */
-  HOT_LOADER_PORT = 5578;
+  NPM_BASE = slash(join('.', this.APP_BASE, 'node_modules/'));
 
   /**
    * The build interval which will force the TypeScript compiler to perform a typed compile run.
@@ -126,13 +129,10 @@ export class SeedConfig {
   APP_CLIENT = argv['client'] || 'client';
 
   /**
-   * The bootstrap file to be used to boot the application. The file to be used is dependent if the hot-loader option is
-   * used or not.
-   * Per default (non hot-loader mode) the `main.ts` file will be used, with the hot-loader option enabled, the
-   * `hot_loader_main.ts` file will be used.
+   * The bootstrap file to be used to boot the application.
    * @type {string}
    */
-  BOOTSTRAP_MODULE = `${this.BOOTSTRAP_DIR}/` + (this.ENABLE_HOT_LOADING ? 'hot_loader_main' : 'main');
+  BOOTSTRAP_MODULE = `${this.BOOTSTRAP_DIR}/main`;
 
   BOOTSTRAP_PROD_MODULE = `${this.BOOTSTRAP_DIR}/` + 'main';
 
@@ -144,13 +144,19 @@ export class SeedConfig {
    * `index.html`.
    * @type {string}
    */
-  APP_TITLE = 'Index';
+  APP_TITLE = 'Welcome to angular-seed!';
 
   /**
    * The base folder of the applications source files.
    * @type {string}
    */
   APP_SRC = `src/${this.APP_CLIENT}`;
+
+  /**
+   * The name of the TypeScript project file
+   * @type {string}
+   */
+  APP_PROJECTNAME = 'tsconfig.json';
 
   /**
    * The folder of the applications asset files.
@@ -165,6 +171,17 @@ export class SeedConfig {
   CSS_SRC = `${this.APP_SRC}/css`;
 
   /**
+   * The folder of the e2e specs and framework
+   */
+  E2E_SRC = 'src/e2e';
+
+  /**
+   * The folder of the applications scss files.
+   * @type {string}
+   */
+  SCSS_SRC = `${this.APP_SRC}/scss`;
+
+  /**
    * The directory of the applications tools
    * @type {string}
    */
@@ -174,6 +191,18 @@ export class SeedConfig {
    * The directory of the tasks provided by the seed.
    */
   SEED_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, 'tasks', 'seed');
+
+  /**
+   * Seed tasks which are composition of other tasks.
+   */
+  SEED_COMPOSITE_TASKS = join(process.cwd(), this.TOOLS_DIR, 'config', 'seed.tasks.json');
+
+  /**
+   * Project tasks which are composition of other tasks
+   * and aim to override the tasks defined in
+   * SEED_COMPOSITE_TASKS.
+   */
+  PROJECT_COMPOSITE_TASKS = join(process.cwd(), this.TOOLS_DIR, 'config', 'project.tasks.json');
 
   /**
    * The destination folder for the generated documentation.
@@ -200,6 +229,12 @@ export class SeedConfig {
   PROD_DEST = `${this.DIST_DIR}/prod`;
 
   /**
+   * The folder for the built files of the e2e-specs.
+   * @type {string}
+   */
+  E2E_DEST = `${this.DIST_DIR}/e2e`;
+
+  /**
    * The folder for temporary files.
    * @type {string}
    */
@@ -209,7 +244,7 @@ export class SeedConfig {
    * The folder for the built files, corresponding to the current environment.
    * @type {string}
    */
-  APP_DEST = this.ENV === ENVIRONMENTS.DEVELOPMENT ? this.DEV_DEST : this.PROD_DEST;
+  APP_DEST = this.BUILD_TYPE === BUILD_TYPES.DEVELOPMENT ? this.DEV_DEST : this.PROD_DEST;
 
   /**
    * The folder for the built CSS files.
@@ -259,16 +294,11 @@ export class SeedConfig {
   VERSION_NODE = '4.0.0';
 
   /**
-   * The ruleset to be used by `codelyzer` for linting the TypeScript files.
-   */
-  CODELYZER_RULES = customRules();
-
-  /**
-   * The flag to enable handling of SCSS files
-   * The default value is false. Override with the '--scss' flag.
+   * Enable SCSS stylesheet compilation.
+   * Set ENABLE_SCSS environment variable to 'true' or '1'
    * @type {boolean}
    */
-  ENABLE_SCSS = argv['scss'] || false;
+  ENABLE_SCSS = ['true', '1'].indexOf(`${process.env.ENABLE_SCSS}`.toLowerCase()) !== -1 || argv['scss'] || false;
 
   /**
    * The list of NPM dependcies to be injected in the `index.html`.
@@ -277,8 +307,10 @@ export class SeedConfig {
   NPM_DEPENDENCIES: InjectableDependency[] = [
     { src: 'zone.js/dist/zone.js', inject: 'libs' },
     { src: 'core-js/client/shim.min.js', inject: 'shims' },
-    { src: 'systemjs/dist/system.src.js', inject: 'shims', env: ENVIRONMENTS.DEVELOPMENT },
-    { src: 'rxjs/bundles/Rx.min.js', inject: 'libs', env: ENVIRONMENTS.DEVELOPMENT },
+    { src: 'intl/dist/Intl.min.js', inject: 'shims' },
+    { src: 'systemjs/dist/system.src.js', inject: 'shims', buildType: BUILD_TYPES.DEVELOPMENT },
+    // Temporary fix. See https://github.com/angular/angular/issues/9359
+    { src: '.tmp/Rx.min.js', inject: 'libs', buildType: BUILD_TYPES.DEVELOPMENT },
   ];
 
   /**
@@ -303,8 +335,8 @@ export class SeedConfig {
    * @return {InjectableDependency[]} The array of npm dependencies and assets.
    */
   get DEPENDENCIES(): InjectableDependency[] {
-    return normalizeDependencies(this.NPM_DEPENDENCIES.filter(filterDependency.bind(null, this.ENV)))
-      .concat(this.APP_ASSETS.filter(filterDependency.bind(null, this.ENV)));
+    return normalizeDependencies(this.NPM_DEPENDENCIES.filter(filterDependency.bind(null, this.BUILD_TYPE)))
+      .concat(this.APP_ASSETS.filter(filterDependency.bind(null, this.BUILD_TYPE)));
   }
 
   /**
@@ -313,11 +345,6 @@ export class SeedConfig {
    */
   SYSTEM_CONFIG_DEV: any = {
     defaultJSExtensions: true,
-    packageConfigPaths: [
-      `/node_modules/*/package.json`,
-      `/node_modules/**/package.json`,
-      `/node_modules/@angular/*/package.json`
-    ],
     paths: {
       [this.BOOTSTRAP_MODULE]: `${this.APP_BASE}${this.BOOTSTRAP_MODULE}`,
       '@angular/common': 'node_modules/@angular/common/bundles/common.umd.js',
@@ -339,14 +366,12 @@ export class SeedConfig {
         'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
       '@angular/router/testing': 'node_modules/@angular/router/bundles/router-testing.umd.js',
 
-      'rxjs/*': 'node_modules/rxjs/*',
       'app/*': '/app/*',
       // For test config
       'dist/dev/*': '/base/dist/dev/*',
       '*': 'node_modules/*'
     },
     packages: {
-      rxjs: { defaultExtension: 'js' }
     }
   };
 
@@ -363,12 +388,18 @@ export class SeedConfig {
    */
   SYSTEM_BUILDER_CONFIG: any = {
     defaultJSExtensions: true,
+    base: this.PROJECT_ROOT,
     packageConfigPaths: [
-      join(this.PROJECT_ROOT, 'node_modules', '*', 'package.json'),
-      join(this.PROJECT_ROOT, 'node_modules', '@angular', '*', 'package.json')
+      join('node_modules', '*', 'package.json'),
+      join('node_modules', '@angular', '*', 'package.json')
     ],
     paths: {
-      [`${this.TMP_DIR}/*`]: `${this.TMP_DIR}/*`,
+      // Note that for multiple apps this configuration need to be updated
+      // You will have to include entries for each individual application in
+      // `src/client`.
+      [join(this.TMP_DIR, this.BOOTSTRAP_DIR, '*')]: `${this.TMP_DIR}/${this.BOOTSTRAP_DIR}/*`,
+      'dist/tmp/node_modules/*': 'dist/tmp/node_modules/*',
+      'node_modules/*': 'node_modules/*',
       '*': 'node_modules/*'
     },
     packages: {
@@ -409,6 +440,7 @@ export class SeedConfig {
         defaultExtension: 'js'
       },
       'rxjs': {
+        main: 'Rx.js',
         defaultExtension: 'js'
       }
     }
@@ -451,30 +483,7 @@ export class SeedConfig {
      */
     'browser-sync': {
       middleware: [require('connect-history-api-fallback')({
-        index: `${this.APP_BASE}index.html`,
-        rewrites: [
-          {
-            from: new RegExp(`^${this.NPM_BASE}.*$`),
-            to: (context:any) => context.parsedUrl.pathname
-          },
-          {
-            from: new RegExp(`^\/${this.BOOTSTRAP_DIR}\/.*$`),
-            to: (context:any) => context.parsedUrl.pathname
-          },
-          {
-            from: new RegExp(`^${this.APP_BASE}${this.APP_SRC}\/.*$`),
-            to: (context:any) => context.parsedUrl.pathname
-          },
-          {
-            from: new RegExp(`^${this.ASSETS_SRC.replace(this.APP_SRC, '')}\/.*$`),
-            to: (context:any) => context.parsedUrl.pathname
-          },
-          {
-            from: new RegExp(`^${this.CSS_DEST.replace(this.APP_DEST, '')}\/.*$`),
-            to: (context:any) => `/${slash(join(this.APP_DEST, context.parsedUrl.pathname))}`
-          }
-        ],
-        disableDotRule: true
+        index: `${this.APP_BASE}index.html`
       })],
       port: this.PORT,
       startPath: this.APP_BASE,
@@ -516,6 +525,52 @@ export class SeedConfig {
     }
   };
 
+  constructor() {
+    for (let proxy of this.getProxyMiddleware()) {
+      this.PLUGIN_CONFIGS['browser-sync'].middleware.push(proxy);
+    }
+  }
+
+  /**
+   * Get proxy middleware configuration. Add in your project config like:
+   * getProxyMiddleware(): Array<any> {
+   *   const proxyMiddleware = require('http-proxy-middleware');
+   *   return [
+   *     proxyMiddleware('/ws', {
+   *       ws: false,
+   *       target: 'http://localhost:3003'
+   *     })
+   *   ];
+   * }
+   */
+  getProxyMiddleware(): Array<any> {
+    return [];
+  }
+
+  /**
+   * Karma reporter configuration
+   */
+  getKarmaReporters(): any {
+    return {
+      preprocessors: {
+        'dist/**/!(*spec|index|*.module|*.routes).js': ['coverage']
+      },
+      reporters: ['mocha', 'coverage', 'karma-remap-istanbul'],
+      coverageReporter: {
+        dir: this.COVERAGE_DIR + '/',
+        reporters: [
+          { type: 'json', subdir: '.', file: 'coverage-final.json' },
+          { type: 'html', subdir: '.' }
+        ]
+      },
+      remapIstanbulReporter: {
+        reports: {
+          html: this.COVERAGE_TS_DIR
+        }
+      }
+    };
+  };
+
   /**
    * Recursively merge source onto target.
    * @param {any} target The target object (to receive values from source)
@@ -538,7 +593,28 @@ export class SeedConfig {
   }
 
   getInjectableStyleExtension() {
-    return this.ENV === ENVIRONMENTS.PRODUCTION && this.ENABLE_SCSS ? 'scss' : 'css';
+    return this.BUILD_TYPE === BUILD_TYPES.PRODUCTION && this.ENABLE_SCSS ? 'scss' : 'css';
+  }
+
+  addPackageBundles(pack: ExtendPackages) {
+
+    if (pack.path) {
+      this.SYSTEM_CONFIG_DEV.paths[pack.name] = pack.path;
+      this.SYSTEM_BUILDER_CONFIG.paths[pack.name] = pack.path;
+    }
+
+    if (pack.packageMeta) {
+      this.SYSTEM_CONFIG_DEV.packages[pack.name] = pack.packageMeta;
+      this.SYSTEM_BUILDER_CONFIG.packages[pack.name] = pack.packageMeta;
+    }
+  }
+
+  addPackagesBundles(packs: ExtendPackages[]) {
+
+    packs.forEach((pack: ExtendPackages) => {
+      this.addPackageBundles(pack);
+    });
+
   }
 
 }
@@ -560,14 +636,16 @@ export function normalizeDependencies(deps: InjectableDependency[]) {
  * @param  {InjectableDependency} d   - The dependency to check.
  * @return {boolean}                    `true` if the dependency is used in this environment, `false` otherwise.
  */
-function filterDependency(env: string, d: InjectableDependency): boolean {
-  if (!d.env) {
-    d.env = Object.keys(ENVIRONMENTS).map(k => ENVIRONMENTS[k]);
+function filterDependency(type: string, d: InjectableDependency): boolean {
+  const t = d.buildType || d.env;
+  d.buildType = t;
+  if (!t) {
+    d.buildType = Object.keys(BUILD_TYPES).map(k => BUILD_TYPES[k]);
   }
-  if (!(d.env instanceof Array)) {
-    (<any>d).env = [d.env];
+  if (!(d.buildType instanceof Array)) {
+    (<any>d).env = [d.buildType];
   }
-  return d.env.indexOf(env) >= 0;
+  return d.buildType.indexOf(type) >= 0;
 }
 
 /**
@@ -580,24 +658,15 @@ function appVersion(): number | string {
 }
 
 /**
- * Returns the linting configuration to be used for `codelyzer`.
- * @return {string[]} The list of linting rules.
+ * Returns the application build type.
  */
-function customRules(): string[] {
-  var lintConf = require('../../tslint.json');
-  return lintConf.rulesDirectory;
-}
-
-/**
- * Returns the environment of the application.
- */
-function getEnvironment() {
+function getBuildType() {
+  let type = (argv['build-type'] || argv['env'] || '').toLowerCase();
   let base: string[] = argv['_'];
-  let prodKeyword = !!base.filter(o => o.indexOf(ENVIRONMENTS.PRODUCTION) >= 0).pop();
-  let env = (argv['env'] || '').toLowerCase();
-  if ((base && prodKeyword) || env === ENVIRONMENTS.PRODUCTION) {
-    return ENVIRONMENTS.PRODUCTION;
+  let prodKeyword = !!base.filter(o => o.indexOf(BUILD_TYPES.PRODUCTION) >= 0).pop();
+  if ((base && prodKeyword) || type === BUILD_TYPES.PRODUCTION) {
+    return BUILD_TYPES.PRODUCTION;
   } else {
-    return ENVIRONMENTS.DEVELOPMENT;
+    return BUILD_TYPES.DEVELOPMENT;
   }
 }

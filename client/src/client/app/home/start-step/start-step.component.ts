@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
 import { SnifferClientService } from './../../shared/sniffer-client/index';
 
+declare var $: any;
+
 /**
  * This class represents the lazy loaded StartStepComponent.
  */

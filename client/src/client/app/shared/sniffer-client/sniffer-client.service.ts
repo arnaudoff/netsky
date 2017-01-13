@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs/Rx';
 import { WebSocketService } from './../websocket/index';
 
-import { IPacketResponseModel } from './packet.model';
-import { IRetrieveInterfacesResponseModel } from './retrieve-interfaces.model';
+import { RetrievedInterfaces } from './models/negotiation/retrieved-interfaces';
 import { IConfigurableEntity } from './../sniffer-config-builder/index';
 
 const SNIFFER_SERVER_URL = 'ws://localhost:1903';
 
 @Injectable()
 export class SnifferClientService {
-  public packets: Subject<IPacketResponseModel>;
-  public interfaces: Subject<IRetrieveInterfacesResponseModel>;
+  public packets: Subject<Object>;
+  public interfaces: Subject<RetrievedInterfaces>;
   public connectionInstance: Subject<Object>;
 
   constructor(private wsService: WebSocketService) {
@@ -21,10 +20,10 @@ export class SnifferClientService {
         return JSON.parse(response.data);
       });
 
-    this.packets = <Subject<IPacketResponseModel>>this.wsService
+    this.packets = <Subject<Object>>this.wsService
       .connect(SNIFFER_SERVER_URL)
       .filter((response: MessageEvent) => response.data.hasOwnProperty('packet'))
-      .map((response: MessageEvent) : IPacketResponseModel => {
+      .map((response: MessageEvent) : Object => {
         let data = JSON.parse(response.data);
 
         return {
@@ -34,15 +33,15 @@ export class SnifferClientService {
         }
       });
 
-    this.interfaces = <Subject<IRetrieveInterfacesResponseModel>>this.wsService
+    this.interfaces = <Subject<RetrievedInterfaces>>this.wsService
       .connect(SNIFFER_SERVER_URL)
       .filter((response: MessageEvent) => {
           let data = JSON.parse(response.data);
           return data.hasOwnProperty('interfaces');
       })
-      .map((response: MessageEvent) : IRetrieveInterfacesResponseModel => {
+      .map((response: MessageEvent) : RetrievedInterfaces => {
         let data = JSON.parse(response.data);
-        return <IRetrieveInterfacesResponseModel>data;
+        return <RetrievedInterfaces>data;
       });
   }
 

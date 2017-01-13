@@ -18,7 +18,6 @@ import { SnifferConfigBuilderService } from './sniffer-config-builder/index';
   declarations: [NavbarComponent, FooterComponent],
   exports: [NavbarComponent, FooterComponent, CommonModule, FormsModule, RouterModule]
 })
-
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {

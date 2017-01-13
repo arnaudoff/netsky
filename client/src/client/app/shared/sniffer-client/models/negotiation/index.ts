@@ -3,6 +3,6 @@
  * negotiation of interfaces and listeners between the client & the server.
  */
 
-export * from './interface-address.model';
-export * from './interface.model';
-export * from './retrieve-interfaces.model';
+export * from './interface-address';
+export * from './interface';
+export * from './retrieved-interfaces';

@@ -30,5 +30,4 @@ export function main() {
   selector: 'test-cmp',
   template: '<filter-step></filter-step>'
 })
-
 class TestComponent {}

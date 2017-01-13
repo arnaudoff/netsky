@@ -9,5 +9,4 @@ import { Component } from '@angular/core';
   templateUrl: 'capture.component.html',
   styleUrls: ['capture.component.css'],
 })
-
 export class CaptureComponent { }

@@ -1,0 +1,6 @@
+<virtual-scroll [items]="packetList" (update)="viewPortItems = $event">
+
+    <packet-list-item *ngFor="let item of viewPortItems" [item]="item">
+    </packet-list-item>
+
+</virtual-scroll>

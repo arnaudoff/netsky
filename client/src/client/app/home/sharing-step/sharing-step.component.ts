@@ -7,6 +7,8 @@ from './../../shared/sniffer-config-builder/index';
 import { IConfigurableEntity }
 from './../../shared/sniffer-config-builder/configurable-entity.interface';
 
+declare var $: any;
+
 /**
  * This class represents the lazy loaded SharingStepComponent.
  */
@@ -50,7 +52,7 @@ export class SharingStepComponent {
         .addClass('disabled')
         .removeClass('active');
 
-    this.router.navigate(['home/start']);
+    this.router.navigate(['new/start']);
   }
 
 }

@@ -6,4 +6,3 @@
 
 export * from './sniffer-client.service';
 export * from './models/negotiation';
-export * from './models/protocols';

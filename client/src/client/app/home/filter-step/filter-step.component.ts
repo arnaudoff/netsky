@@ -1,6 +1,9 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
+
+declare var $: any;
 
 /**
  * This class represents the lazy loaded FilterStepComponent.
@@ -11,7 +14,6 @@ import { SnifferConfigBuilderService } from './../../shared/sniffer-config-build
   templateUrl: 'filter-step.component.html',
   styleUrls: ['filter-step.component.css'],
 })
-
 export class FilterStepComponent {
   private filters: string;
 
@@ -31,7 +33,7 @@ export class FilterStepComponent {
         .addClass('disabled')
         .removeClass('active');
 
-    this.router.navigate(['home/sharing']);
+    this.router.navigate(['new/sharing']);
   }
 
 }
