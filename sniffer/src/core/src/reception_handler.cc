@@ -96,7 +96,12 @@ void ReceptionHandler::Handle(
     // Finally, serialize the parsed fields of the header and append
     // the generated object to the accumulating object.
     auto serialized_obj = header_instance->Serialize(serializer_);
-    serializer_.SetObject(name, serialized_obj, accumulator_obj);
+    if (!serializer_.ObjectExists(*accumulator_obj, "data")) {
+      serializer_.SetObject("data", serialized_obj, accumulator_obj);
+    } else {
+      serializer_.AppendVariableDepthObject("data", "children", 3,
+                                            serialized_obj, accumulator_obj);
+    }
 
     // Continue up the layer stack
     layers::Layer* upper_layer = layer_->upper_layer();

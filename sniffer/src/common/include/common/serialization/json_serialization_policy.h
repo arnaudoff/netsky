@@ -19,6 +19,7 @@
 #ifndef SNIFFER_SRC_COMMON_INCLUDE_COMMON_SERIALIZATION_JSON_SERIALIZATION_POLICY_H_
 #define SNIFFER_SRC_COMMON_INCLUDE_COMMON_SERIALIZATION_JSON_SERIALIZATION_POLICY_H_
 
+#include <algorithm>
 #include <memory>
 #include <string>
 
@@ -95,6 +96,43 @@ class JsonSerializationPolicy {
     json_pobj[key].push_back(json_obj);
 
     serialized_parent_obj->set_data(json_pobj.dump());
+  }
+
+  void AppendVariableDepthObject(const std::string& root_key,
+                                 const std::string& children_key,
+                                 int subtree_depth_delta,
+                                 const T& serialized_obj,
+                                 T* serialized_parent_obj) const {
+    auto json_pobj = nlohmann::json::parse(serialized_parent_obj->data());
+    auto json_obj = nlohmann::json::parse(serialized_obj.data());
+
+    InsertObjectAtNthDepth(children_key, subtree_depth_delta, json_obj,
+                           &(json_pobj[root_key]));
+
+    serialized_parent_obj->set_data(json_pobj.dump());
+  }
+
+  int InsertObjectAtNthDepth(const std::string& children_key,
+                             int subtree_depth_delta,
+                             nlohmann::json obj_to_insert,
+                             nlohmann::json* root) const {
+    if (root->empty()) {
+      return 0;
+    }
+
+    int height = 0;
+
+    for (auto& obj : (*root)[children_key]) {
+      height = std::max(
+          height, InsertObjectAtNthDepth(children_key, subtree_depth_delta,
+                                         obj_to_insert, &obj));
+    }
+
+    if (height + 1 == subtree_depth_delta) {
+      (*root)[children_key].push_back(obj_to_insert);
+    }
+
+    return height + 1;
   }
 };
 

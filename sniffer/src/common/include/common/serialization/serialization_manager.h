@@ -68,6 +68,15 @@ class SerializationManager : public SerializationPolicy<SerializedObject> {
                     SerializedObject* p_obj) const {
     SerializationPolicy<SerializedObject>::AppendObject(key, obj, p_obj);
   }
+
+  void AppendVariableDepthObject(const std::string& root_key,
+                                 const std::string& children_key,
+                                 int subtree_depth_delta,
+                                 const SerializedObject& obj,
+                                 SerializedObject* p_obj) const {
+    SerializationPolicy<SerializedObject>::AppendVariableDepthObject(
+        root_key, children_key, subtree_depth_delta, obj, p_obj);
+  }
 };
 
 }  // namespace serialization
