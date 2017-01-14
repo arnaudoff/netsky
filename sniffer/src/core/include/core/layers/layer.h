@@ -44,6 +44,8 @@ class SniffedPacket;
 
 namespace headers {
 
+class Header;
+
 namespace metadata {
 
 class HeaderMetadata;
@@ -60,7 +62,8 @@ namespace layers {
 
 class Layer {
  public:
-  Layer(const sniffer::common::serialization::SerializationMgr& serializer);
+  Layer(const std::string& name,
+        const sniffer::common::serialization::SerializationMgr& serializer);
 
   virtual ~Layer() {}
 
@@ -76,6 +79,8 @@ class Layer {
 
   void set_upper_layer(Layer* layer);
 
+  std::string name() const;
+
   const std::vector<
       std::unique_ptr<sniffer::protocols::headers::metadata::HeaderMetadata>>&
   supported_headers() const;
@@ -83,6 +88,11 @@ class Layer {
   void set_supported_headers(
       std::vector<std::unique_ptr<
           sniffer::protocols::headers::metadata::HeaderMetadata>>&& headers);
+
+  void AppendSummary(
+      const sniffer::common::serialization::SerializationMgr& serializer,
+      sniffer::protocols::headers::Header* header,
+      sniffer::common::serialization::SerializedObject* acc) const;
 
  protected:
   ReceptionHandler reception_handler_;
@@ -95,6 +105,8 @@ class Layer {
   std::vector<
       std::unique_ptr<sniffer::protocols::headers::metadata::HeaderMetadata>>
       supported_headers_;
+
+  std::string name_;
 };
 
 }  // namespace layers

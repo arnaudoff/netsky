@@ -31,6 +31,7 @@ namespace layers {
 class NetworkLayer : public Layer {
  public:
   NetworkLayer(
+      const std::string& name,
       const sniffer::common::serialization::SerializationMgr& serializer);
 
   void HandleReception(

@@ -31,6 +31,7 @@ namespace layers {
 class DataLinkLayer : public Layer {
  public:
   DataLinkLayer(
+      const std::string& name,
       const sniffer::common::serialization::SerializationMgr& serializer);
 
   void HandleReception(

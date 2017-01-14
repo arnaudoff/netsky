@@ -25,6 +25,7 @@
 
 #include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
+#include "protocols/headers/header.h"
 #include "protocols/headers/metadata/header_metadata.h"
 #include "protocols/sniffed_packet.h"
 
@@ -34,8 +35,10 @@ namespace core {
 
 namespace layers {
 
-Layer::Layer(const sniffer::common::serialization::SerializationMgr& serializer)
-    : lower_layer_{NULL},
+Layer::Layer(const std::string& name,
+             const sniffer::common::serialization::SerializationMgr& serializer)
+    : name_{name},
+      lower_layer_{NULL},
       upper_layer_{NULL},
       reception_handler_{serializer, this} {};
 
@@ -47,17 +50,28 @@ Layer* Layer::upper_layer() const { return upper_layer_; }
 
 void Layer::set_upper_layer(Layer* layer) { upper_layer_ = layer; }
 
+std::string Layer::name() const {
+  return name_;
+}
+
 const std::vector<
     std::unique_ptr<sniffer::protocols::headers::metadata::HeaderMetadata>>&
 Layer::supported_headers() const {
   return supported_headers_;
 }
 
-// wtf?
 void Layer::set_supported_headers(
     std::vector<std::unique_ptr<
         sniffer::protocols::headers::metadata::HeaderMetadata>>&& headers) {
   supported_headers_ = std::move(headers);
+}
+
+void Layer::AppendSummary(
+    const sniffer::common::serialization::SerializationMgr& serializer,
+    sniffer::protocols::headers::Header* header,
+    sniffer::common::serialization::SerializedObject* acc) const {
+  auto header_summary = header->Summarise(serializer);
+  serializer.SetObject(name(), header_summary, acc);
 }
 
 }  // namespace layers

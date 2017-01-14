@@ -31,6 +31,7 @@ namespace layers {
 class TransportLayer : public Layer {
  public:
   TransportLayer(
+      const std::string& name,
       const sniffer::common::serialization::SerializationMgr& serializer);
 
   void HandleReception(

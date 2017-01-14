@@ -31,6 +31,7 @@ namespace layers {
 class ApplicationLayer : public Layer {
  public:
   ApplicationLayer(
+      const std::string& name,
       const sniffer::common::serialization::SerializationMgr& serializer);
 
   void HandleReception(

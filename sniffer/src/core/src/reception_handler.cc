@@ -103,6 +103,9 @@ void ReceptionHandler::Handle(
                                             serialized_obj, accumulator_obj);
     }
 
+    // Add the summary for this layer
+    layer_->AppendSummary(serializer_, header_instance.get(), accumulator_obj);
+
     // Continue up the layer stack
     layers::Layer* upper_layer = layer_->upper_layer();
     if (upper_layer) {

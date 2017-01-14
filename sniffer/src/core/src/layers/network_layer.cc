@@ -29,8 +29,9 @@ namespace core {
 namespace layers {
 
 NetworkLayer::NetworkLayer(
+    const std::string& name,
     const sniffer::common::serialization::SerializationMgr& mgr)
-    : Layer{mgr} {}
+    : Layer{name, mgr} {}
 
 void NetworkLayer::HandleReception(
     int next_header_id, sniffer::protocols::SniffedPacket* packet,

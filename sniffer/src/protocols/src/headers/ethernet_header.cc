@@ -150,6 +150,16 @@ sniffer::common::serialization::SerializedObject EthernetHeader::Serialize(
   return root_obj;
 }
 
+sniffer::common::serialization::SerializedObject EthernetHeader::Summarise(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto root_obj = serializer.CreateObject();
+
+  serializer.SetValue<std::string>("dst", destination_address(), &root_obj);
+  serializer.SetValue<std::string>("src", source_address(), &root_obj);
+
+  return root_obj;
+}
+
 }  // namespace headers
 
 }  // namespace protocols

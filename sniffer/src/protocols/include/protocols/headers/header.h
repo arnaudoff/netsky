@@ -51,6 +51,10 @@ class Header : public sniffer::common::serialization::SerializableEntity {
 
   virtual std::string entity_name() const = 0;
 
+  virtual sniffer::common::serialization::SerializedObject Summarise(
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const = 0;
+
  protected:
   SniffedPacket* packet_;
 

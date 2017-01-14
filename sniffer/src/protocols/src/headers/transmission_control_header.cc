@@ -125,12 +125,11 @@ TransmissionControlHeader::Serialize(
   serializer.SetValue<std::string>("name", entity_name(), &root_obj);
 
   auto dst_port_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "destination_port",
-                                   &dst_port_obj);
+  serializer.SetValue<std::string>("name", "destination_port", &dst_port_obj);
 
   auto dst_port_value_obj = serializer.CreateObject();
   serializer.SetValue<u_int16_t>("name", destination_port(),
-                                   &dst_port_value_obj);
+                                 &dst_port_value_obj);
   serializer.SetValue<int>("size", 2, &dst_port_value_obj);
   serializer.AppendObject("children", dst_port_value_obj, &dst_port_obj);
 
@@ -138,8 +137,7 @@ TransmissionControlHeader::Serialize(
   serializer.SetValue<std::string>("name", "source_port", &src_port_obj);
 
   auto src_port_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_int16_t>("name", source_port(),
-                                   &src_port_value_obj);
+  serializer.SetValue<u_int16_t>("name", source_port(), &src_port_value_obj);
   serializer.SetValue<int>("size", 2, &src_port_value_obj);
   serializer.AppendObject("children", src_port_value_obj, &src_port_obj);
 
@@ -156,6 +154,17 @@ TransmissionControlHeader::Serialize(
   serializer.AppendObject("children", dst_port_obj, &root_obj);
   serializer.AppendObject("children", src_port_obj, &root_obj);
   serializer.AppendObject("children", length_obj, &root_obj);
+
+  return root_obj;
+}
+
+sniffer::common::serialization::SerializedObject
+TransmissionControlHeader::Summarise(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto root_obj = serializer.CreateObject();
+
+  serializer.SetValue<u_int16_t>("dst", destination_port(), &root_obj);
+  serializer.SetValue<u_int16_t>("src", source_port(), &root_obj);
 
   return root_obj;
 }

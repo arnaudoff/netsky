@@ -71,6 +71,10 @@ class TransmissionControlHeader : public Header {
       const sniffer::common::serialization::SerializationMgr& serializer)
       const override;
 
+  sniffer::common::serialization::SerializedObject Summarise(
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const override;
+
   std::string entity_name() const override;
 
  private:

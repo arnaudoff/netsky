@@ -29,8 +29,9 @@ namespace core {
 namespace layers {
 
 DataLinkLayer::DataLinkLayer(
+    const std::string& name,
     const sniffer::common::serialization::SerializationMgr& mgr)
-    : Layer{mgr} {}
+    : Layer{name, mgr} {}
 
 void DataLinkLayer::HandleReception(
     int next_header_id, sniffer::protocols::SniffedPacket* packet,

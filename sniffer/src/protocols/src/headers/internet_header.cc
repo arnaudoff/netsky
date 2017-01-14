@@ -162,6 +162,16 @@ sniffer::common::serialization::SerializedObject InternetHeader::Serialize(
   return root_obj;
 }
 
+sniffer::common::serialization::SerializedObject InternetHeader::Summarise(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto root_obj = serializer.CreateObject();
+
+  serializer.SetValue<const char*>("dst", destination_address(), &root_obj);
+  serializer.SetValue<const char*>("src", source_address(), &root_obj);
+
+  return root_obj;
+}
+
 }  // namespace headers
 
 }  // namespace protocols

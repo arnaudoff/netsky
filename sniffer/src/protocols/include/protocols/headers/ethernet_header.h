@@ -58,6 +58,10 @@ class EthernetHeader : public Header {
       const sniffer::common::serialization::SerializationMgr& serializer)
       const override;
 
+  sniffer::common::serialization::SerializedObject Summarise(
+      const sniffer::common::serialization::SerializationMgr& serializer)
+      const override;
+
  private:
   static constexpr int ADDRESS_LENGTH = 6;
 

@@ -98,7 +98,7 @@ int main() {
   std::vector<std::unique_ptr<HeaderMetadata>> dll_supported_headers{};
   dll_supported_headers.push_back(std::move(ethernet_metadata));
 
-  DataLinkLayer dll{serializer};
+  DataLinkLayer dll{"datalink", serializer};
   dll.set_supported_headers(std::move(dll_supported_headers));
 
   // Network layer specific initializations
@@ -108,7 +108,7 @@ int main() {
   std::vector<std::unique_ptr<HeaderMetadata>> nl_supported_headers{};
   nl_supported_headers.push_back(std::move(internet_metadata));
 
-  NetworkLayer nl{serializer};
+  NetworkLayer nl{"network", serializer};
   nl.set_supported_headers(std::move(nl_supported_headers));
 
   // Transport layer specific initialization
@@ -118,10 +118,10 @@ int main() {
   std::vector<std::unique_ptr<HeaderMetadata>> tl_supported_headers{};
   tl_supported_headers.push_back(std::move(tcp_metadata));
 
-  TransportLayer tl{serializer};
+  TransportLayer tl{"transport", serializer};
   tl.set_supported_headers(std::move(tl_supported_headers));
 
-  ApplicationLayer al{serializer};
+  ApplicationLayer al{"application", serializer};
 
   // Build the protocol stack
 
