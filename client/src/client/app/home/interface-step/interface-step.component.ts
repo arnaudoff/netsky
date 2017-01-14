@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { SnifferClientService, Interface, RetrievedInterfaces }
 from './../../shared/sniffer-client/index';
 
-import { SnifferConfigBuilderService, IConfigurableEntity }
-from './../../shared/sniffer-config-builder/index';
+import { SnifferConfigurationService } from './../../shared/sniffer-configuration/index';
 
 declare var $: any;
 
@@ -25,7 +24,7 @@ export class InterfaceStepComponent {
 
   constructor(
       private router: Router,
-      private snifferConfigBuilderService: SnifferConfigBuilderService,
+      private snifferConfigurationService: SnifferConfigurationService,
       private snifferClientService: SnifferClientService) {
   }
 
@@ -56,8 +55,8 @@ export class InterfaceStepComponent {
         }
     });
 
-    let configurableEntity: IConfigurableEntity = { values: selectedInterfaces };
-    this.snifferConfigBuilderService.interfaces = configurableEntity;
+    selectedInterfaces
+      .forEach(i => this.snifferConfigurationService.addInterface(i));
 
     $('#interface-step')
         .addClass('disabled')

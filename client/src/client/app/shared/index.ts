@@ -5,5 +5,5 @@ export * from './navbar/index';
 export * from './footer/index';
 export * from './websocket/index';
 export * from './sniffer-client/index';
-export * from './sniffer-config-builder/index';
+export * from './sniffer-configuration/index';
 export * from './config/env.config';

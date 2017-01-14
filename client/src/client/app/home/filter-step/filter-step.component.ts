@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
+import { SnifferConfigurationService } from './../../shared/sniffer-configuration/index';
 
 declare var $: any;
 
@@ -18,7 +18,7 @@ export class FilterStepComponent {
   private filters: string;
 
   constructor(private router: Router,
-     private snifferConfigBuilderService: SnifferConfigBuilderService) {}
+     private snifferConfigurationService: SnifferConfigurationService) {}
 
   ngAfterViewInit() {
     $('#filters-step')
@@ -27,7 +27,7 @@ export class FilterStepComponent {
   }
 
   handleStep() {
-    this.snifferConfigBuilderService.filters = { values: [this.filters] };
+    this.snifferConfigurationService.addFilter(this.filters);
 
     $('#filters-step')
         .addClass('disabled')

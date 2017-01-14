@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs/Rx';
-import { WebSocketService } from './../websocket/index';
 
-import { RetrievedInterfaces } from './models/negotiation/retrieved-interfaces';
-import { IConfigurableEntity } from './../sniffer-config-builder/index';
+import { WebSocketService } from './../websocket/index';
+import { RetrievedInterfaces } from './models/retrieved-interfaces';
+import { PacketListItem } from './models/packet-list-item';
 
 const SNIFFER_SERVER_URL = 'ws://localhost:1903';
 
 @Injectable()
 export class SnifferClientService {
-  public packets: Subject<Object>;
+  public packets: Subject<PacketListItem>;
   public interfaces: Subject<RetrievedInterfaces>;
   public connectionInstance: Subject<Object>;
 
@@ -20,17 +20,10 @@ export class SnifferClientService {
         return JSON.parse(response.data);
       });
 
-    this.packets = <Subject<Object>>this.wsService
+    this.packets = <Subject<PacketListItem>>this.wsService
       .connect(SNIFFER_SERVER_URL)
-      .filter((response: MessageEvent) => response.data.hasOwnProperty('packet'))
       .map((response: MessageEvent) : Object => {
-        let data = JSON.parse(response.data);
-
-        return {
-            packet: {
-                protocol: data.packet.protocol
-            }
-        }
+        return JSON.parse(response.data);
       });
 
     this.interfaces = <Subject<RetrievedInterfaces>>this.wsService
@@ -52,14 +45,14 @@ export class SnifferClientService {
   }
 
   public startSniffer(
-      interfaces: IConfigurableEntity,
-      filters: IConfigurableEntity,
-      listeners: IConfigurableEntity): void {
+    interfaces: Array<string>,
+    filters: Array<string>,
+    listeners: Array<string>): void {
 
     let argumentsObject: Object = {
-      interfaces: interfaces.values,
-      filters: filters.values,
-      shared: listeners.values
+      interfaces: interfaces,
+      filters: filters,
+      shared: listeners
     };
 
     let commandObject: Object = {

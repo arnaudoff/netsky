@@ -1,6 +1,8 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SnifferConfigBuilderService } from './../../shared/sniffer-config-builder/index';
+
+import { SnifferConfigurationService }
+from './../../shared/sniffer-configuration/index';
 import { SnifferClientService } from './../../shared/sniffer-client/index';
 
 declare var $: any;
@@ -17,7 +19,7 @@ declare var $: any;
 
 export class StartStepComponent {
   constructor(private router: Router,
-     private snifferConfigBuilderService: SnifferConfigBuilderService,
+     private snifferConfigurationService: SnifferConfigurationService,
      private snifferClientService: SnifferClientService)
   {}
 
@@ -29,9 +31,9 @@ export class StartStepComponent {
 
   handleStep() {
     this.snifferClientService.startSniffer(
-        this.snifferConfigBuilderService.interfaces,
-        this.snifferConfigBuilderService.filters,
-        this.snifferConfigBuilderService.listeners);
+        this.snifferConfigurationService.interfaces,
+        this.snifferConfigurationService.filters,
+        this.snifferConfigurationService.listeners);
 
     this.router.navigate(['capture']);
   }

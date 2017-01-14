@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+
 import { SnifferClientService } from '../../shared/index';
-import { PacketListItem } from './packet-list-item/packet-list-item';
+import { PacketListItem } from './../../shared/sniffer-client/index';
 
 /**
  * This class represents the lazy loaded PacketListComponent.
@@ -13,8 +14,7 @@ import { PacketListItem } from './packet-list-item/packet-list-item';
 })
 
 export class PacketListComponent {
-  private receivedPackets: Array<Object> = [];
-  private packetListItems: Array<PacketListItem> = [];
+  private receivedPackets: Array<PacketListItem> = [];
 
   /**
    * Creates an instance of the PacketListComponent with the injected
@@ -25,7 +25,6 @@ export class PacketListComponent {
   constructor(private snifferClientService: SnifferClientService) {
     this.snifferClientService.packets.subscribe(packet => {
       this.receivedPackets.push(packet);
-      this.packetListItems.push(packet.summary);
     });
   }
 }

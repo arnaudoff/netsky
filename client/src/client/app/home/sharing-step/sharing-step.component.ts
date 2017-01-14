@@ -1,11 +1,8 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferConfigBuilderService }
-from './../../shared/sniffer-config-builder/index';
-
-import { IConfigurableEntity }
-from './../../shared/sniffer-config-builder/configurable-entity.interface';
+import { SnifferConfigurationService }
+from './../../shared/sniffer-configuration/index';
 
 declare var $: any;
 
@@ -24,7 +21,7 @@ export class SharingStepComponent {
   private listeners: Array<Object>;
 
   constructor(private router: Router,
-     private snifferConfigBuilderService: SnifferConfigBuilderService) {}
+     private snifferConfigurationService: SnifferConfigurationService) {}
 
   ngAfterViewInit() {
     $('#sharing-step')
@@ -44,9 +41,8 @@ export class SharingStepComponent {
         $(this.selectElement.nativeElement).dropdown('get value');
     let selectedListeners: Array<string> = selectedElements.split(',');
 
-    let configurableEntity: IConfigurableEntity = { values: selectedListeners };
-
-    this.snifferConfigBuilderService.listeners = configurableEntity;
+    selectedListeners
+      .forEach(l => this.snifferConfigurationService.addListener(l));
 
     $('#sharing-step')
         .addClass('disabled')

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { PacketListItem } from './packet-list-item'
+import { PacketListItem } from './../../../shared/sniffer-client/index';
 
 /**
  * This class represents the lazy loaded PacketListItemComponent.

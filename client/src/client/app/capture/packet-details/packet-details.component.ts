@@ -182,7 +182,7 @@ export class PacketDetailsComponent {
       .style('opacity', node => node.dx * this.yCoefficient > 12 ? 1 : 0)
       .text(node => node.name)
 
-    d3.select(window).on('click', () => this.nodeClicked(root));
+    d3.select(window).on('click', () => this.nodeClicked(inputObject));
   }
 
   private nodeClicked(node: Object) {

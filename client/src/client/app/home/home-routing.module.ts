@@ -15,7 +15,7 @@ import { StartStepComponent } from './start-step/start-step.component'
         path: 'new',
         component: HomeComponent,
         children: [
-          { path: '', redirectTo: 'interface', pathMatch: 'full' }
+          { path: '', redirectTo: 'interface', pathMatch: 'full' },
           { path: 'interface', component: InterfaceStepComponent },
           { path: 'filter', component: FilterStepComponent },
           { path: 'sharing', component: SharingStepComponent },
