@@ -15,7 +15,7 @@ export class SnifferConfigurationService {
    * @constructor
    */
   constructor() {
-      this.interfaces_ = ['any'];
+      this.interfaces_ = [];
       this.filters_ = [];
       this.listeners_ = [];
   }

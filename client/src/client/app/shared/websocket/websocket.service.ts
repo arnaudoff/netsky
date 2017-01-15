@@ -35,6 +35,7 @@ export class WebSocketService {
     let observer = {
       next: (data: Object) => {
         if (wsInstance.readyState === WebSocket.OPEN) {
+          console.log('Send object: ', JSON.stringify(data));
           wsInstance.send(JSON.stringify(data));
         }
       }

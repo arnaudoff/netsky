@@ -22,8 +22,9 @@ export class SnifferClientService {
 
     this.packets = <Subject<PacketListItem>>this.wsService
       .connect(SNIFFER_SERVER_URL)
-      .map((response: MessageEvent) : Object => {
-        return JSON.parse(response.data);
+      .map((response: MessageEvent) : PacketListItem => {
+        let data = JSON.parse(response.data);
+        return <PacketListItem>data;
       });
 
     this.interfaces = <Subject<RetrievedInterfaces>>this.wsService
@@ -56,7 +57,7 @@ export class SnifferClientService {
     };
 
     let commandObject: Object = {
-        "start-packet-sniffer": argumentsObject
+        "start-sniffer": argumentsObject
     };
 
     this.connectionInstance.next(commandObject);
