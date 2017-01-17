@@ -1,20 +1,18 @@
-<table class="ui very basic collapsing celled table">
-  <thead>
-    <tr>
-      <th>No</th>
-      <th>Timestamp</th>
-      <th>Identifier</th>
-      <th>Source</th>
-      <th>Destination</th>
-      <th>Protocol</th>
-      <th>Length</th>
-      <th>Info</th>
-    </tr>
-  </thead>
-  <tbody>
-    <virtual-scroll [items]="receivedPackets" (update)="viewPortItems = $event">
-        <packet-list-item *ngFor="let item of viewPortItems" [item]="item">
-        </packet-list-item>
-    </virtual-scroll>
-  </tbody>
-</table>
+<virtual-scroll
+  [items]="renderablePackets"
+  (update)="viewPortPackets = $event"
+  (change)="onListChange($event)">
+
+   <packet-list-item
+     *ngFor="let packet of viewPortPackets"
+     [packet]="packet">
+   </packet-list-item>
+
+</virtual-scroll>
+<br />
+<div class="status">
+     Showing <span class="badge">{{indices?.start + 1}}</span>
+     - <span class="badge">{{indices?.end}}</span>
+     of <span class="badge">{{renderablePackets?.length}}</span>
+    <span>({{viewPortPackets?.length}} nodes)</span>
+</div>

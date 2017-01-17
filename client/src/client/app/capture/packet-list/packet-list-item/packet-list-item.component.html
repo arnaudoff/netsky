@@ -1,20 +1,7 @@
-<tr>
-  <td>1</td>
-  <td>12922929.0</td>
-  <td>
-    <h4 class="ui image header">
-      <img src="/images/avatar2/small/lena.png" class="ui mini rounded image">
-    </h4>
-  </td>
-  <td>{{ item.network.src }}</td>
-  <td>{{ item.network.dst }}</td>
-  <td>TCP</td>
-  <td>
-    <h4 class="ui image header">
-      <div class="content">
-        {{ item.transport.src }} -> {{ item.transport.dst }}
-        <div class="sub header">Some info</div>
-      </div>
-    </h4>
-  </td>
-</tr>
+<div [ngClass]="['item']">
+  <div [ngClass]="['content']">
+    <div [ngClass]="['header']">
+      {{ packet.network.src }} to {{ packet.network.dst }}
+    </div>
+  </div>
+</div>

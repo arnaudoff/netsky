@@ -10,7 +10,7 @@ import { PacketListComponent } from './packet-list.component';
 import { SnifferClientService } from '../../shared/sniffer-client/index';
 
 @NgModule({
-  imports: [CommonModule, SharedModule, VirtualScrollModule, PacketListItemModule],
+  imports: [CommonModule, SharedModule, PacketListItemModule, VirtualScrollModule],
   declarations: [PacketListComponent],
   exports: [PacketListComponent],
   providers: [SnifferClientService]

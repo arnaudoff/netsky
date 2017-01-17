@@ -1,0 +1,6 @@
+virtual-scroll {
+  overflow: hidden;
+  overflow-y: auto;
+  height: 45vh;
+  display: block;
+}

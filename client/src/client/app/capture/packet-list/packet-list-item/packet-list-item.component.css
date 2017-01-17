@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  border-bottom: 1px solid #ddd;
+  background: #eee;
+  padding: 10px;
+  height: 50px;
+  overflow: hidden;
+}
