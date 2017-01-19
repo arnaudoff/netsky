@@ -36,7 +36,7 @@ class ConfigurationManager : public StoragePolicy<Configuration>,
                              public FormattingPolicy<Configuration> {
  public:
   template <typename U>
-  U ExtractValue(const std::string& object, const std::string& key) {
+  U ExtractValue(const std::string& object, const std::string& key) const {
     auto resource_path =
         config_path + FormattingPolicy<Configuration>::extension();
 
@@ -47,7 +47,8 @@ class ConfigurationManager : public StoragePolicy<Configuration>,
   }
 
   template <typename U>
-  void SetValue(const std::string& object, const std::string& key, U value) {
+  void SetValue(const std::string& object, const std::string& key,
+                U value) const {
     auto resource_path =
         config_path + FormattingPolicy<Configuration>::extension();
 

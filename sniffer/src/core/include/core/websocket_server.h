@@ -25,7 +25,7 @@
 #include <string>
 #include <thread>
 
-#include "websocketpp/config/asio_no_tls.hpp"
+#include "websocketpp/config/asio.hpp"
 #include "websocketpp/server.hpp"
 
 #include "common/policy_bindings.h"
@@ -67,7 +67,7 @@ class WebSocketServer : public Server {
   int next_connection_id() const;
 
  private:
-  websocketpp::server<websocketpp::config::asio> server_;
+  websocketpp::server<websocketpp::config::asio_tls> server_;
 
   std::unique_ptr<WebSocketServerEventHandler> event_handler_;
 

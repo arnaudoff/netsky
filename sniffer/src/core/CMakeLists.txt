@@ -8,6 +8,7 @@ add_library(netsky-core
   src/layers/application_layer.cc
   src/response_models/retrieve_interfaces_response_model.cc
   src/server_commands/kill_command.cc
+  src/server_commands/has_host_command.cc
   src/server_commands/retrieve_interfaces_command.cc
   src/server_commands/server_command.cc
   src/server_commands/start_sniffer_command.cc
@@ -59,7 +60,8 @@ endif()
 # Depend on a library that we defined in the top-level file
 
 target_link_libraries(netsky-core netsky-common ${NETSKY_PROTOCOLS_LIB}
-  boost-system websocketpp spdlog pcap ${CMAKE_THREAD_LIBS_INIT})
+  boost-system websocketpp spdlog pcap ${CMAKE_THREAD_LIBS_INIT}
+  ${OPENSSL_LIBRARIES})
 
 # 'make install' to the correct location
 

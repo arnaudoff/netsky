@@ -57,6 +57,8 @@ class Server {
 
   void Broadcast(const std::string& message);
 
+  virtual std::string password() const;
+
  protected:
   std::unique_ptr<PacketSniffer> sniffer_;
 

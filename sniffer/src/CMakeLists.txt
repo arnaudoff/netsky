@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.6.1 FATAL_ERROR)
 
 project(sniffer VERSION 0.1.0 LANGUAGES CXX)
 
-
 # Include boost
 
 find_package(Boost REQUIRED system)
+find_package(OpenSSL)
 
 add_library(boost INTERFACE IMPORTED)
 set_property(TARGET boost PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})

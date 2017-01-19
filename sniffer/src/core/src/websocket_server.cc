@@ -28,6 +28,7 @@
 
 #include "common/policy_bindings.h"
 #include "core/websocket_server_event_handler.h"
+#include "core/websocket_server_tls_mode.h"
 
 namespace sniffer {
 
@@ -61,6 +62,12 @@ WebSocketServer::WebSocketServer(
   server_.set_message_handler(std::bind(
       &WebSocketServerEventHandler::OnMessageReceived, event_handler_.get(),
       websocketpp::lib::placeholders::_1, websocketpp::lib::placeholders::_2));
+
+  server_.set_tls_init_handler(
+      std::bind(&WebSocketServerEventHandler::OnTlsInit, event_handler_.get(),
+                WebSocketServerTlsMode::kMozillaIntermediate,
+                this,
+                websocketpp::lib::placeholders::_1));
 }
 
 /**

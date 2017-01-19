@@ -33,7 +33,7 @@ namespace config {
 template <class T>
 class FileStoragePolicy {
  public:
-  T Read(const std::string& resource) {
+  T Read(const std::string& resource) const {
     std::ifstream t(resource);
     std::stringstream buffer;
 
@@ -43,7 +43,7 @@ class FileStoragePolicy {
     return config;
   }
 
-  void Write(const T& config, const std::string& resource) {
+  void Write(const T& config, const std::string& resource) const {
     std::ofstream out(resource);
     out << config.data();
     out.close();

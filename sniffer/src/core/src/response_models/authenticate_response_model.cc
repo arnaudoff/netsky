@@ -16,33 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_EVENT_H_
-#define SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_EVENT_H_
+#include "core/response_models/authenticate_response_model.h"
 
-#include "websocketpp/config/asio.hpp"
-#include "websocketpp/server.hpp"
+#include "common/policy_bindings.h"
+#include "common/serialization/serialized_object.h"
 
 namespace sniffer {
 
 namespace core {
 
-enum class WebSocketServerEventType : char;
+namespace response_models {
 
-struct WebSocketServerEvent {
-  WebSocketServerEvent(WebSocketServerEventType event_type,
-                       websocketpp::connection_hdl handle);
+AuthenticateResponseModel::AuthenticateResponseModel(bool is_authenticated)
+    : is_authenticated_{is_authenticated} {}
 
-  WebSocketServerEvent(WebSocketServerEventType event_type,
-                       websocketpp::connection_hdl handle,
-                       websocketpp::config::asio::message_type::ptr message);
+sniffer::common::serialization::SerializedObject
+AuthenticateResponseModel::Serialize(
+    const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto obj = serializer.CreateObject();
 
-  WebSocketServerEventType type;
-  websocketpp::connection_hdl handle;
-  websocketpp::config::asio::message_type::ptr message;
-};
+  serializer.SetValue<bool>("isAuthenticated", is_authenticated_, &obj);
+
+  return obj;
+}
+
+std::string AuthenticateResponseModel::entity_name() const {
+  return "authenticate";
+}
+
+AuthenticateResponseModel::~AuthenticateResponseModel() {}
+
+}  // namespace response_models
 
 }  // namespace core
 
 }  // namespace sniffer
-
-#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_EVENT_H_

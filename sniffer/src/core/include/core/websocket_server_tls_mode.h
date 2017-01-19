@@ -16,26 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "core/websocket_server_event.h"
-
-#include "websocketpp/config/asio.hpp"
-#include "websocketpp/server.hpp"
-
-#include "core/websocket_server_event_type.h"
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_TLS_MODE_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_TLS_MODE_H_
 
 namespace sniffer {
 
 namespace core {
 
-WebSocketServerEvent::WebSocketServerEvent(WebSocketServerEventType type,
-                                           websocketpp::connection_hdl handle)
-    : type{type}, handle{handle} {}
-
-WebSocketServerEvent::WebSocketServerEvent(
-    WebSocketServerEventType type, websocketpp::connection_hdl handle,
-    websocketpp::config::asio::message_type::ptr message)
-    : type{type}, handle{handle}, message{message} {}
+enum WebSocketServerTlsMode : char {
+  kMozillaIntermediate = 1,
+  kMozillaModern = 2
+};
 
 }  // namespace core
 
 }  // namespace sniffer
+
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_WEBSOCKET_SERVER_TLS_MODE_H_

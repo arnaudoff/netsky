@@ -88,6 +88,14 @@ void Server::RemoveConnection(int connection_id) {
   connections_.erase(connection_id);
 }
 
+/**
+ * @brief Gets the server password
+ */
+std::string Server::password() const {
+  return config_manager_.ExtractValue<std::string>("server", "password");
+}
+
+
 }  // namespace core
 
 }  // namespace sniffer

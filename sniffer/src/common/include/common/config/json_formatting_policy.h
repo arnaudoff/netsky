@@ -35,14 +35,14 @@ class JsonFormattingPolicy {
  public:
   template <typename U>
   U ExtractValue(const T& config, const std::string& object,
-                 const std::string& key) {
+                 const std::string& key) const {
     auto json_obj = nlohmann::json::parse(config.data());
     return json_obj[object][key].template get<U>();
   }
 
   template <typename U>
   T SetValue(const T& config, const std::string& object, const std::string& key,
-             U value) {
+             U value) const {
     auto json_obj = nlohmann::json::parse(config.data());
 
     json_obj[object][key] = value;
@@ -51,7 +51,7 @@ class JsonFormattingPolicy {
     return config_obj;
   }
 
-  std::string extension() { return "json"; }
+  std::string extension() const { return "json"; }
 };
 
 }  // namespace config

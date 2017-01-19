@@ -24,10 +24,11 @@
 #include <queue>
 #include <thread>
 
-#include "websocketpp/config/asio_no_tls.hpp"  // NOLINT
-#include "websocketpp/server.hpp"              // NOLINT
+#include "websocketpp/config/asio.hpp"  // NOLINT
+#include "websocketpp/server.hpp"       // NOLINT
 
 #include "core/websocket_server_event.h"
+#include "core/websocket_server_tls_mode.h"
 
 namespace sniffer {
 
@@ -45,9 +46,12 @@ class WebSocketServerEventHandler {
 
   void OnConnectionClosed(websocketpp::connection_hdl handle);
 
-  void OnMessageReceived(
-      websocketpp::connection_hdl handle,
-      websocketpp::server<websocketpp::config::asio>::message_ptr msg);
+  void OnMessageReceived(websocketpp::connection_hdl handle,
+                         websocketpp::config::asio::message_type::ptr msg);
+
+  websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> OnTlsInit(
+      WebSocketServerTlsMode mode, WebSocketServer* ws_server,
+      websocketpp::connection_hdl handle);
 
   void Handle(WebSocketServer* ws_server);
 
