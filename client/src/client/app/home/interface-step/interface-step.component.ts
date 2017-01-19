@@ -1,16 +1,11 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferClientService, Interface, RetrievedInterfaces }
-from './../../shared/sniffer-client/index';
-
-import { SnifferConfigurationService } from './../../shared/sniffer-configuration/index';
+import { SnifferService } from './../../shared/sniffer/index';
+import { InterfaceService, Interface } from './../../shared/interface/index';
 
 declare var $: any;
 
-/**
- * This class represents the lazy loaded InterfaceStepComponent.
- */
 @Component({
   moduleId: module.id,
   selector: 'interface-step',
@@ -19,24 +14,24 @@ declare var $: any;
 })
 
 export class InterfaceStepComponent {
+
   @ViewChild('selectInterfaces') selectElement: ElementRef;
   private interfaces: Array<Interface> = [];
 
-  constructor(
-      private router: Router,
-      private snifferConfigurationService: SnifferConfigurationService,
-      private snifferClientService: SnifferClientService) {
+  constructor(private router: Router,
+              private snifferService: SnifferService,
+              private interfaceService: InterfaceService) {
   }
 
   ngOnInit() {
-    this.snifferClientService.retrieveInterfaces();
+    this.snifferService.retrieveInterfaces();
 
     $('#interface-step')
         .addClass('active')
         .removeClass('disabled');
 
-    this.snifferClientService.interfaces.subscribe((retInterfaces: RetrievedInterfaces) => {
-      for (let entry of retInterfaces.interfaces) {
+    this.interfaceService.interfaces.subscribe((interfaces: Array<Interface>) => {
+      for (let entry of interfaces) {
           this.interfaces.push(entry);
       }
     });
@@ -44,7 +39,7 @@ export class InterfaceStepComponent {
     $(this.selectElement.nativeElement).dropdown({forceSelection: false});
   }
 
-  handleStep() {
+  private handleStep() {
     let selectedElements: Array<string> =
         $(this.selectElement.nativeElement).dropdown('get values');
 
@@ -56,7 +51,7 @@ export class InterfaceStepComponent {
     });
 
     selectedInterfaces
-      .forEach(i => this.snifferConfigurationService.addInterface(i));
+      .forEach(i => this.snifferService.addInterface(i));
 
     $('#interface-step')
         .addClass('disabled')

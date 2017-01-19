@@ -3,7 +3,9 @@ import * as Rx from 'rxjs/Rx';
 
 @Injectable()
 export class WebSocketService {
+
   public activeConnection: Rx.Observable<Object>;
+
   private subject: Rx.Subject<MessageEvent>;
   private ws: WebSocket;
 
@@ -35,7 +37,6 @@ export class WebSocketService {
     let observer = {
       next: (data: Object) => {
         if (wsInstance.readyState === WebSocket.OPEN) {
-          console.log('Send object: ', JSON.stringify(data));
           wsInstance.send(JSON.stringify(data));
         }
       }
@@ -43,4 +44,5 @@ export class WebSocketService {
 
     return Rx.Subject.create(observer, observable);
   }
+
 }

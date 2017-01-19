@@ -1,15 +1,10 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferConfigurationService }
-from './../../shared/sniffer-configuration/index';
-import { SnifferClientService } from './../../shared/sniffer-client/index';
+import { SnifferService } from './../../shared/sniffer/index';
 
 declare var $: any;
 
-/**
- * This class represents the lazy loaded StartStepComponent.
- */
 @Component({
   moduleId: module.id,
   selector: 'start-step',
@@ -18,10 +13,8 @@ declare var $: any;
 })
 
 export class StartStepComponent {
-  constructor(private router: Router,
-     private snifferConfigurationService: SnifferConfigurationService,
-     private snifferClientService: SnifferClientService)
-  {}
+
+  constructor(private router: Router, private snifferService: SnifferService) {}
 
   ngAfterViewInit() {
     $('#start-step')
@@ -30,11 +23,7 @@ export class StartStepComponent {
   }
 
   handleStep() {
-    this.snifferClientService.startSniffer(
-        this.snifferConfigurationService.interfaces,
-        this.snifferConfigurationService.filters,
-        this.snifferConfigurationService.listeners);
-
+    this.snifferService.start();
     this.router.navigate(['capture']);
   }
 

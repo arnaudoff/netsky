@@ -3,7 +3,7 @@ interface TransportableEntity {
   dst?: string
 };
 
-export interface PacketListItem {
+export interface Packet {
     datalink?: TransportableEntity,
     network?: TransportableEntity,
     transport?: TransportableEntity,

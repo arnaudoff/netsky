@@ -1,42 +1,36 @@
-<div class="ui main container">
-  <h2 class="ui header">
+<div [ngClass]="['ui', 'main', 'container']">
+  <h2 [ngClass]="['ui', 'header']">
     <img src="/assets/images/logo.png">
-    <div class="content">
+    <div [ngClass]="['content']">
       Netsky
-      <div class="sub header">A simple packet sniffer</div>
+      <div [ngClass]="['sub', 'header']">A remote accessible packet sniffer based on
+        libpcap</div>
     </div>
   </h2>
-  <div class="ui inverted section divider"></div>
-  <div class="ui small fluid steps">
-    <div id="interface-step" class="disabled step">
-      <i class="plug icon"></i>
-      <div class="content">
-        <div class="title">Interface</div>
-        <div class="description">Choose the interface to sniff on</div>
+  <div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
+  <div [ngClass]="['ui', 'small', 'fluid', 'steps']">
+    <div id="interface-step" [ngClass]="['disabled', 'step']">
+      <i [ngClass]="['plug', 'icon']"></i>
+      <div [ngClass]="['content']">
+        <div [ngClass]="['title']">Interface</div>
+        <div [ngClass]="['description']">Choose the interface to sniff on</div>
       </div>
     </div>
-    <div id="filters-step" class="disabled step">
-      <i class="options icon"></i>
-      <div class="content">
-        <div class="title">Filters</div>
-        <div class="description">Choose filters to apply to the capture</div>
+    <div id="filters-step" [ngClass]="['disabled', 'step']">
+      <i [ngClass]="['options', 'icon']"></i>
+      <div [ngClass]="['content']">
+        <div [ngClass]="['title']">Filters</div>
+        <div [ngClass]="['description']">Choose filters to apply to the capture</div>
       </div>
     </div>
-    <div id="sharing-step" class="disabled step">
-      <i class="users icon"></i>
-      <div class="content">
-        <div class="title">Sharing</div>
-        <div class="description">Choose who to share your capture with</div>
-      </div>
-    </div>
-    <div id="start-step" class="disabled step">
-      <i class="check circle icon"></i>
-      <div class="content">
-        <div class="title">Start the capture</div>
+    <div id="start-step" [ngClass]="['disabled', 'step']">
+      <i [ngClass]="['check', 'circle', 'icon']"></i>
+      <div [ngClass]="['content']">
+        <div [ngClass]="['title']">Start the capture</div>
       </div>
     </div>
   </div>
-  <div class="ui inverted section divider"></div>
+  <div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
 
   <router-outlet></router-outlet>
 </div>

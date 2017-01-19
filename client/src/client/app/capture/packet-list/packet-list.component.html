@@ -3,7 +3,7 @@
   (update)="viewPortPackets = $event"
   (change)="onListChange($event)">
 
-   <packet-list-item
+   <packet-list-item (click)="packetClicked(packet)"
      *ngFor="let packet of viewPortPackets"
      [packet]="packet">
    </packet-list-item>

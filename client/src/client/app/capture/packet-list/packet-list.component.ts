@@ -1,13 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-
 import { VirtualScrollComponent, ChangeEvent } from 'angular2-virtual-scroll';
 
-import { SnifferClientService } from '../../shared/index';
-import { PacketListItem } from './../../shared/sniffer-client/index';
+import { PacketService } from '../../shared/index';
+import { Packet } from './../../shared/packet/index';
 
-/**
- * This class represents the lazy loaded PacketListComponent.
- */
 @Component({
   moduleId: module.id,
   selector: 'packet-list',
@@ -15,8 +11,9 @@ import { PacketListItem } from './../../shared/sniffer-client/index';
   styleUrls: ['packet-list.component.css'],
 })
 export class PacketListComponent {
-  private packetsBuffer: PacketListItem[] = [];
-  private renderablePackets: PacketListItem[] = [];
+
+  private packetsBuffer: Packet[] = [];
+  private renderablePackets: Packet[] = [];
   private totalReceived: number = 0;
   private readonly viewPortSize: number = 15;
   private indices: ChangeEvent;
@@ -24,14 +21,8 @@ export class PacketListComponent {
   @ViewChild(VirtualScrollComponent)
   private virtualScroll: VirtualScrollComponent;
 
-  /**
-   * Creates an instance of the PacketListComponent with the injected
-   * SnifferClientService.
-   *
-   * @param {SnifferClientService} snifferClientService - The injected SnifferClientService.
-   */
-  constructor(private snifferClientService: SnifferClientService) {
-    this.snifferClientService.packets.subscribe(packet => {
+  constructor(private packetService: PacketService) {
+    this.packetService.packets.subscribe((packet: Packet) => {
       this.totalReceived += 1;
 
       if (this.totalReceived < this.viewPortSize) {
@@ -58,4 +49,9 @@ export class PacketListComponent {
       this.virtualScroll.refresh();
     }
   }
+
+  private packetClicked(packet: Packet) {
+    this.packetService.setObservedPacket(packet);
+  }
+
 }

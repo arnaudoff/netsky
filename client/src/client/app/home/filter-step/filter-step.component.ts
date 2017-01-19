@@ -1,13 +1,10 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferConfigurationService } from './../../shared/sniffer-configuration/index';
+import { SnifferService } from './../../shared/sniffer/index';
 
 declare var $: any;
 
-/**
- * This class represents the lazy loaded FilterStepComponent.
- */
 @Component({
   moduleId: module.id,
   selector: 'filter-step',
@@ -15,10 +12,11 @@ declare var $: any;
   styleUrls: ['filter-step.component.css'],
 })
 export class FilterStepComponent {
+
   private filters: string;
 
   constructor(private router: Router,
-     private snifferConfigurationService: SnifferConfigurationService) {}
+     private snifferService: SnifferService) {}
 
   ngAfterViewInit() {
     $('#filters-step')
@@ -27,13 +25,13 @@ export class FilterStepComponent {
   }
 
   handleStep() {
-    this.snifferConfigurationService.addFilter(this.filters);
+    this.snifferService.addFilter(this.filters);
 
     $('#filters-step')
         .addClass('disabled')
         .removeClass('active');
 
-    this.router.navigate(['new/sharing']);
+    this.router.navigate(['new/start']);
   }
 
 }

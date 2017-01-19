@@ -1,10 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core'; 
 
-import { PacketListItem } from './../../../shared/sniffer-client/index';
+import { Packet } from './../../../shared/packet/index';
 
-/**
- * This class represents the lazy loaded PacketListItemComponent.
- */
 @Component({
   moduleId: module.id,
   selector: 'packet-list-item',
@@ -13,5 +10,5 @@ import { PacketListItem } from './../../../shared/sniffer-client/index';
 })
 export class PacketListItemComponent {
   @Input()
-  packet: PacketListItem;
+  packet: Packet;
 }
