@@ -6,31 +6,73 @@
       <div [ngClass]="['sub', 'header']">A remote accessible packet sniffer based on
         libpcap</div>
     </div>
+    <div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
   </h2>
-  <div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
-  <div [ngClass]="['ui', 'small', 'fluid', 'steps']">
-    <div id="interface-step" [ngClass]="['disabled', 'step']">
-      <i [ngClass]="['plug', 'icon']"></i>
-      <div [ngClass]="['content']">
-        <div [ngClass]="['title']">Interface</div>
-        <div [ngClass]="['description']">Choose the interface to sniff on</div>
+  <div *ngIf="_hostInfo">
+    <div *ngIf="!_hostInfo.hasHost">
+      <div [ngClass]="['ui', 'small', 'fluid', 'steps']">
+        <div id="interface-step" [ngClass]="['disabled', 'step']">
+          <i [ngClass]="['plug', 'icon']"></i>
+          <div [ngClass]="['content']">
+            <div [ngClass]="['title']">Interface</div>
+            <div [ngClass]="['description']">Choose the interface to sniff on</div>
+          </div>
+        </div>
+        <div id="filters-step" [ngClass]="['disabled', 'step']">
+          <i [ngClass]="['options', 'icon']"></i>
+          <div [ngClass]="['content']">
+            <div [ngClass]="['title']">Filters</div>
+            <div [ngClass]="['description']">Choose filters to apply to the capture</div>
+          </div>
+        </div>
+        <div id="start-step" [ngClass]="['disabled', 'step']">
+          <i [ngClass]="['check', 'circle', 'icon']"></i>
+          <div [ngClass]="['content']">
+            <div [ngClass]="['title']">Start the capture</div>
+          </div>
+        </div>
       </div>
+      <div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
+
+      <router-outlet></router-outlet>
     </div>
-    <div id="filters-step" [ngClass]="['disabled', 'step']">
-      <i [ngClass]="['options', 'icon']"></i>
-      <div [ngClass]="['content']">
-        <div [ngClass]="['title']">Filters</div>
-        <div [ngClass]="['description']">Choose filters to apply to the capture</div>
+    <div *ngIf="_hostInfo.hasHost">
+      <h2 [ngClass]="['ui', 'header']">
+        <i [ngClass]="['exchange', 'icon']"></i>
+        <div [ngClass]="['content']">
+          There's a session available right now.
+          <div [ngClass]="['sub', 'header']">You can either subscribe to it or wait for
+            it to finish and create a new one.</div>
+        </div>
+      </h2>
+      <div [ngClass]="['ui', 'action', 'input']">
+        <input type="password" #passwordInput>
+        <button (click)="subscribeClicked(passwordInput.value)"
+          [ngClass]="['ui', 'teal', 'right', 'labeled', 'icon', 'button']">
+          <i [ngClass]="['copy', 'icon']"></i>
+          Subscribe
+        </button>
       </div>
-    </div>
-    <div id="start-step" [ngClass]="['disabled', 'step']">
-      <i [ngClass]="['check', 'circle', 'icon']"></i>
-      <div [ngClass]="['content']">
-        <div [ngClass]="['title']">Start the capture</div>
+      <div *ngIf="!authencationInfo.authenticated" [ngClass]="['ui', 'negative', 'message']">
+        <i [ngClass]="['close', 'icon']"></i>
+        <div [ngClass]="['header']">
+          Failed to subscribe to sniffing session
+        </div>
+        <p>The password you've entered is incorrect.</p>
       </div>
     </div>
   </div>
-  <div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
-
-  <router-outlet></router-outlet>
+  <div *ngIf="!_hostInfo">
+    <div [ngClass]="['ui', 'error', 'message']">
+      <i [ngClass]="['close', 'icon']"></i>
+      <div [ngClass]="['header']">
+        Could not connect to the sniffing server daemon. Possible reasons
+        include:
+      </div>
+      <ul [ngClass]="['list']">
+        <li>It was not started.</li>
+        <li>Invalid SSL certificate was specified.</li>
+      </ul>
+    </div>
+  </div>
 </div>
