@@ -24,9 +24,12 @@
 #include "common/policy_bindings.h"
 
 #include "core/server_command_invoker.h"
+#include "core/server_commands/authenticate_command.h"
+#include "core/server_commands/has_host_command.h"
 #include "core/server_commands/kill_command.h"
 #include "core/server_commands/retrieve_interfaces_command.h"
 #include "core/server_commands/start_sniffer_command.h"
+
 #include "core/websocket_server.h"
 #include "core/websocket_server_event_handler.h"
 
@@ -78,6 +81,8 @@ using sniffer::core::ServerCommandInvoker;
 using sniffer::core::server_commands::KillCommand;
 using sniffer::core::server_commands::StartSnifferCommand;
 using sniffer::core::server_commands::RetrieveInterfacesCommand;
+using sniffer::core::server_commands::AuthenticateCommand;
+using sniffer::core::server_commands::HasHostCommand;
 
 int main() {
   auto console_logger = spdlog::stdout_color_mt("console");
@@ -153,16 +158,22 @@ int main() {
   // Commands for the server
 
   auto kill_cmd = std::make_unique<KillCommand>(server.get(), serializer);
-
   auto retrieve_if_cmd = std::make_unique<RetrieveInterfacesCommand>(
       server.get(), serializer, std::move(pcap_retriever));
 
   auto start_sniffer_cmd =
       std::make_unique<StartSnifferCommand>(server.get(), serializer, ls);
 
+  auto authenticate_cmd =
+      std::make_unique<AuthenticateCommand>(server.get(), serializer);
+
+  auto hashost_cmd = std::make_unique<HasHostCommand>(server.get(), serializer);
+
   invoker->AddCommand(kill_cmd.get());
   invoker->AddCommand(retrieve_if_cmd.get());
   invoker->AddCommand(start_sniffer_cmd.get());
+  invoker->AddCommand(authenticate_cmd.get());
+  invoker->AddCommand(hashost_cmd.get());
 
   server->Start(config_manager.ExtractValue<int>("server", "port"));
 

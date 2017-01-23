@@ -7,6 +7,8 @@ add_library(netsky-core
   src/layers/transport_layer.cc
   src/layers/application_layer.cc
   src/response_models/retrieve_interfaces_response_model.cc
+  src/response_models/has_host_response_model.cc
+  src/response_models/authenticate_response_model.cc
   src/server_commands/kill_command.cc
   src/server_commands/has_host_command.cc
   src/server_commands/authenticate_command.cc

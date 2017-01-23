@@ -55,4 +55,4 @@ class AuthenticateResponseModel : public ResponseModel {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_RESPONSE_MODELS_HAS_HOST_RESPONSE_MODEL_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_RESPONSE_MODELS_AUTHENTICATE_RESPONSE_MODEL_H_

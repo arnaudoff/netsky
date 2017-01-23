@@ -18,8 +18,10 @@
 
 #include "core/server_command_invoker.h"
 
-#include "core/server_commands/server_command.h"
+#include "spdlog/spdlog.h"  // NOLINT
+
 #include "core/server.h"
+#include "core/server_commands/server_command.h"
 
 namespace sniffer {
 
@@ -48,6 +50,9 @@ void ServerCommandInvoker::Invoke(Server* server, int connection_id,
                                   const std::string& message) {
   for (auto command : server_commands_) {
     if (command->Matches(message)) {
+      spdlog::get("console")->info("Invoking command {0} for client {1}",
+                                   command->name(), connection_id);
+
       if (command->secure()) {
         if (server->IsClientAuthenticated(connection_id)) {
           command->Execute(connection_id, command->ParseArguments(message));

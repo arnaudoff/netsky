@@ -43,14 +43,34 @@ Server::Server(const sniffer::common::config::ConfigurationMgr& manager, const s
  */
 Server::~Server() {}
 
+/**
+ * @brief Sets the sniffer for the current server instance by changing the
+ * ownership of the sniffer to the server.
+ *
+ * @param sniffer A pointer with unique ownership semantics to a sniffer object.
+ */
 void Server::set_sniffer(std::unique_ptr<PacketSniffer> sniffer) {
   sniffer_ = std::move(sniffer);
 }
 
 PacketSniffer* Server::sniffer() const { return sniffer_.get(); }
 
+/**
+ * @brief Retrieves the configuration manager instance.
+ *
+ * @return The configuration manager.
+ */
 sniffer::common::config::ConfigurationMgr Server::config_manager() const {
   return config_manager_;
+}
+
+/**
+ * @brief Gets the server password.
+ *
+ * @return The server password.
+ */
+std::string Server::password() const {
+  return password_;
 }
 
 /**
