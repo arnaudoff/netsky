@@ -1,0 +1,33 @@
+<div [ngClass]="['ui', 'small', 'fluid', 'steps']">
+  <div id="password-step" [ngClass]="['disabled', 'step']">
+    <i [ngClass]="['lock', 'icon']"></i>
+    <div [ngClass]="['content']">
+      <div [ngClass]="['title']">Password</div>
+      <div [ngClass]="['description']">Enter the password for the sniffing daemon</div>
+    </div>
+  </div>
+  <div id="interface-step" [ngClass]="['disabled', 'step']">
+    <i [ngClass]="['plug', 'icon']"></i>
+    <div [ngClass]="['content']">
+      <div [ngClass]="['title']">Interface</div>
+      <div [ngClass]="['description']">Choose the interface to sniff on</div>
+    </div>
+  </div>
+  <div id="filters-step" [ngClass]="['disabled', 'step']">
+    <i [ngClass]="['options', 'icon']"></i>
+    <div [ngClass]="['content']">
+      <div [ngClass]="['title']">Filters</div>
+      <div [ngClass]="['description']">Enter filters to apply to the sniffing
+        session</div>
+    </div>
+  </div>
+  <div id="start-step" [ngClass]="['disabled', 'step']">
+    <i [ngClass]="['check', 'circle', 'icon']"></i>
+    <div [ngClass]="['content']">
+      <div [ngClass]="['title']">Start the capture</div>
+    </div>
+  </div>
+</div>
+<div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
+
+<router-outlet></router-outlet>

@@ -1,26 +1,29 @@
 import { Component } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
-import { HomeComponent } from './home.module';
+import { InterfaceStepModule } from './interface-step.module';
 
 export function main() {
-   describe('Home component', () => {
+   describe('Interface step component', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestComponent],
-        imports: [HomeModule]
+        imports: [InterfaceStepModule]
       });
     });
 
-    it('should have text describing that interface should be chosen',
+    it('should have a dropdown',
       async(() => {
         TestBed
           .compileComponents()
           .then(() => {
             let fixture = TestBed.createComponent(TestComponent);
-            let homeDOMElement = fixture.debugElement.children[0].nativeElement;
+            let interfaceStepDOMElement =
+              fixture.debugElement.children[0].nativeElement;
 
-            expect(homeDOMElement.querySelectorAll('p')[0].textContent).toEqual('Choose an interface to sniff');
+            expect(
+              interfaceStepDOMElement.querySelectorAll('.dropdown').length
+            ).toEqual(1);
           });
         }));
     });
@@ -28,7 +31,6 @@ export function main() {
 
 @Component({
   selector: 'test-cmp',
-  template: '<home></home>'
+  template: '<interface-step></interface-step>'
 })
-
 class TestComponent {}

@@ -12,11 +12,12 @@ import { Packet } from './../../shared/packet/index';
 })
 export class PacketListComponent {
 
-  private packetsBuffer: Packet[] = [];
-  private renderablePackets: Packet[] = [];
+  public renderablePackets: Packet[] = [];
+  public readonly viewPortSize: number = 15;
+  public indices: ChangeEvent;
+
   private totalReceived: number = 0;
-  private readonly viewPortSize: number = 15;
-  private indices: ChangeEvent;
+  private packetsBuffer: Packet[] = [];
 
   @ViewChild(VirtualScrollComponent)
   private virtualScroll: VirtualScrollComponent;

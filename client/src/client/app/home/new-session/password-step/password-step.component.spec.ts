@@ -1,26 +1,28 @@
 import { Component } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
-import { InterfaceStepComponent } from './interface-step.module';
+import { PasswordStepModule } from './password-step.module';
 
 export function main() {
-   describe('Interface step component', () => {
+   describe('Password step component', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestComponent],
-        imports: [InterfaceStepComponent]
+        imports: [PasswordStepModule]
       });
     });
 
-    it('should have a dropdown',
+    it('should have an input',
       async(() => {
         TestBed
           .compileComponents()
           .then(() => {
             let fixture = TestBed.createComponent(TestComponent);
-            let interfaceStepDOMElement = fixture.debugElement.children[0].nativeElement;
+            let passwordStepDOMElement =
+              fixture.debugElement.children[0].nativeElement;
 
-            expect(interfaceStepDOMElement.querySelectorAll('.dropdown').length).toEqual(1);
+            expect(passwordStepDOMElement.querySelectorAll('input').length)
+              .toEqual(1);
           });
         }));
     });
@@ -28,7 +30,6 @@ export function main() {
 
 @Component({
   selector: 'test-cmp',
-  template: '<interface-step></interface-step>'
+  template: '<password-step></password-step>'
 })
-
 class TestComponent {}

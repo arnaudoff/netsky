@@ -1,3 +1,3 @@
 export interface HostInfo {
-  hasHost: boolean
+  hasHost: boolean;
 };

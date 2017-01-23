@@ -8,9 +8,9 @@ import { Packet } from './packet';
 @Injectable()
 export class PacketService {
 
-  private _observedPacket: BehaviorSubject<Packet> = new BehaviorSubject({});
-
   public packets: Subject<Packet>;
+
+  private _observedPacket: BehaviorSubject<Packet> = new BehaviorSubject({});
 
   constructor(private wsService: WebSocketService) {
     this.packets = <Subject<Packet>>this.wsService

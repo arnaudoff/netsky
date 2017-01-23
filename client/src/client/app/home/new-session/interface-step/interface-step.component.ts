@@ -1,27 +1,25 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferService } from './../../shared/sniffer/index';
-import { InterfaceService, Interface } from './../../shared/interface/index';
+import { SnifferService } from './../../../shared/sniffer/index';
+import { InterfaceService, Interface } from './../../../shared/interface/index';
 
 declare var $: any;
 
 @Component({
   moduleId: module.id,
   selector: 'interface-step',
-  templateUrl: 'interface-step.component.html',
-  styleUrls: ['interface-step.component.css'],
+  templateUrl: 'interface-step.component.html'
 })
 
-export class InterfaceStepComponent {
+export class InterfaceStepComponent implements OnInit {
 
   @ViewChild('selectInterfaces') selectElement: ElementRef;
-  private interfaces: Array<Interface> = [];
+  public interfaces: Array<Interface> = [];
 
   constructor(private router: Router,
               private snifferService: SnifferService,
-              private interfaceService: InterfaceService) {
-  }
+              private interfaceService: InterfaceService) {}
 
   ngOnInit() {
     this.snifferService.retrieveInterfaces();
@@ -31,9 +29,7 @@ export class InterfaceStepComponent {
         .removeClass('disabled');
 
     this.interfaceService.interfaces.subscribe((interfaces: Array<Interface>) => {
-      for (let entry of interfaces) {
-          this.interfaces.push(entry);
-      }
+      interfaces.forEach((i: Interface) => this.interfaces.push());
     });
 
     $(this.selectElement.nativeElement).dropdown({forceSelection: false});
@@ -51,7 +47,7 @@ export class InterfaceStepComponent {
     });
 
     selectedInterfaces
-      .forEach(i => this.snifferService.addInterface(i));
+      .forEach((i: string) => this.snifferService.addInterface(i));
 
     $('#interface-step')
         .addClass('disabled')

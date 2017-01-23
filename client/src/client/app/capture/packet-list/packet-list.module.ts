@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { SharedModule } from '../../shared/shared.module';
-import { PacketListItemModule } from './packet-list-item/packet-list-item.module'
+import { PacketListItemModule } from './packet-list-item/packet-list-item.module';
 
 import { SnifferService } from '../../shared/sniffer/index';
 import { PacketService } from '../../shared/packet/index';

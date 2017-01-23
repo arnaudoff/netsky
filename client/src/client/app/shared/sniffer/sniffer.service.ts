@@ -58,12 +58,12 @@ export class SnifferService {
   }
 
   public retrieveInterfaces() : void {
-    this._remoteConnection.next({ "retrieve-interfaces": {} });
+    this._remoteConnection.next({ 'retrieve-interfaces': {} });
   }
 
   public sendHostCheck() : void {
     this.wsService.activeConnection.subscribe((v: Object) => {
-        this._remoteConnection.next({ "has-host": {} });
+        this._remoteConnection.next({ 'has-host': {} });
     });
   }
 
@@ -73,7 +73,7 @@ export class SnifferService {
     };
 
     let commandObject: Object = {
-        "authenticate": argumentsObject
+        'authenticate': argumentsObject
     };
 
     this._remoteConnection.next(commandObject);
@@ -87,7 +87,7 @@ export class SnifferService {
     };
 
     let commandObject: Object = {
-        "start-sniffer": argumentsObject
+        'start-sniffer': argumentsObject
     };
 
     this._remoteConnection.next(commandObject);

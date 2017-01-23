@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core'; 
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 import { Packet } from './../../../shared/packet/index';
 

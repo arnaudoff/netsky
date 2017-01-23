@@ -1,22 +1,20 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferService } from './../../shared/sniffer/index';
+import { SnifferService } from './../../../shared/sniffer/index';
 
 declare var $: any;
 
 @Component({
   moduleId: module.id,
   selector: 'filter-step',
-  templateUrl: 'filter-step.component.html',
-  styleUrls: ['filter-step.component.css'],
+  templateUrl: 'filter-step.component.html'
 })
-export class FilterStepComponent {
+export class FilterStepComponent implements AfterViewInit {
 
-  private filters: string;
+  public filters: string;
 
-  constructor(private router: Router,
-     private snifferService: SnifferService) {}
+  constructor(private router: Router, private snifferService: SnifferService) {}
 
   ngAfterViewInit() {
     $('#filters-step')

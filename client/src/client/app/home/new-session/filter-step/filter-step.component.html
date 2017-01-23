@@ -1,0 +1,23 @@
+<div [ngClass]="['ui', 'info', 'message']">
+  <i [ngClass]="['close', 'icon']"></i>
+  <div [ngClass]="['header']">
+    Once specified, this filter:
+  </div>
+  <ul [ngClass]="['list']">
+    <li>lets you concentrate on the concrete protocol</li>
+    <li>is valid throughout the whole sniffing session</li>
+  </ul>
+</div>
+
+<div [ngClass]="['ui', 'fluid', 'icon', 'input']">
+  <input id="filters" type="text" [(ngModel)]="filters" placeholder="Filters..">
+  <i [ngClass]="['plug', 'icon']"></i>
+</div>
+<br />
+<button
+  [ngClass]="['ui', 'right', 'labeled', 'icon', 'button', 'next-button']"
+  (click)="handleStep()">
+  <i [ngClass]="['right', 'arrow', 'icon']"></i>
+    Next
+</button>
+

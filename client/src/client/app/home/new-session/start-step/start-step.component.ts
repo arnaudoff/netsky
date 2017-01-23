@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SnifferService } from './../../shared/sniffer/index';
+import { SnifferService } from './../../../shared/sniffer/index';
 
 declare var $: any;
 
@@ -12,7 +12,7 @@ declare var $: any;
   styleUrls: ['start-step.component.css'],
 })
 
-export class StartStepComponent {
+export class StartStepComponent implements AfterViewInit {
 
   constructor(private router: Router, private snifferService: SnifferService) {}
 
