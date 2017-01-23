@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <unistd.h>
+
 #include "spdlog/spdlog.h"
 
 #include "common/addressing/ip_address_factory.h"
@@ -78,7 +80,13 @@ using sniffer::core::server_commands::StartSnifferCommand;
 using sniffer::core::server_commands::RetrieveInterfacesCommand;
 
 int main() {
-  auto console_logger = spdlog::stdout_logger_mt("console");
+  auto console_logger = spdlog::stdout_color_mt("console");
+
+  if (getuid()) {
+    console_logger->critical("You must be root in order to run the server.");
+    return 1;
+  }
+
   console_logger->info("Initialized Netsky 0.1.0");
 
   // Initialize the serializer and configuration managers
