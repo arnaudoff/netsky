@@ -42,11 +42,13 @@ namespace core {
  *
  * @param manager The ConfigurationManager to use
  * @param handler Event handler object to use
+ * @param password The server password used for authentication of clients
  */
 WebSocketServer::WebSocketServer(
     const common::config::ConfigurationMgr& config_manager,
-    std::unique_ptr<WebSocketServerEventHandler> handler)
-    : Server{config_manager},
+    std::unique_ptr<WebSocketServerEventHandler> handler,
+    const std::string& password)
+    : Server{config_manager, password},
       event_handler_{std::move(handler)},
       next_connection_id_{0} {
   server_.init_asio();
@@ -65,8 +67,7 @@ WebSocketServer::WebSocketServer(
 
   server_.set_tls_init_handler(
       std::bind(&WebSocketServerEventHandler::OnTlsInit, event_handler_.get(),
-                WebSocketServerTlsMode::kMozillaIntermediate,
-                this,
+                WebSocketServerTlsMode::kMozillaIntermediate, this,
                 websocketpp::lib::placeholders::_1));
 }
 
@@ -132,13 +133,36 @@ void WebSocketServer::Stop() { server_.stop_listening(); }
  * server with the corresponding websocketpp::connection_hdl.
  *
  * @param connection_id The connection ID of the receiver
- *
  * @param msg The specific message to send
  */
 void WebSocketServer::Unicast(int connection_id, const std::string& message) {
   std::lock_guard<std::mutex> map_guard(ws_connections_map_lock_);
+
   server_.send(ws_connections_map_[connection_id], message,
                websocketpp::frame::opcode::text);
+}
+
+/**
+ * @brief Sends the specified message to all currently connected clients
+ *
+ * @param message The message to send
+ */
+void WebSocketServer::Broadcast(const std::string& message) {
+  std::lock_guard<std::mutex> connections_guard(connections_lock_);
+
+  Server::Broadcast(message);
+}
+
+/**
+ * @brief Sends the specified message to all currently connected AND
+ * authenticated clients
+ *
+ * @param message The message to send
+ */
+void WebSocketServer::AuthenticatedBroadcast(const std::string& message) {
+  std::lock_guard<std::mutex> auth_con_guard(authenticated_connections_lock_);
+
+  Server::AuthenticatedBroadcast(message);
 }
 
 /**
@@ -152,6 +176,7 @@ void WebSocketServer::Unicast(int connection_id, const std::string& message) {
  */
 void WebSocketServer::AddConnection(int connection_id) {
   std::lock_guard<std::mutex> guard(connections_lock_);
+
   Server::AddConnection(connection_id);
 }
 
@@ -166,6 +191,8 @@ void WebSocketServer::AddConnection(int connection_id) {
  */
 void WebSocketServer::RemoveConnection(int connection_id) {
   std::lock_guard<std::mutex> guard(connections_lock_);
+  std::lock_guard<std::mutex> auth_con_guard(authenticated_connections_lock_);
+
   Server::RemoveConnection(connection_id);
 }
 
@@ -214,6 +241,31 @@ void WebSocketServer::RemoveClient(websocketpp::connection_hdl handle) {
 }
 
 /**
+ * @brief Authenticates a client to the server. Thread safe, because the main
+ * thread could try to broadcast while a new client is being authenticated.
+ *
+ * @param connection_id The ID of the client to authenticate.
+ */
+void WebSocketServer::Authenticate(int connection_id) {
+  std::lock_guard<std::mutex> guard(authenticated_connections_lock_);
+
+  Server::Authenticate(connection_id);
+}
+
+/**
+ * @brief Determines if a client is in the list of authenticated clients.
+ *
+ * @param connection_id The connection ID of the client to check.
+ *
+ * @return True if authenticated, false otherwise.
+ */
+bool WebSocketServer::IsClientAuthenticated(int connection_id) {
+  std::lock_guard<std::mutex> auth_con_guard(authenticated_connections_lock_);
+
+  return Server::IsClientAuthenticated(connection_id);
+}
+
+/**
  * @brief Gets the connection ID from the concrete websocketpp::connection_hdl.
  *
  * @param handle The handle for which the corresponding connection ID is to be
@@ -233,10 +285,9 @@ int WebSocketServer::GetConnectionIdFromHandle(
 
 /**
  * @brief Compares two connection handles (clients) that are actually
- * implemented as a weak_ptrs.
+ * implemented as weak_ptrs.
  *
  * @param first_handle The first connection handle
- *
  * @param second_handle The second connection handle
  *
  * @return True if they are equal (the address of the control block is the same)

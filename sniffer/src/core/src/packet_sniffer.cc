@@ -30,12 +30,10 @@ namespace core {
 
 PacketSniffer::PacketSniffer(
     std::vector<std::string> interfaces, std::vector<std::string> filters,
-    std::vector<std::string> shared,
     const sniffer::common::config::ConfigurationMgr& config,
     const LayerStack& stack, Server* server)
     : interfaces_{interfaces},
       filters_{filters},
-      shared_{shared},
       config_manager_{config},
       stack_{stack},
       server_{server} {}

@@ -33,7 +33,8 @@ class PacketSniffer;
 
 class Server {
  public:
-  explicit Server(const sniffer::common::config::ConfigurationMgr& manager);
+  Server(const sniffer::common::config::ConfigurationMgr& manager,
+         const std::string& password);
 
   virtual ~Server();
 
@@ -43,6 +44,10 @@ class Server {
 
   std::set<int> connections() const;
 
+  std::set<int> authenticated_connections() const;
+
+  std::string password() const;
+
   sniffer::common::config::ConfigurationMgr config_manager() const;
 
   virtual void Start(uint16_t port) = 0;
@@ -51,18 +56,26 @@ class Server {
 
   virtual void Unicast(int connection_id, const std::string& msg) = 0;
 
+  virtual void Broadcast(const std::string& message);
+
+  virtual void AuthenticatedBroadcast(const std::string& message);
+
   virtual void AddConnection(int connection_id);
 
   virtual void RemoveConnection(int connection_id);
 
-  void Broadcast(const std::string& message);
+  virtual void Authenticate(int connection_id);
 
-  virtual std::string password() const;
+  virtual bool IsClientAuthenticated(int connection_id);
 
  protected:
   std::unique_ptr<PacketSniffer> sniffer_;
 
   std::set<int> connections_;
+
+  std::set<int> authenticated_connections_;
+
+  std::string password_;
 
   sniffer::common::config::ConfigurationMgr config_manager_;
 };

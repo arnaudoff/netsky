@@ -35,7 +35,6 @@ class PcapPacketSniffer : public PacketSniffer {
  public:
   PcapPacketSniffer(std::vector<std::string> interfaces,
                     std::vector<std::string> filters,
-                    std::vector<std::string> shared,
                     const sniffer::common::config::ConfigurationMgr& config,
                     const LayerStack& stack, Server* server);
 

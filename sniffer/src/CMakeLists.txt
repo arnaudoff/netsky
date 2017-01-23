@@ -8,11 +8,17 @@ find_package(Boost REQUIRED system)
 find_package(OpenSSL)
 
 add_library(boost INTERFACE IMPORTED)
-set_property(TARGET boost PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
+set_property(
+  TARGET boost
+  PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
 
 add_library(boost-system SHARED IMPORTED)
-set_property(TARGET boost-system PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
-set_property(TARGET boost-system PROPERTY IMPORTED_LOCATION ${Boost_SYSTEM_LIBRARY})
+set_property(
+  TARGET boost-system
+  PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
+set_property(
+  TARGET boost-system
+  PROPERTY IMPORTED_LOCATION ${Boost_SYSTEM_LIBRARY})
 
 # Include pthreads
 

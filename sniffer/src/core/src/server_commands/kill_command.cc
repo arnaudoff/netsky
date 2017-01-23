@@ -41,7 +41,7 @@ namespace server_commands {
 KillCommand::KillCommand(
     Server* server,
     const sniffer::common::serialization::SerializationMgr& serializer)
-    : ServerCommand{"kill", server, serializer} {}
+    : ServerCommand{"kill", server, serializer, true} {}
 
 /**
  * @brief Parses the arguments for the kill command.

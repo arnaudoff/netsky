@@ -33,9 +33,10 @@ namespace core {
  * @brief Constructs a Server object.
  *
  * @param manager The configuration manager to use for the server.
+ * @param password The server password
  */
-Server::Server(const sniffer::common::config::ConfigurationMgr& manager)
-    : config_manager_{manager} {}
+Server::Server(const sniffer::common::config::ConfigurationMgr& manager, const std::string& password)
+    : config_manager_{manager}, password_{password} {}
 
 /**
  * @brief Destructs a Server object.
@@ -71,6 +72,18 @@ void Server::Broadcast(const std::string& message) {
 }
 
 /**
+ * @brief Sends the specified message to all currently connected AND
+ * authenticated clients
+ *
+ * @param message The message to send
+ */
+void Server::AuthenticatedBroadcast(const std::string& message) {
+  for (auto connection : authenticated_connections_) {
+    Unicast(connection, message);
+  }
+}
+
+/**
  * @brief Adds a connection to the set of connections.
  *
  * @param connection_id The ID of the connection that uniquely identifies it.
@@ -80,21 +93,38 @@ void Server::AddConnection(int connection_id) {
 }
 
 /**
- * @brief Removes a connection from the set of connections.
+ * @brief Removes a connection from the set of connections AND authenticated
+ * connections (if the disconnecting user was authenticated).
  *
  * @param connection_id The connection ID to remove.
  */
 void Server::RemoveConnection(int connection_id) {
   connections_.erase(connection_id);
+
+  if (authenticated_connections_.count(connection_id)){
+    authenticated_connections_.erase(connection_id);
+  }
 }
 
 /**
- * @brief Gets the server password
+ * @brief Authenticates a connection to the server.
+ *
+ * @param connection_id The connection ID of the client to authenticate.
  */
-std::string Server::password() const {
-  return config_manager_.ExtractValue<std::string>("server", "password");
+void Server::Authenticate(int connection_id) {
+  authenticated_connections_.insert(connection_id);
 }
 
+/**
+ * @brief Determines if a client is in the list of authenticated clients.
+ *
+ * @param connection_id The connection ID of the client to check.
+ *
+ * @return True if authenticated, false otherwise.
+ */
+bool Server::IsClientAuthenticated(int connection_id) {
+  return authenticated_connections_.count(connection_id) > 0;
+}
 
 }  // namespace core
 

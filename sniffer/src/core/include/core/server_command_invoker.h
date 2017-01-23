@@ -26,6 +26,8 @@ namespace sniffer {
 
 namespace core {
 
+class Server;
+
 namespace server_commands {
 
 class ServerCommand;
@@ -43,7 +45,8 @@ class ServerCommandInvoker {
 
   void AddCommand(server_commands::ServerCommand* command);
 
-  void Invoke(int connection_id, const std::string& received_message);
+  void Invoke(Server* server, int connection_id,
+              const std::string& received_message);
 };
 
 }  // namespace core

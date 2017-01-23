@@ -36,7 +36,6 @@ class PacketSniffer {
  public:
   PacketSniffer(std::vector<std::string> interfaces,
                 std::vector<std::string> filters,
-                std::vector<std::string> shared,
                 const sniffer::common::config::ConfigurationMgr& config,
                 const LayerStack& stack, Server* server);
 
@@ -48,8 +47,6 @@ class PacketSniffer {
   std::vector<std::string> interfaces_;
 
   std::vector<std::string> filters_;
-
-  std::vector<std::string> shared_;
 
   sniffer::common::config::ConfigurationMgr config_manager_;
 

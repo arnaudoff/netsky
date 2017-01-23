@@ -39,7 +39,7 @@ RetrieveInterfacesCommand::RetrieveInterfacesCommand(
     Server* server,
     const sniffer::common::serialization::SerializationMgr& serializer,
     std::unique_ptr<InterfaceRetriever> retriever)
-    : ServerCommand{"retrieve-interfaces", server, serializer},
+    : ServerCommand{"retrieve-interfaces", server, serializer, true},
       interface_retriever_{std::move(retriever)} {}
 
 std::map<std::string, std::vector<std::string>>

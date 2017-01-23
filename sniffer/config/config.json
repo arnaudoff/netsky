@@ -4,6 +4,10 @@
         "snap_len": 65535
     },
     "server": {
-        "port": 1903
+        "port": 1903,
+        "password": "foo",
+        "ssl_cert": "/home/ivo/code/netsky/sniffer/config/public.crt",
+        "ssl_private_key": "/home/ivo/code/netsky/sniffer/config/private.key",
+        "ssl_dh": "/home/ivo/code/netsky/sniffer/config/dhparam.pem"
     }
 }

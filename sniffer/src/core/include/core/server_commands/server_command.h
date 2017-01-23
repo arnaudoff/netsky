@@ -37,11 +37,14 @@ class ServerCommand {
  public:
   ServerCommand(
       const std::string& name, Server* server,
-      const sniffer::common::serialization::SerializationMgr& serializer);
+      const sniffer::common::serialization::SerializationMgr& serializer,
+      bool secure);
 
   virtual ~ServerCommand() {}
 
   std::string name() const;
+
+  bool secure() const;
 
   bool Matches(const std::string& data) const;
 
@@ -54,6 +57,8 @@ class ServerCommand {
 
  protected:
   std::string name_;
+
+  bool secure_;
 
   Server* server_;
 

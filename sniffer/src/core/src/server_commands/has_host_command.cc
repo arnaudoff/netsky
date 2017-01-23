@@ -41,7 +41,7 @@ namespace server_commands {
 HasHostCommand::HasHostCommand(
     Server* server,
     const sniffer::common::serialization::SerializationMgr& serializer)
-    : ServerCommand{"has-host", server, serializer} {}
+    : ServerCommand{"has-host", server, serializer, false} {}
 
 /**
  * @brief Parses the arguments for the has-host command.

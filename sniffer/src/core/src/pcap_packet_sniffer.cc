@@ -43,23 +43,16 @@ namespace core {
  * @brief Constructs a packet sniffer based on libpcap.
  *
  * @param interfaces The interfaces to sniff on
- *
  * @param filters Filters to apply
- *
- * @param shared List of users to share the sniffing session with
- *
  * @param config An instance of a configuration manager
- *
- * @param stack The layerstack to use for the packet parsing process
- *
+ * @param stack The LayerStack to use for the packet parsing process
  * @param server A pointer to the server which to use for transmission
  */
 PcapPacketSniffer::PcapPacketSniffer(
     std::vector<std::string> interfaces, std::vector<std::string> filters,
-    std::vector<std::string> shared,
     const sniffer::common::config::ConfigurationMgr& config,
     const LayerStack& stack, Server* server)
-    : PacketSniffer(interfaces, filters, shared, config, stack, server) {}
+    : PacketSniffer(interfaces, filters, config, stack, server) {}
 
 /**
  * @brief Prepares the physical interfaces to sniff on
@@ -147,13 +140,10 @@ void PcapPacketSniffer::OnPacketReceived(u_char* args,
  * @brief An internal callback called by the static one expected by libpcap
  *
  * @param header Pointer to a pcap_pkthdr which is some header metadata
- *
  * @param packet Pointer to the beginning of a packet
  */
 void PcapPacketSniffer::OnPacketReceivedInternal(
     const struct pcap_pkthdr* header, const u_char* packet) {
-  spdlog::get("console")->info("Packet received. Length: {0}", header->caplen);
-
   sniffer::protocols::PacketRegion body{0, static_cast<int>(header->caplen)};
 
   sniffer::protocols::SniffedPacket packet_obj{packet, body};
@@ -161,7 +151,7 @@ void PcapPacketSniffer::OnPacketReceivedInternal(
 
   // http://www.tcpdump.org/linktypes.html
   stack_.HandleReception(1, &packet_obj, &accumulator_obj);
-  server_->Broadcast(accumulator_obj.data());
+  server_->AuthenticatedBroadcast(accumulator_obj.data());
 }
 
 /**

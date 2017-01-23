@@ -41,7 +41,7 @@ namespace server_commands {
 AuthenticateCommand::AuthenticateCommand(
     Server* server,
     const sniffer::common::serialization::SerializationMgr& serializer)
-    : ServerCommand{"authenticate", server, serializer} {}
+    : ServerCommand{"authenticate", server, serializer, false} {}
 
 /**
  * @brief Parses the arguments for the authenticate command.
@@ -61,17 +61,21 @@ AuthenticateCommand::ParseArguments(const std::string& data) const {
 }
 
 /**
- * @brief Checks whether the client is submitted the right password
+ * @brief Matches the server password with the client-supplied password.
  *
- * @param connection_id Unused, kept to keep up with the interface.
- * @param args Also unused.
+ * @param connection_id The connection ID of the client that invoked the command
+ * @param args Command arguments.
  */
 void AuthenticateCommand::Execute(
     int connection_id, std::map<std::string, std::vector<std::string>> args) {
-  auto is_authenticated = (server_->password() == args["password"]);
+  auto is_authenticated = (server_->password() == args["password"][0]);
 
   sniffer::core::response_models::AuthenticateResponseModel model{is_authenticated};
   auto model_obj = model.Serialize(serializer_);
+
+  if (is_authenticated) {
+    server_->Authenticate(connection_id);
+  }
 
   server_->Unicast(connection_id, model_obj.data());
 }

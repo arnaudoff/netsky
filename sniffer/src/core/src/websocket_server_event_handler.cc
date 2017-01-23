@@ -18,6 +18,8 @@
 
 #include "core/websocket_server_event_handler.h"
 
+#include <memory>
+
 #include <spdlog/spdlog.h>
 
 #include "core/server_command_invoker.h"
@@ -25,6 +27,7 @@
 #include "core/websocket_server_event.h"
 #include "core/websocket_server_event_type.h"
 #include "core/websocket_server_tls_mode.h"
+#include "common/policy_bindings.h"
 
 namespace sniffer {
 
@@ -122,19 +125,29 @@ void WebSocketServerEventHandler::OnMessageReceived(
   event_cond_.notify_one();
 }
 
-websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context>
+/**
+ * @brief Generates an Asio context object by setting its options depending
+ * on the mode chosen, as well as setting the private key and Diffie Hellman
+ * params file.
+ *
+ * @param mode The WebSocketServerTlsMode depending on the clients, e.g. Modern
+ * or Intermediate.
+ * @param ws_server A pointer to the current WebSocketServer object.
+ * @param handle Handle to the connection the TLS handler is invoked upon.
+ *
+ * @return The Asio context object.
+ */
+std::shared_ptr<websocketpp::lib::asio::ssl::context>
 WebSocketServerEventHandler::OnTlsInit(WebSocketServerTlsMode mode,
                                        WebSocketServer* ws_server,
                                        websocketpp::connection_hdl handle) {
   namespace asio = websocketpp::lib::asio;
 
-  websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> ctx =
-      websocketpp::lib::make_shared<asio::ssl::context>(
-          asio::ssl::context::sslv23);
+  std::shared_ptr<asio::ssl::context> ctx =
+      std::make_shared<asio::ssl::context>(asio::ssl::context::sslv23);
 
   try {
     if (mode == WebSocketServerTlsMode::kMozillaModern) {
-      // Modern disables TLSv1
       ctx->set_options(
           asio::ssl::context::default_workarounds |
           asio::ssl::context::no_sslv2 | asio::ssl::context::no_sslv3 |
@@ -146,11 +159,15 @@ WebSocketServerEventHandler::OnTlsInit(WebSocketServerTlsMode mode,
                        asio::ssl::context::single_dh_use);
     }
 
-    ctx->set_password_callback(std::bind(&WebSocketServer::password, ws_server));
-    ctx->use_certificate_chain_file("../../config/server.pem");
-    ctx->use_private_key_file("../../config/server.pem",
-                              asio::ssl::context::pem);
-    ctx->use_tmp_dh_file("../../config/dh.pem");
+    sniffer::common::config::ConfigurationMgr mgr =
+        ws_server->config_manager();
+    ctx->use_certificate_chain_file(
+        mgr.ExtractValue<std::string>("server", "ssl_cert"));
+    ctx->use_private_key_file(
+        mgr.ExtractValue<std::string>("server", "ssl_private_key"),
+        asio::ssl::context::pem);
+    ctx->use_tmp_dh_file(
+        mgr.ExtractValue<std::string>("server", "ssl_dh"));
 
     std::string ciphers;
 
@@ -181,10 +198,10 @@ WebSocketServerEventHandler::OnTlsInit(WebSocketServerTlsMode mode,
     }
 
     if (SSL_CTX_set_cipher_list(ctx->native_handle(), ciphers.c_str()) != 1) {
-      std::cout << "Error setting cipher list" << std::endl;
+      spdlog::get("console")->error("Could not set the cipher list.");
     }
   } catch (std::exception& e) {
-    std::cout << "Exception: " << e.what() << std::endl;
+    spdlog::get("console")->critical(e.what());
   }
 
   return ctx;
@@ -217,10 +234,11 @@ void WebSocketServerEventHandler::Handle(WebSocketServer* server) {
       server->RemoveClient(current_event.handle);
     } else if (current_event.type == WebSocketServerEventType::kMessage) {
       command_invoker_->Invoke(
+          server,
           server->GetConnectionIdFromHandle(current_event.handle),
           current_event.message->get_payload());
     } else {
-      spdlog::get("console")->info(
+      spdlog::get("console")->warn(
           "The WebSocket server received an event that cannot be handled.");
     }
   }

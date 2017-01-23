@@ -19,6 +19,7 @@
 #include "core/server_command_invoker.h"
 
 #include "core/server_commands/server_command.h"
+#include "core/server.h"
 
 namespace sniffer {
 
@@ -36,16 +37,26 @@ void ServerCommandInvoker::AddCommand(server_commands::ServerCommand* command) {
 /**
  * @brief Iterates over the list of registered commands and if it matches,
  * executes it by passing it the client for which to execute it and the command
- * arguments.
+ * arguments. If a secure command, it is invoked if and only if the client is
+ * in the authenticated list of the server.
  *
- * @param connection_id A connection ID representing the client session
- * @param message
+ * @param server A pointer to the server instance.
+ * @param connection_id A connection ID representing the client session.
+ * @param message The raw message from the client.
  */
-void ServerCommandInvoker::Invoke(int connection_id,
+void ServerCommandInvoker::Invoke(Server* server, int connection_id,
                                   const std::string& message) {
   for (auto command : server_commands_) {
     if (command->Matches(message)) {
-      command->Execute(connection_id, command->ParseArguments(message));
+      if (command->secure()) {
+        if (server->IsClientAuthenticated(connection_id)) {
+          command->Execute(connection_id, command->ParseArguments(message));
+        }
+
+        // TODO(arnaudoff): Log unauthorized attempt
+      } else {
+        command->Execute(connection_id, command->ParseArguments(message));
+      }
     }
   }
 }

@@ -42,10 +42,8 @@ namespace server_commands {
  *
  * @param server A pointer to a Server instance denoting the Server object to
  * execute the command on.
- *
  * @param serializer The serializer to use for parsing the arguments of
  * the StartSnifferCommand
- *
  * @param ls The layer stack object that is to be passed to the PacketSniffer
  * instance that is to be created.
  */
@@ -53,7 +51,8 @@ StartSnifferCommand::StartSnifferCommand(
     Server* server,
     const sniffer::common::serialization::SerializationMgr& serializer,
     const LayerStack& ls)
-    : layer_stack_{ls}, ServerCommand{"start-sniffer", server, serializer} {}
+    : layer_stack_{ls}, ServerCommand{"start-sniffer", server, serializer, true}
+{}
 
 /**
  * @brief Parses the arguments required for the sniffer to be started.
@@ -74,27 +73,23 @@ StartSnifferCommand::ParseArguments(const std::string& data) const {
   arguments["filters"] = serializer_.ExtractValue<std::vector<std::string>>(
       data_obj, ServerCommand::name(), "filters");
 
-  arguments["shared"] = serializer_.ExtractValue<std::vector<std::string>>(
-      data_obj, ServerCommand::name(), "shared");
-
   return arguments;
 }
 
 /**
  * @brief Starts a packet sniffer
  *
- * @param connection_id
+ * @param connection_id The connection ID of the client which invoked the cmd.
  *
- * @param args
+ * @param args The parsed arguments for the StartSnifferCommand.
  */
 void StartSnifferCommand::Execute(
     int connection_id, std::map<std::string, std::vector<std::string>> args) {
   auto interfaces = args["interfaces"];
   auto filters = args["filters"];
-  auto shared = args["shared"];
 
   std::unique_ptr<PacketSniffer> sniffer = std::make_unique<PcapPacketSniffer>(
-      interfaces, filters, shared, server_->config_manager(), layer_stack_,
+      interfaces, filters, server_->config_manager(), layer_stack_,
       server_);
 
   server_->set_sniffer(std::move(sniffer));

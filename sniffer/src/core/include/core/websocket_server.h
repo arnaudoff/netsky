@@ -41,7 +41,8 @@ class WebSocketServer : public Server {
  public:
   WebSocketServer(
       const sniffer::common::config::ConfigurationMgr& config_manager,
-      std::unique_ptr<WebSocketServerEventHandler> handler);
+      std::unique_ptr<WebSocketServerEventHandler> handler,
+      const std::string& password);
 
   ~WebSocketServer(){};
 
@@ -51,9 +52,17 @@ class WebSocketServer : public Server {
 
   void Unicast(int connection_id, const std::string& msg) override;
 
+  void Broadcast(const std::string& message) override;
+
+  void AuthenticatedBroadcast(const std::string& message) override;
+
   void AddConnection(int connection_id) override;
 
   void RemoveConnection(int connection_id) override;
+
+  void Authenticate(int connection_id) override;
+
+  bool IsClientAuthenticated(int connection_id) override;
 
   void AddClient(websocketpp::connection_hdl handle);
 
@@ -82,6 +91,8 @@ class WebSocketServer : public Server {
   mutable std::mutex next_connection_id_lock_;
 
   mutable std::mutex connections_lock_;
+
+  mutable std::mutex authenticated_connections_lock_;
 
   void Run(uint16_t port);
 };
