@@ -10,7 +10,7 @@ import { SnifferService, AuthenticationInfo } from './../../shared/sniffer/index
 })
 export class SessionSubscriptionComponent {
 
-  private authenticationInfo: AuthenticationInfo;
+  public authenticationInfo: AuthenticationInfo;
 
   constructor(private router: Router, private snifferService: SnifferService) {
     this.snifferService.authenticationInfo

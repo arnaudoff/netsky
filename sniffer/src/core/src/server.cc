@@ -37,7 +37,10 @@ namespace core {
  */
 Server::Server(const sniffer::common::config::ConfigurationMgr& manager,
                const std::string& password)
-    : config_manager_{manager}, password_{password} {}
+    : config_manager_{manager},
+      password_{password},
+      has_host_connection_{false},
+      host_connection_{0} {}
 
 /**
  * @brief Destructs a Server object.

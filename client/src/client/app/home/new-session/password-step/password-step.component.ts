@@ -24,7 +24,7 @@ export class PasswordStepComponent implements AfterViewInit {
               .addClass('disabled')
               .removeClass('active');
 
-          this.router.navigate(['new/interface']);
+          this.router.navigate(['home/new/interface']);
         } else {
           this.authenticationInfo = authInfo;
         }

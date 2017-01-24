@@ -29,7 +29,7 @@ export class FilterStepComponent implements AfterViewInit {
         .addClass('disabled')
         .removeClass('active');
 
-    this.router.navigate(['new/start']);
+    this.router.navigate(['home/new/start']);
   }
 
 }

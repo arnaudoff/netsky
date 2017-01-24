@@ -7,15 +7,7 @@
     </div>
     <div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
   </h2>
-  <div *ngIf="_hostInfo">
-    <div *ngIf="!_hostInfo.hasHost">
-      <new-session></new-session>
-    </div>
-    <div *ngIf="_hostInfo.hasHost">
-      <session-subscription></session-subscription>
-    </div>
-  </div>
-  <div *ngIf="!_hostInfo">
+  <div *ngIf="!hostInfo">
     <div [ngClass]="['ui', 'error', 'message']">
       <i [ngClass]="['close', 'icon']"></i>
       <div [ngClass]="['header']">
@@ -28,4 +20,5 @@
       </ul>
     </div>
   </div>
+  <router-outlet></router-outlet>
 </div>

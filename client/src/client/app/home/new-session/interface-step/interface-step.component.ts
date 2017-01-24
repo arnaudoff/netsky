@@ -53,7 +53,7 @@ export class InterfaceStepComponent implements OnInit {
         .addClass('disabled')
         .removeClass('active');
 
-    this.router.navigate(['new/filter']);
+    this.router.navigate(['home/new/filter']);
   }
 
 }
