@@ -149,8 +149,9 @@ int main() {
       std::make_unique<WebSocketServerEventHandler>(invoker.get());
 
   auto server = std::make_unique<WebSocketServer>(
-      config_manager, std::move(event_handler),
-      config_manager.ExtractValue<std::string>("server", "password"));
+      config_manager,
+      config_manager.ExtractValue<std::string>("server", "password"),
+      std::move(event_handler));
 
   auto pcap_retriever =
       std::make_unique<PcapInterfaceRetriever>(ip_addr_factory);

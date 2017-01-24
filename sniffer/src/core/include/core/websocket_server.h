@@ -41,10 +41,16 @@ class WebSocketServer : public Server {
  public:
   WebSocketServer(
       const sniffer::common::config::ConfigurationMgr& config_manager,
-      std::unique_ptr<WebSocketServerEventHandler> handler,
-      const std::string& password);
+      const std::string& password,
+      std::unique_ptr<WebSocketServerEventHandler> handler);
 
-  ~WebSocketServer(){};
+  ~WebSocketServer();
+
+  bool has_host_connection() const override;
+
+  int host_connection() const override;
+
+  void set_host_connection(int connection_id) override;
 
   void Start(uint16_t port) override;
 
@@ -93,6 +99,8 @@ class WebSocketServer : public Server {
   mutable std::mutex connections_lock_;
 
   mutable std::mutex authenticated_connections_lock_;
+
+  mutable std::mutex host_lock_;
 
   void Run(uint16_t port);
 };

@@ -43,7 +43,7 @@ namespace server_commands {
  * @param server A pointer to a Server instance denoting the Server object to
  * execute the command on.
  * @param serializer The serializer to use for parsing the arguments of
- * the StartSnifferCommand
+ * the StartSnifferCommand.
  * @param ls The layer stack object that is to be passed to the PacketSniffer
  * instance that is to be created.
  */
@@ -77,10 +77,10 @@ StartSnifferCommand::ParseArguments(const std::string& data) const {
 }
 
 /**
- * @brief Starts a packet sniffer
+ * @brief Constructs a PacketSniffer and starts it.
  *
- * @param connection_id The connection ID of the client which invoked the cmd.
- *
+ * @param connection_id The connection ID of the client which invoked the
+ * command, also the future host connection for the sniffer.
  * @param args The parsed arguments for the StartSnifferCommand.
  */
 void StartSnifferCommand::Execute(
@@ -93,6 +93,7 @@ void StartSnifferCommand::Execute(
       server_);
 
   server_->set_sniffer(std::move(sniffer));
+  server_->set_host_connection(connection_id);
 
   server_->sniffer()->Start();
 }

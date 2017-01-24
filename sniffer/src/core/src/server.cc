@@ -35,7 +35,8 @@ namespace core {
  * @param manager The configuration manager to use for the server.
  * @param password The server password
  */
-Server::Server(const sniffer::common::config::ConfigurationMgr& manager, const std::string& password)
+Server::Server(const sniffer::common::config::ConfigurationMgr& manager,
+               const std::string& password)
     : config_manager_{manager}, password_{password} {}
 
 /**
@@ -69,8 +70,32 @@ sniffer::common::config::ConfigurationMgr Server::config_manager() const {
  *
  * @return The server password.
  */
-std::string Server::password() const {
-  return password_;
+std::string Server::password() const { return password_; }
+
+/**
+ * @brief Determines whether the server has a sniffer initialized, e.g. whether
+ * there's just some connections or an actual sniffing session.
+ *
+ * @return True if there's a sniffing session, false otherwise.
+ */
+bool Server::has_host_connection() const { return has_host_connection_; }
+
+/**
+ * @brief Gets the ID of the client that started the sniffing session.
+ *
+ * @return The client ID
+ */
+int Server::host_connection() const { return host_connection_; }
+
+/**
+ * @brief Sets the host connection for a server, e.g. the one that initialized
+ * the sniffing session. This is so because multiple clients are supported.
+ *
+ * @param connection_id The ID of the client that initiated the connection.
+ */
+void Server::set_host_connection(int connection_id) {
+  host_connection_ = connection_id;
+  has_host_connection_ = true;
 }
 
 /**
@@ -121,7 +146,7 @@ void Server::AddConnection(int connection_id) {
 void Server::RemoveConnection(int connection_id) {
   connections_.erase(connection_id);
 
-  if (authenticated_connections_.count(connection_id)){
+  if (authenticated_connections_.count(connection_id)) {
     authenticated_connections_.erase(connection_id);
   }
 }

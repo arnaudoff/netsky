@@ -35,19 +35,18 @@ namespace sniffer {
 namespace core {
 
 /**
- * @brief Constructs a WebSocketServer object which in turn is a wrapper
- * around a websocketpp server. The constructor initializes Boost.Asio and
- * sets the async IO handlers for handling new connections, disconnects and
+ * @brief Constructs a WebSocketServer. Initializes Boost.Asio and sets the
+ * async IO handlers for handling new connections, disconnects and
  * new messages that are defined in WebSocketEventHandler.
  *
- * @param manager The ConfigurationManager to use
- * @param handler Event handler object to use
- * @param password The server password used for authentication of clients
+ * @param manager The ConfigurationManager to use.
+ * @param password The server password used for authentication of clients.
+ * @param handler Event handler object to use.
  */
 WebSocketServer::WebSocketServer(
     const common::config::ConfigurationMgr& config_manager,
-    std::unique_ptr<WebSocketServerEventHandler> handler,
-    const std::string& password)
+    const std::string& password,
+    std::unique_ptr<WebSocketServerEventHandler> handler)
     : Server{config_manager, password},
       event_handler_{std::move(handler)},
       next_connection_id_{0} {
@@ -72,10 +71,60 @@ WebSocketServer::WebSocketServer(
 }
 
 /**
- * @brief In a nutshell, this function sets the internals of Boost.Asio. Note
- * that it invokes the run() method of websocketpp, which in turn invokes the
- * boost::asio::io_service. Therefore, the WebSocketServerEventHandler handlers
- * are executed within the main thread.
+ * @brief Destructs the WebSocketServer object.
+ */
+WebSocketServer::~WebSocketServer() {}
+
+/**
+ * @brief Determines whether the server has a sniffer initialized, e.g. whether
+ * there's just some connections or an actual sniffing session.
+ *
+ * Thread safe, because while the host is being updated in the processing
+ * thread, another thread could try to check whether a host exists.
+ *
+ * @return True if there's a sniffing session, false otherwise.
+ */
+bool WebSocketServer::has_host_connection() const {
+  std::lock_guard<std::mutex> host_guard(host_lock_);
+
+  return Server::has_host_connection();
+}
+
+/**
+ * @brief Gets the ID of the client that started the sniffing session.
+ *
+ * Thread safe, because while the host is being updated in the processing
+ * thread, another thread could try to retrieve it.
+ *
+ * @return The client ID
+ */
+int WebSocketServer::host_connection() const {
+  std::lock_guard<std::mutex> host_guard(host_lock_);
+
+  return Server::host_connection();
+}
+
+/**
+ * @brief Sets the host connection for a server, e.g. the one that initialized
+ * the sniffing session. This is so because multiple clients are supported.
+ *
+ * Thread safe, because while the host is being updated in the processing
+ * thread, another thread could try to check whether a host exists or retrieve
+ * it.
+ *
+ * @param connection_id The ID of the client that initiated the connection.
+ */
+void WebSocketServer::set_host_connection(int connection_id) {
+  std::lock_guard<std::mutex> host_guard(host_lock_);
+
+  return Server::set_host_connection(connection_id);
+}
+
+/**
+ * @brief This function sets the internals of Boost.Asio. It invokes the run()
+ * method of websocketpp, which in turn invokes the boost::asio::io_service.
+ * Therefore, the WebSocketServerEventHandler handlers are executed within the
+ * main thread.
  *
  * @param port The port to use for listening
  */
@@ -91,13 +140,11 @@ void WebSocketServer::Run(uint16_t port) {
 }
 
 /**
- * @brief Starts a new WebSocket server by spawning a processing thread, passing
- * a pointer to the Handle member function of the WebSocketServerEventHandler
- * class. It is used as a processing function for the incoming events.
- * Additionally, the thread is passed the address of the event_handler_ resource
- * that is held by the WebSocketServer so that the processing function is
- * invoked on the new thread. Also, the processing function is passed a pointer
- * to the current instance of the WebSocketServer.
+ * @brief Starts a new WebSocket server by spawning a processing thread. The
+ * Handle member function is used as a processing function for the incoming
+ * events. Additionally, the thread is passed the address of the event_handler_
+ * resource that is held by the WebSocketServer so that the processing function is
+ * invoked on the new thread.
  *
  * WebSocket++ handlers block core networking functions. In general, to maintain
  * responsiveness at high message rates handlers SHOULD pass processing requests
@@ -123,17 +170,15 @@ void WebSocketServer::Start(uint16_t port) {
 }
 
 /**
- * @brief Stops the WebSocketServer by calling the internal stop_listening()
- * function on the websocketpp server.
+ * @brief Stops the WebSocketServer.
  */
 void WebSocketServer::Stop() { server_.stop_listening(); }
 
 /**
- * @brief Sends a specific message to a specific client by calling send() on the
- * server with the corresponding websocketpp::connection_hdl.
+ * @brief Sends a specific message to a specific client.
  *
- * @param connection_id The connection ID of the receiver
- * @param msg The specific message to send
+ * @param connection_id The connection ID of the receiver.
+ * @param msg The specific message to send.
  */
 void WebSocketServer::Unicast(int connection_id, const std::string& message) {
   std::lock_guard<std::mutex> map_guard(ws_connections_map_lock_);
@@ -143,9 +188,9 @@ void WebSocketServer::Unicast(int connection_id, const std::string& message) {
 }
 
 /**
- * @brief Sends the specified message to all currently connected clients
+ * @brief Sends the specified message to all currently connected clients.
  *
- * @param message The message to send
+ * @param message The message to send.
  */
 void WebSocketServer::Broadcast(const std::string& message) {
   std::lock_guard<std::mutex> connections_guard(connections_lock_);
@@ -155,9 +200,9 @@ void WebSocketServer::Broadcast(const std::string& message) {
 
 /**
  * @brief Sends the specified message to all currently connected AND
- * authenticated clients
+ * authenticated clients.
  *
- * @param message The message to send
+ * @param message The message to send.
  */
 void WebSocketServer::AuthenticatedBroadcast(const std::string& message) {
   std::lock_guard<std::mutex> auth_con_guard(authenticated_connections_lock_);
@@ -166,13 +211,13 @@ void WebSocketServer::AuthenticatedBroadcast(const std::string& message) {
 }
 
 /**
- * @brief Adds a connection to the abstract server connections list. The
- * addition of the connection ID is thread-safe, because the WebSocket
- * implementation of a Server calls this function on it's processing thread;
- * meanwhile the main thread could try to read the set of connections and
- * therefore introduce a data race.
+ * @brief Adds a connection to the server connections list.
  *
- * @param connection_id The ID of the connection which uniquely identifies it
+ * Thread safe, because this function is normally called
+ * from the processing thread, therefore another thread could try to read the
+ * set of connections at the same time.
+ *
+ * @param connection_id The ID of the client.
  */
 void WebSocketServer::AddConnection(int connection_id) {
   std::lock_guard<std::mutex> guard(connections_lock_);
@@ -181,11 +226,11 @@ void WebSocketServer::AddConnection(int connection_id) {
 }
 
 /**
- * @brief Removes a connection from the abstract server connections list. The
- * removal of the connection ID is thread-safe, because the WebSocket
- * implementation of a Server calls this function on it's processing thread;
- * meanwhile the main thread could try to read the set of connections and
- * therefore introduce a data race.
+ * @brief Removes a connection from the server connections list.
+ *
+ * Thread safe, because this function is normally called from the processing
+ * thread, therefore another thread could try to read the set of connections at
+ * the same time.
  *
  * @param connection_id The ID of the connection which uniquely identifies it
  */

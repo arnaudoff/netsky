@@ -38,9 +38,9 @@ class Server {
 
   virtual ~Server();
 
-  void set_sniffer(std::unique_ptr<PacketSniffer> sniffer);
-
   PacketSniffer* sniffer() const;
+
+  void set_sniffer(std::unique_ptr<PacketSniffer> sniffer);
 
   std::set<int> connections() const;
 
@@ -49,6 +49,12 @@ class Server {
   std::string password() const;
 
   sniffer::common::config::ConfigurationMgr config_manager() const;
+
+  virtual bool has_host_connection() const;
+
+  virtual int host_connection() const;
+
+  virtual void set_host_connection(int connection_id);
 
   virtual void Start(uint16_t port) = 0;
 
@@ -69,15 +75,19 @@ class Server {
   virtual bool IsClientAuthenticated(int connection_id);
 
  protected:
+  sniffer::common::config::ConfigurationMgr config_manager_;
+
   std::unique_ptr<PacketSniffer> sniffer_;
 
   std::set<int> connections_;
 
   std::set<int> authenticated_connections_;
 
-  std::string password_;
+  int host_connection_;
 
-  sniffer::common::config::ConfigurationMgr config_manager_;
+  bool has_host_connection_;
+
+  std::string password_;
 };
 
 }  // namespace core

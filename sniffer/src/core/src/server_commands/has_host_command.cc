@@ -23,8 +23,8 @@
 #include <vector>
 
 #include "common/policy_bindings.h"
-#include "core/server.h"
 #include "core/response_models/has_host_response_model.h"
+#include "core/server.h"
 
 namespace sniffer {
 
@@ -57,16 +57,15 @@ std::map<std::string, std::vector<std::string>> HasHostCommand::ParseArguments(
 }
 
 /**
- * @brief Checks whether the server has a host for a sniffing session.
+ * @brief Checks whether the server has an ongoing sniffing session.
  *
  * @param connection_id Unused, kept to keep up with the interface.
  * @param args Also unused.
  */
 void HasHostCommand::Execute(
     int connection_id, std::map<std::string, std::vector<std::string>> args) {
-  auto hasHost = server_->connections().size() > 0;
-
-  sniffer::core::response_models::HasHostResponseModel model{hasHost};
+  sniffer::core::response_models::HasHostResponseModel model{
+      server_->has_host_connection()};
   auto model_obj = model.Serialize(serializer_);
 
   server_->Unicast(connection_id, model_obj.data());
