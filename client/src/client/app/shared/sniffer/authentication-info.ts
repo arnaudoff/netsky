@@ -1,4 +1,4 @@
 export interface AuthenticationInfo {
-  authenticated: boolean;
+  isAuthenticated: boolean;
   errors?: Array<string>;
 };

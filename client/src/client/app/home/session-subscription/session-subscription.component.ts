@@ -10,12 +10,12 @@ import { SnifferService, AuthenticationInfo } from './../../shared/sniffer/index
 })
 export class SessionSubscriptionComponent {
 
-  public authenticationInfo: AuthenticationInfo;
+  public authenticationInfo: AuthenticationInfo = null;
 
   constructor(private router: Router, private snifferService: SnifferService) {
     this.snifferService.authenticationInfo
       .subscribe((authInfo : AuthenticationInfo) => {
-        if (authInfo.authenticated) {
+        if (authInfo.isAuthenticated) {
           this.router.navigate(['capture']);
         } else {
           this.authenticationInfo = authInfo;

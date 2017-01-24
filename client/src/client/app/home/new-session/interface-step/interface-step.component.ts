@@ -29,7 +29,7 @@ export class InterfaceStepComponent implements OnInit {
         .removeClass('disabled');
 
     this.interfaceService.interfaces.subscribe((interfaces: Array<Interface>) => {
-      interfaces.forEach((i: Interface) => this.interfaces.push());
+      interfaces.forEach((i: Interface) => this.interfaces.push(i));
     });
 
     $(this.selectElement.nativeElement).dropdown({forceSelection: false});

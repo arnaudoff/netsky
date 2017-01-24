@@ -1,29 +1,26 @@
-<select class="ui fluid search dropdown" multiple="" #selectInterfaces>
-  <option value="">Search available interfaces...</option>
+<select [ngClass]="['ui', 'fluid', 'search', 'dropdown']" multiple="" #selectInterfaces>
+  <option value="">Type in the interface name to sniff on</option>
   <option *ngFor="let interface of interfaces" [value]="interface.name">{{
   interface.name }}</option>
 </select>
 <br />
-<div class="ui list">
-  <div *ngFor="let interface of interfaces" class="item">
-    <i class="plug icon"></i>
-    <div class="content">
-      <div class="header">{{ interface.name }}</div>
-      <div class="description">{{ interface.description }}</div>
-      <div class="list">
-        <div *ngFor="let address of interface.addresses" class="item">
-          <i class="share alternate icon"></i>
-          <div class="content">
-            <div class="header">{{ address.addr }}</div>
-            <div class="description">
-              <span *ngIf="address.bcast_addr">Broadcast: </span>
-              {{ address.bcast_addr }}
-              <span *ngIf="address.dst_addr">Destination: </span>
-              {{ address.dst_addr }}
-              <span *ngIf="address.netmask">Netmask: </span>
-              {{ address.netmask }}
-            </div>
-          </div>
+<div [ngClass]="['ui', 'middle', 'aligned', 'animated', 'list']">
+  <div *ngFor="let interface of interfaces" [ngClass]="['item']">
+    <i [ngClass]="['share', 'alternate', 'icon']"></i>
+    <div [ngClass]="['content']">
+      <a [ngClass]="['header']">{{ interface.name }}</a>
+      <div [ngClass]="['description']">{{ interface.description }}
+        <div *ngFor="let address of interface.addresses" [ngClass]="item">
+          <span><i [ngClass]="['marker', 'icon']"></i><b>{{ address.addr }}</b></span>
+            <span *ngIf="address.bcast_addr">
+              <i [ngClass]="['announcement', 'icon']"></i><b>{{ address.bcast_addr }}</b>
+            </span>
+            <span *ngIf="address.dst_addr">
+              <i [ngClass]="['marker', 'icon']"></i><b>{{ address.dst_addr }}</b> (PPP destination)
+            </span>
+            <span *ngIf="address.netmask">
+              <i [ngClass]="['hide', 'icon']"></i><b>{{ address.netmask }}</b>
+            </span>
         </div>
       </div>
     </div>

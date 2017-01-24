@@ -13,7 +13,7 @@ declare var $: any;
 })
 export class PacketDetailsComponent {
 
-  private packetToDisplay: Packet;
+  private packetToDisplay: Packet = null;
 
   private readonly width: number = 1120;
   private readonly height: number = 300;
@@ -37,6 +37,8 @@ export class PacketDetailsComponent {
         if (this.packetToDisplay) {
           $('.chart').remove();
         }
+
+        this.packetToDisplay = packet;
 
         this.displayPacket();
       }

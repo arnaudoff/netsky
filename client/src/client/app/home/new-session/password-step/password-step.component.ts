@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { SnifferService, AuthenticationInfo } from './../../../shared/sniffer/index';
@@ -14,12 +14,12 @@ export class PasswordStepComponent implements AfterViewInit {
 
   public password: string;
 
-  private authenticationInfo: AuthenticationInfo;
+  private authenticationInfo: AuthenticationInfo = null;
 
   constructor(private router: Router, private snifferService: SnifferService) {
     this.snifferService.authenticationInfo
       .subscribe((authInfo : AuthenticationInfo) => {
-        if (authInfo.authenticated) {
+        if (authInfo.isAuthenticated) {
           $('#password-step')
               .addClass('disabled')
               .removeClass('active');
