@@ -24,7 +24,7 @@ export class PacketDetailsComponent {
   private yScale: d3.scale.Linear<number, number> =
     d3.scale.linear().range([0, this.height]);
 
-  private group: d3.Selection<any>;
+  private group: d3.selection.Update<any>;
 
   private xCoefficient: number;
   private yCoefficient: number;
@@ -39,7 +39,6 @@ export class PacketDetailsComponent {
         }
 
         this.packetToDisplay = packet;
-
         this.displayPacket();
       }
     });
@@ -59,10 +58,9 @@ export class PacketDetailsComponent {
     let partition: d3.layout.Partition<d3.layout.partition.Node> =
       d3.layout.partition().value((node: any) => node.size);
 
-    this.group = visualSelection.selectAll('g')
-      .data(partition.nodes(this.packetToDisplay.data));
-
-    this.group
+    this.group = <d3.selection.Update<any>>visualSelection.selectAll('g')
+      .data(partition.nodes(this.packetToDisplay.data))
+      .enter()
       .append('svg:g')
       .attr('transform', (node: d3.layout.partition.Node) =>
           'translate(' + this.xScale(node.y) + ',' + this.yScale(node.x) + ')')
@@ -89,9 +87,9 @@ export class PacketDetailsComponent {
       .on('click', () => this.nodeClicked(this.packetToDisplay.data));
   }
 
-  private nodeClicked(node: d3.layout.partition.Node) : boolean {
+  private nodeClicked(node: d3.layout.partition.Node) {
     if (!node.children) {
-      return false;
+      return;
     }
 
     this.xCoefficient = (node.y ? this.width - 40 : this.width) / (1 - node.y);
@@ -101,7 +99,7 @@ export class PacketDetailsComponent {
     this.yScale.domain([node.x, node.x + node.dx]);
 
     let transition = this.group.transition()
-      .duration(7500)
+      .duration(750)
       .attr('transform', (node: d3.layout.partition.Node) => 'translate(' +
             this.xScale(node.y) + ',' + this.yScale(node.x) + ')');
 
@@ -115,7 +113,7 @@ export class PacketDetailsComponent {
       .style('opacity', (node: d3.layout.partition.Node) =>
              node.dx * this.yCoefficient > 12 ? 1 : 0);
 
-    return false;
+    (d3.event as Event).stopPropagation();
   }
 
   private transform(node: d3.layout.partition.Node) {

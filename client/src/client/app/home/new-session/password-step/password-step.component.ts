@@ -38,7 +38,9 @@ export class PasswordStepComponent implements AfterViewInit {
   }
 
   handleStep() {
-    this.snifferService.sendAuthenticate(this.password);
+    if (this.password) {
+      this.snifferService.sendAuthenticate(this.password);
+    }
   }
 
 }
