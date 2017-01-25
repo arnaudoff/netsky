@@ -1,7 +1,11 @@
-<div [ngClass]="['item']">
-  <div [ngClass]="['content']">
-    <div [ngClass]="['header']">
-      {{ packet.network.src }} to {{ packet.network.dst }}
-    </div>
+<div [ngClass]="['summary']">
+  <div [ngClass]="['summary-header']">
+    <i [ngClass]="['icon', 'square']"></i> {{ packet.network.src }} &rarr; {{
+    packet.network.dst }} [ {{ packet.transport.src }} &harr; {{
+    packet.transport.dst }}]
+  </div>
+  <div [ngClass]="['summary-details']">
+    <i [ngClass]="['icon', 'plug']"></i> {{ packet.datalink.src }} &rarr; {{ packet.datalink.src }}
   </div>
 </div>
+

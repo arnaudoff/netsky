@@ -1,4 +1,50 @@
-<button class="ui fluid button positive" (click)="handleStep()">
+<table [ngClass]="['ui', 'very', 'basic', 'fluid', 'celled', 'table']">
+  <thead>
+    <tr>
+      <th>Configuration entry</th>
+      <th>Selected value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <h4 [ngClass]="['ui', 'header']">
+          <i [ngClass]="['share', 'alternate', 'icon']"></i>
+          <div [ngClass]="['content']">
+            Interfaces
+            <div [ngClass]="['sub', 'header']">
+              Physical interfaces to sniff on
+            </div>
+          </div>
+        </h4>
+      </td>
+      <td>
+        <div *ngFor="let interface of interfaces">
+          {{ interface }}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h4 [ngClass]="['ui', 'header']">
+          <i [ngClass]="['options', 'icon']"></i>
+          <div [ngClass]="['content']">
+            Filters
+            <div [ngClass]="['sub', 'header']">
+              Limit the output
+            </div>
+          </div>
+        </h4>
+      </td>
+      <td>
+        <div *ngFor="let filter of filters">
+          {{ filter }}
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button [ngClass]="['ui', 'fluid', 'button', 'positive']" (click)="handleStep()">
     Start
 </button>
 
