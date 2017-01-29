@@ -5,13 +5,11 @@
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Sanders(2011)]{sanders_practical_2011}
-C.~Sanders.
-\newblock \emph{Practical packet analysis: using {Wireshark} to solve
-  real-world network problems}.
-\newblock No Starch Press, San Francisco, Calif, 2. ed edition, 2011.
-\newblock ISBN 978-1-59327-266-1.
-\newblock OCLC: 755869776.
+\bibitem[Stroustrup(2013)]{stroustrup_c++_2013}
+B.~Stroustrup.
+\newblock \emph{The {C}++ programming language}.
+\newblock Addison-Wesley, Upper Saddle River, NJ, fourth edition edition, 2013.
+\newblock ISBN 978-0-321-56384-2.
 
 \bibitem[Tanenbaum and Wetherall(2011)]{tanenbaum_computer_2011}
 A.~S. Tanenbaum and D.~Wetherall.
