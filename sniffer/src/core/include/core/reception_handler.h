@@ -53,11 +53,15 @@ class ReceptionHandler {
       const sniffer::common::serialization::SerializationMgr& manager,
       layers::Layer* layer);
 
-  void Handle(int next_header_id, sniffer::protocols::SniffedPacket* packet,
-              sniffer::common::serialization::SerializedObject* acc);
+  void Handle(std::string prev_header_name, int current_header_id,
+              sniffer::protocols::SniffedPacket* packet,
+              sniffer::common::serialization::SerializedObject* composite);
+
+  sniffer::common::serialization::SerializationMgr serializer() const;
 
  private:
   layers::Layer* layer_;
+
   sniffer::common::serialization::SerializationMgr serializer_;
 };
 

@@ -28,20 +28,32 @@ namespace sniffer {
 
 namespace core {
 
+/**
+ * @brief Constructs a PacketSniffer object.
+ *
+ * @param interface The interface to sniff on.
+ * @param filter The filter to apply.
+ * @param config The ConfigurationMgr to use when fetching config values.
+ * @param stack The LayerStack to use for parsing.
+ * @param server The server for which the sniffer is created.
+ */
 PacketSniffer::PacketSniffer(
-    std::vector<std::string> interfaces, std::vector<std::string> filters,
+    const std::string& interface, const std::string& filter,
     const sniffer::common::config::ConfigurationMgr& config,
     const LayerStack& stack, Server* server)
-    : interfaces_{interfaces},
-      filters_{filters},
+    : interface_{interface},
+      filter_{filter},
       config_manager_{config},
       stack_{stack},
       server_{server} {}
 
+/**
+ * @brief Starts the packet sniffer.
+ */
 void PacketSniffer::Start() {
   PrepareInterfaces();
 
-  if (!filters_.empty()) {
+  if (!filter_.empty()) {
     ParseFilters();
     ApplyFilters();
   }

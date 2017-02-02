@@ -28,25 +28,60 @@ namespace sniffer {
 
 namespace core {
 
+/**
+ * @brief Constructs an Interface object.
+ *
+ * @param name The name of the interface, e.g. eth0
+ * @param desc Description of the interface
+ */
 Interface::Interface(const char* name, const char* desc)
     : name_{name ? name : std::string()},
       description_{desc ? desc : std::string()} {}
 
+/**
+ * @brief Destructs an Interface object.
+ */
 Interface::~Interface() {}
 
+/**
+ * @brief Retrieves the name of this interface.
+ *
+ * @return String representation of the interface name.
+ */
 std::string Interface::name() const { return name_; }
 
+/**
+ * @brief Retrieves the description of this interface.
+ *
+ * @return String representing the description for this interface.
+ */
 std::string Interface::description() const { return description_; }
 
-void Interface::set_addresses(std::vector<InterfaceAddress> addresses) {
-  addresses_ = addresses;
+/**
+ * @brief Adds an address to the collection of addresses for the interface.
+ *
+ * @param addresses
+ */
+void Interface::AddAddress(const InterfaceAddress& address) {
+  addresses_.push_back(address);
 }
 
-// TODO(arnaudoff): Replace with iterator
+/**
+ * @brief Retrieves the collection of addresses for this interface.
+ *
+ * @return A collection of addresses for the interface if any.
+ */
 std::vector<InterfaceAddress> Interface::addresses() const {
   return addresses_;
 }
 
+/**
+ * @brief Serializes an interface.
+ *
+ * @param serializer The serializer to use for serializing the object.
+ *
+ * @return SerializedObject containing serialized interface fields.
+ */
 sniffer::common::serialization::SerializedObject Interface::Serialize(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
   auto obj = serializer.CreateObject();
@@ -67,6 +102,12 @@ sniffer::common::serialization::SerializedObject Interface::Serialize(
   return obj;
 }
 
+/**
+ * @brief Retrieves the entity name of the Interface, i.e. the name of the
+ * interface.
+ *
+ * @return The entity name of the Interface.
+ */
 std::string Interface::entity_name() const { return name(); }
 
 }  // namespace core

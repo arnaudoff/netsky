@@ -33,8 +33,8 @@ namespace core {
 
 class PcapPacketSniffer : public PacketSniffer {
  public:
-  PcapPacketSniffer(std::vector<std::string> interfaces,
-                    std::vector<std::string> filters,
+  PcapPacketSniffer(const std::string& interface,
+                    const std::string& filter,
                     const sniffer::common::config::ConfigurationMgr& config,
                     const LayerStack& stack, Server* server);
 

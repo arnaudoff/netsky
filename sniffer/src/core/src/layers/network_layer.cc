@@ -18,6 +18,8 @@
 
 #include "core/layers/network_layer.h"
 
+#include <string>
+
 #include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
 #include "protocols/sniffed_packet.h"
@@ -28,15 +30,33 @@ namespace core {
 
 namespace layers {
 
+/**
+ * @brief Constructs a NetworkLayer object.
+ *
+ * @param name Name of the layer.
+ * @param mgr The serialization manager to use.
+ */
 NetworkLayer::NetworkLayer(
     const std::string& name,
     const sniffer::common::serialization::SerializationMgr& mgr)
     : Layer{name, mgr} {}
 
+/**
+ * @brief Handles the reception of a SniffedPacket on the NetworkLayer.
+ *
+ * @param prev_header_name The name of the lower-layer header.
+ * @param current_header_id ID extracted from the lower layer.
+ * @param packet A raw pointer to the packet to interpret.
+ * @param composite A pointer to the SerializedObject that is used as a
+ * composite object for storage of the interpreted fields while going up
+ * the stack.
+ */
 void NetworkLayer::HandleReception(
-    int next_header_id, sniffer::protocols::SniffedPacket* packet,
-    sniffer::common::serialization::SerializedObject* acc) {
-  reception_handler_.Handle(next_header_id, packet, acc);
+    std::string prev_header_name, int current_header_id,
+    sniffer::protocols::SniffedPacket* packet,
+    sniffer::common::serialization::SerializedObject* composite) {
+  reception_handler_.Handle(prev_header_name, current_header_id, packet,
+                            composite);
 }
 
 }  // namespace layers

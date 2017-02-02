@@ -16,38 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_HAS_HOST_COMMAND_H_
-#define SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_HAS_HOST_COMMAND_H_
+#ifndef SNIFFER_SRC_CORE_INCLUDE_CORE_HEX_ASCII_PAYLOAD_INTERPRETER_H_
+#define SNIFFER_SRC_CORE_INCLUDE_CORE_HEX_ASCII_PAYLOAD_INTERPRETER_H_
 
-#include <map>
 #include <string>
-#include <vector>
 
-#include "common/policy_bindings.h"
-#include "core/server_commands/server_command.h"
+#include "core/payload_interpreter.h"
 
 namespace sniffer {
 
 namespace core {
 
-namespace server_commands {
-
-class HasHostCommand : public ServerCommand {
+class HexAsciiPayloadInterpreter : public PayloadInterpreter {
  public:
-  HasHostCommand(
-      Server* server,
-      const sniffer::common::serialization::SerializationMgr& serializer);
+  std::string Interpret(const u_char* payload, int length) override;
 
-  ~HasHostCommand() {}
+  ~HexAsciiPayloadInterpreter() override;
 
-  void Execute(int connection_id,
-               std::map<std::string, std::string> args) override;
+ private:
+  const int kBytesPerLine = 16;
+
+  std::string InterpretLine(const u_char* payload, int length, int offset);
 };
-
-}  // namespace server_commands
 
 }  // namespace core
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_SERVER_COMMANDS_HAS_HOST_COMMAND_H_
+#endif  // SNIFFER_SRC_CORE_INCLUDE_CORE_HEX_ASCII_PAYLOAD_INTERPRETER_H_
+

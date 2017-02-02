@@ -20,6 +20,7 @@
 
 #include "common/policy_bindings.h"
 #include "common/serialization/serialized_object.h"
+#include "core/payload_interpreter.h"
 #include "protocols/sniffed_packet.h"
 
 namespace sniffer {
@@ -28,15 +29,45 @@ namespace core {
 
 namespace layers {
 
+/**
+ * @brief Constructs an ApplicationLayer object.
+ *
+ * @param name Name of the layer.
+ * @param mgr The serialization manager to use.
+ * @param interpreter The payload interpreter to use, e.g.
+ * HexAsciiPayloadInterpreter.
+ */
 ApplicationLayer::ApplicationLayer(
     const std::string& name,
-    const sniffer::common::serialization::SerializationMgr& mgr)
-    : Layer{name, mgr} {}
+    const sniffer::common::serialization::SerializationMgr& mgr,
+    std::unique_ptr<PayloadInterpreter> interpreter)
+    : Layer{name, mgr}, interpreter_{std::move(interpreter)} {}
 
+/**
+ * @brief Handles the reception of a SniffedPacket on the ApplicationLayer.
+ * Since the rest of the packet is dissected, the only thing left is to
+ * interpret the payload and add it to the composite object.
+ *
+ * @param prev_header_name The name of the lower-layer header.
+ * @param current_header_id ID extracted from the lower layer.
+ * @param packet A raw pointer to the packet to interpret.
+ * @param composite A pointer to the SerializedObject that is used as a
+ * composite object for storage of the interpreted fields while going up
+ * the stack.
+ */
 void ApplicationLayer::HandleReception(
-    int next_header_id, sniffer::protocols::SniffedPacket* packet,
-    sniffer::common::serialization::SerializedObject* acc) {
-  reception_handler_.Handle(next_header_id, packet, acc);
+    std::string prev_header_name, int current_header_id,
+    sniffer::protocols::SniffedPacket* packet,
+    sniffer::common::serialization::SerializedObject* composite) {
+  if (packet->payload_length() > 0) {
+    auto serializer = reception_handler_.serializer();
+    auto payload_obj = serializer.CreateObject();
+
+    auto interpreted_payload =
+        interpreter_->Interpret(packet->Body(), packet->payload_length());
+    std::cout << "PAYLOAD LENGTH PAYLOAD LENGTH: " << interpreted_payload.length() << std::endl;
+    std::cout << interpreted_payload << std::endl;
+  }
 }
 
 }  // namespace layers

@@ -44,26 +44,13 @@ HasHostCommand::HasHostCommand(
     : ServerCommand{"has-host", server, serializer, false} {}
 
 /**
- * @brief Parses the arguments for the has-host command.
- *
- * @param data The raw data message.
- *
- * @return An empty map; so far has-host requires no arguments.
- */
-std::map<std::string, std::vector<std::string>> HasHostCommand::ParseArguments(
-    const std::string& data) const {
-  std::map<std::string, std::vector<std::string>> arguments{};
-  return arguments;
-}
-
-/**
  * @brief Checks whether the server has an ongoing sniffing session.
  *
  * @param connection_id Unused, kept to keep up with the interface.
  * @param args Also unused.
  */
-void HasHostCommand::Execute(
-    int connection_id, std::map<std::string, std::vector<std::string>> args) {
+void HasHostCommand::Execute(int connection_id,
+                             std::map<std::string, std::string> args) {
   sniffer::core::response_models::HasHostResponseModel model{
       server_->has_host_connection()};
   auto model_obj = model.Serialize(serializer_);

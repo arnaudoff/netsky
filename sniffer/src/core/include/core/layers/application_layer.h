@@ -26,17 +26,24 @@ namespace sniffer {
 
 namespace core {
 
+class PayloadInterpreter;
+
 namespace layers {
 
 class ApplicationLayer : public Layer {
  public:
   ApplicationLayer(
       const std::string& name,
-      const sniffer::common::serialization::SerializationMgr& serializer);
+      const sniffer::common::serialization::SerializationMgr& serializer,
+      std::unique_ptr<PayloadInterpreter> intepreter);
 
   void HandleReception(
-      int next_header_id, sniffer::protocols::SniffedPacket* packet,
-      sniffer::common::serialization::SerializedObject* acc) override;
+      std::string prev_header_name, int current_header_id,
+      sniffer::protocols::SniffedPacket* packet,
+      sniffer::common::serialization::SerializedObject* composite) override;
+
+ private:
+  std::unique_ptr<PayloadInterpreter> interpreter_;
 };
 
 }  // namespace layers

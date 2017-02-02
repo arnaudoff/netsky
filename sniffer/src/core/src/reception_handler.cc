@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Copyright (C) 2017  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -39,9 +39,9 @@ namespace core {
 /**
  * @brief Constructs a ReceptionHandler object
  *
- * @param serializer A const reference to the SerializationMgr to use while
- * serializing values into accumulated object.
- * @param layer A raw pointer to the current layer for which the handler is
+ * @param serializer A reference to the SerializationMgr to use while
+ * serializing values into the composite object.
+ * @param layer A pointer to the current layer for which the handler is
  * is acting upon.
  */
 ReceptionHandler::ReceptionHandler(
@@ -50,42 +50,65 @@ ReceptionHandler::ReceptionHandler(
     : serializer_{serializer}, layer_{layer} {}
 
 /**
+ * @brief Retrieves the serialization manager used for this instance.
+ *
+ * @return The serialization manager that is used.
+ */
+sniffer::common::serialization::SerializationMgr ReceptionHandler::serializer()
+    const {
+  return serializer_;
+}
+
+/**
  * @brief Handles the reception of a SniffedPacket.
  *
- * @param next_header_id An integer that is mapped to the header type.
+ * @param prev_header_name The name of the lower-layer header.
+ * @param current_header_id ID extracted from the lower layer.
  * @param packet A raw pointer to the packet to interpret.
- * @param accumulator_obj A pointer to the SerializedObject that is used as
- * accumulator for storage of the interpreted fields while going up the stack.
+ * @param composite A pointer to the SerializedObject that is used as a
+ * composite object for storage of the interpreted fields while going up
+ * the stack.
  */
 void ReceptionHandler::Handle(
-    int next_header_id, sniffer::protocols::SniffedPacket* packet,
-    sniffer::common::serialization::SerializedObject* accumulator_obj) {
-  auto& supported_headers = layer_->supported_headers();
+    std::string prev_header_name, int current_header_id,
+    sniffer::protocols::SniffedPacket* packet,
+    sniffer::common::serialization::SerializedObject* composite) {
+  sniffer::protocols::headers::metadata::HeaderMetadata* current_header_md =
+      nullptr;
 
-  // Check if the current layer contains this header ID as supported
-  auto header_metadata =
-      std::find_if(supported_headers.begin(), supported_headers.end(),
-                   [next_header_id](const auto& hm) {
-                     return hm.get()->id() == next_header_id;
-                   });
+  // Check if the header metadata has support for the lower layer protocol and
+  // if it does, check whether its ID matches with the one parsed and passed by
+  // the lower layer.
+  for (const auto& hm : layer_->supported_headers()) {
+    if (hm.get()->lower_layer_id_mappings().count(prev_header_name) > 0 &&
+        hm.get()->lower_layer_id_mappings()[prev_header_name] ==
+            current_header_id) {
+      current_header_md = hm.get();
+    }
+  }
 
-  // The layer has metadata for a header with such an ID
-  if (header_metadata != supported_headers.end()) {
-    std::string name = header_metadata->get()->name();
+  if (current_header_md) {
+    std::string name = current_header_md->name();
 
-    // In order to initialize the header, we need to know its exact length.
-    int length = 0;
-    if (header_metadata->get()->has_variable_length()) {
-      // In this case, we have to peek into the raw data before forming
+    if (current_header_md->has_variable_length()) {
       const u_char* len_field =
-          packet->Peek(header_metadata->get()->length_field_offset());
-      length = header_metadata->get()->CalculateLength(len_field);
-    } else {
-      // Otherwise this is a casual fixed-length header such as Ethernet
-      length = header_metadata->get()->length();
+          packet->Peek(current_header_md->length_field_offset());
+      current_header_md->set_length(len_field);
+
+      // We have malformed PDU, e.g. an IP header less than 20 bytes, a TCP
+      // header less than 20 bytes etc.
+      if (current_header_md->length() < current_header_md->minimum_length()) {
+        return;
+      }
     }
 
-    // Now that we have the name and the size of the header, create an
+    int length = current_header_md->length();
+
+    if (current_header_md->accounts_for_payload_length()) {
+      current_header_md->AccountForPayloadLength(packet);
+    }
+
+    // Now that we have the name and the length of the header, create an
     // object of its type and pass it the raw data.
     std::unique_ptr<sniffer::protocols::headers::Header> header_instance{
         registry::Registry<sniffer::protocols::headers::Header, int,
@@ -93,31 +116,25 @@ void ReceptionHandler::Handle(
                                                                        length,
                                                                        packet)};
 
-    // Finally, serialize the parsed fields of the header and append
-    // the generated object to the accumulating object.
-    auto serialized_obj = header_instance->Serialize(serializer_);
-    if (!serializer_.ObjectExists(*accumulator_obj, "data")) {
-      serializer_.SetObject("data", serialized_obj, accumulator_obj);
+    auto serialized_header = header_instance->Serialize(serializer_);
+    if (!serializer_.ObjectExists(*composite, "data")) {
+      serializer_.SetObject("data", serialized_header, composite);
     } else {
       serializer_.AppendVariableDepthObject("data", "children", 3,
-                                            serialized_obj, accumulator_obj);
+                                            serialized_header, composite);
     }
 
-    // Add the summary for this layer
-    layer_->AppendSummary(serializer_, header_instance.get(), accumulator_obj);
+    layer_->AppendSummary(header_instance.get(), composite);
 
     // Continue up the layer stack
     layers::Layer* upper_layer = layer_->upper_layer();
     if (upper_layer) {
-      upper_layer->HandleReception(header_instance->next_header_id(), packet,
-                                   accumulator_obj);
+      upper_layer->HandleReception(name, header_instance->next_header_id(),
+                                   packet, composite);
     } else {
       // We have reached the top of the layer stack, nothing more to interpret
       return;
     }
-  } else {
-    // The header is not supported yet.
-    return;
   }
 }
 

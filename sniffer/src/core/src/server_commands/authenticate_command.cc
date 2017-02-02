@@ -50,12 +50,12 @@ AuthenticateCommand::AuthenticateCommand(
  *
  * @return
  */
-std::map<std::string, std::vector<std::string>>
+std::map<std::string, std::string>
 AuthenticateCommand::ParseArguments(const std::string& data) const {
-  std::map<std::string, std::vector<std::string>> arguments{};
+  std::map<std::string, std::string> arguments{};
 
   sniffer::common::serialization::SerializedObject data_obj {data};
-  arguments["password"] = serializer_.ExtractValue<std::vector<std::string>>(
+  arguments["password"] = serializer_.ExtractValue<std::string>(
       data_obj, ServerCommand::name(), "password");
   return arguments;
 }
@@ -67,8 +67,8 @@ AuthenticateCommand::ParseArguments(const std::string& data) const {
  * @param args Command arguments.
  */
 void AuthenticateCommand::Execute(
-    int connection_id, std::map<std::string, std::vector<std::string>> args) {
-  auto is_authenticated = (server_->password() == args["password"][0]);
+    int connection_id, std::map<std::string, std::string> args) {
+  auto is_authenticated = (server_->password() == args["password"]);
 
   sniffer::core::response_models::AuthenticateResponseModel model{is_authenticated};
   auto model_obj = model.Serialize(serializer_);

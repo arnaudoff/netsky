@@ -62,7 +62,7 @@ bool ServerCommand::secure() const { return secure_; }
 /**
  * @brief Checks whether a certain message is a "command" message, e.g.
  *
- * { 'start-sniffer': { 'interfaces': ['eth0', 'wlan0'] } }
+ * { 'start-sniffer': { 'interface': 'eth0' } }
  *
  * would match for a command registered with name 'start-sniffer'.
  *
@@ -73,6 +73,17 @@ bool ServerCommand::secure() const { return secure_; }
 bool ServerCommand::Matches(const std::string& data) const {
   sniffer::common::serialization::SerializedObject data_obj{data};
   return serializer_.ObjectExists(data_obj, name());
+}
+
+/**
+ * @brief Default implementation for commands with no arguments.
+ *
+ * @return An empty map.
+ */
+std::map<std::string, std::string> ServerCommand::ParseArguments(
+    const std::string& data) const {
+  std::map<std::string, std::string> empty;
+  return empty;
 }
 
 }  // namespace server_commands

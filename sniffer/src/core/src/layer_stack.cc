@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Copyright (C) 2017  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,19 +35,31 @@ LayerStack::LayerStack() : highest_layer_{nullptr}, lowest_layer_{nullptr} {}
  * @brief Handles the reception of a SniffedPacket by defering it to the lowest
  * layer of the LayerStack.
  *
- * @param next_header_id The header ID of the next header.
- * @param packet A pointer to the SniffedPacket object.
- * @param accumulator The object to use to accumulate the parsed properties.
- */
+ * @param prev_header_name The name of the lower-layer header.
+ * @param current_header_id ID extracted from the lower layer (physical).
+ * @param packet A raw pointer to the packet to interpret.
+ * @param composite A pointer to the SerializedObject that is used as a
+ * composite object for storage of the interpreted fields while going up
+ * the stack.
+*/
 void LayerStack::HandleReception(
-    int next_header_id, sniffer::protocols::SniffedPacket* packet,
-    sniffer::common::serialization::SerializedObject* accumulator) {
+    std::string prev_header_name, int current_header_id,
+    sniffer::protocols::SniffedPacket* packet,
+    sniffer::common::serialization::SerializedObject* composite) {
   if (lowest_layer_) {
-    lowest_layer_->HandleReception(next_header_id, packet, accumulator);
+    lowest_layer_->HandleReception(prev_header_name, current_header_id, packet,
+                                   composite);
   }
-  // else throw
 }
 
+/**
+ * @brief Adds a layer on the Position relative to existing_layer.
+ *
+ * @param layer Pointer to the layer to add.
+ * @param existing_layer Pointer to the existing layer.
+ * @param position The position relative to which to apply the layer to existing
+ * layer.
+ */
 void LayerStack::AddLayer(layers::Layer* layer, layers::Layer* existing_layer,
                           LayerStack::Position position) {
   layer->set_lower_layer(nullptr);
@@ -97,6 +109,11 @@ void LayerStack::AddLayer(layers::Layer* layer, layers::Layer* existing_layer,
   }
 }
 
+/**
+ * @brief Removes a layer from the stack.
+ *
+ * @param layer Pointer to the layer to remove.
+ */
 void LayerStack::RemoveLayer(layers::Layer* layer) {
   if (layer == highest_layer_) {
     highest_layer_ = layer->lower_layer();

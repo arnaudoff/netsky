@@ -44,11 +44,8 @@ class RetrieveInterfacesCommand : public ServerCommand {
 
   ~RetrieveInterfacesCommand() {}
 
-  std::map<std::string, std::vector<std::string>> ParseArguments(
-      const std::string& data) const override;
-
   void Execute(int connection_id,
-               std::map<std::string, std::vector<std::string>> args) override;
+               std::map<std::string, std::string> args) override;
 
  private:
   std::unique_ptr<InterfaceRetriever> interface_retriever_;

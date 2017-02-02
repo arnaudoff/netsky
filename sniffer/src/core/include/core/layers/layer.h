@@ -68,8 +68,9 @@ class Layer {
   virtual ~Layer() {}
 
   virtual void HandleReception(
-      int next_header_id, sniffer::protocols::SniffedPacket* packet,
-      sniffer::common::serialization::SerializedObject* acc) = 0;
+      std::string prev_header_name, int current_header_id,
+      sniffer::protocols::SniffedPacket* packet,
+      sniffer::common::serialization::SerializedObject* composite) = 0;
 
   Layer* lower_layer() const;
 
@@ -90,9 +91,8 @@ class Layer {
           sniffer::protocols::headers::metadata::HeaderMetadata>>&& headers);
 
   void AppendSummary(
-      const sniffer::common::serialization::SerializationMgr& serializer,
       sniffer::protocols::headers::Header* header,
-      sniffer::common::serialization::SerializedObject* acc) const;
+      sniffer::common::serialization::SerializedObject* composite) const;
 
  protected:
   ReceptionHandler reception_handler_;

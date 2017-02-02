@@ -35,6 +35,13 @@ namespace core {
 
 namespace server_commands {
 
+/**
+ * @brief Constructs a RetrieveInterfacesCommand object.
+ *
+ * @param server The server to use.
+ * @param serializer The SerializationManager to use.
+ * @param retriever The InterfaceRetriever to use.
+ */
 RetrieveInterfacesCommand::RetrieveInterfacesCommand(
     Server* server,
     const sniffer::common::serialization::SerializationMgr& serializer,
@@ -42,14 +49,16 @@ RetrieveInterfacesCommand::RetrieveInterfacesCommand(
     : ServerCommand{"retrieve-interfaces", server, serializer, true},
       interface_retriever_{std::move(retriever)} {}
 
-std::map<std::string, std::vector<std::string>>
-RetrieveInterfacesCommand::ParseArguments(const std::string& data) const {
-  std::map<std::string, std::vector<std::string>> arguments{};
-  return arguments;
-}
-
+/**
+ * @brief Retrieves the interfaces from the underlying InterfaceRetriever,
+ * instantiates a response model, serializes it and unicasts the interfaces to
+ * the client that requested their retrieval.
+ *
+ * @param connection_id The connection ID of the client.
+ * @param args
+ */
 void RetrieveInterfacesCommand::Execute(
-    int connection_id, std::map<std::string, std::vector<std::string>> args) {
+    int connection_id, std::map<std::string, std::string> args) {
   auto interfaces = interface_retriever_->Retrieve();
 
   sniffer::core::response_models::RetrieveInterfacesResponseModel model{

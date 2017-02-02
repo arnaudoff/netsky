@@ -44,27 +44,14 @@ KillCommand::KillCommand(
     : ServerCommand{"kill", server, serializer, true} {}
 
 /**
- * @brief Parses the arguments for the kill command.
- *
- * @param data The raw data message.
- *
- * @return An empty map; so far kill requires no arguments.
- */
-std::map<std::string, std::vector<std::string>> KillCommand::ParseArguments(
-    const std::string& data) const {
-  std::map<std::string, std::vector<std::string>> arguments{};
-  return arguments;
-}
-
-/**
  * @brief Stops the underlying implementation of a Server.
  *
  * @param connection_id Unused, kept to keep up with the interface.
  *
  * @param args Also unused.
  */
-void KillCommand::Execute(
-    int connection_id, std::map<std::string, std::vector<std::string>> args) {
+void KillCommand::Execute(int connection_id,
+                          std::map<std::string, std::string> args) {
   server_->Stop();
 }
 

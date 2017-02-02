@@ -48,12 +48,12 @@ class ServerCommand {
 
   bool Matches(const std::string& data) const;
 
-  virtual std::map<std::string, std::vector<std::string>> ParseArguments(
-      const std::string& data) const = 0;
+  virtual std::map<std::string, std::string> ParseArguments(
+      const std::string& data) const;
 
   virtual void Execute(
       int connection_id,
-      std::map<std::string, std::vector<std::string>> args) = 0;
+      std::map<std::string, std::string> args) = 0;
 
  protected:
   std::string name_;

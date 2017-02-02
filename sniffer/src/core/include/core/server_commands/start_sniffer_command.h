@@ -42,11 +42,11 @@ class StartSnifferCommand : public ServerCommand {
 
   ~StartSnifferCommand() {}
 
-  std::map<std::string, std::vector<std::string>> ParseArguments(
+  std::map<std::string, std::string> ParseArguments(
       const std::string& data) const override;
 
   void Execute(int connection_id,
-               std::map<std::string, std::vector<std::string>> args) override;
+               std::map<std::string, std::string> args) override;
 
  private:
   LayerStack layer_stack_;

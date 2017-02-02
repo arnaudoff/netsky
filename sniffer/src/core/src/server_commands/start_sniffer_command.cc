@@ -51,8 +51,8 @@ StartSnifferCommand::StartSnifferCommand(
     Server* server,
     const sniffer::common::serialization::SerializationMgr& serializer,
     const LayerStack& ls)
-    : layer_stack_{ls}, ServerCommand{"start-sniffer", server, serializer, true}
-{}
+    : layer_stack_{ls},
+      ServerCommand{"start-sniffer", server, serializer, true} {}
 
 /**
  * @brief Parses the arguments required for the sniffer to be started.
@@ -61,17 +61,17 @@ StartSnifferCommand::StartSnifferCommand(
  *
  * @return Map with arguments
  */
-std::map<std::string, std::vector<std::string>>
-StartSnifferCommand::ParseArguments(const std::string& data) const {
-  std::map<std::string, std::vector<std::string>> arguments;
+std::map<std::string, std::string> StartSnifferCommand::ParseArguments(
+    const std::string& data) const {
+  std::map<std::string, std::string> arguments;
 
   sniffer::common::serialization::SerializedObject data_obj{data};
 
-  arguments["interfaces"] = serializer_.ExtractValue<std::vector<std::string>>(
-      data_obj, ServerCommand::name(), "interfaces");
+  arguments["interface"] = serializer_.ExtractValue<std::string>(
+      data_obj, ServerCommand::name(), "interface");
 
-  arguments["filters"] = serializer_.ExtractValue<std::vector<std::string>>(
-      data_obj, ServerCommand::name(), "filters");
+  arguments["filter"] = serializer_.ExtractValue<std::string>(
+      data_obj, ServerCommand::name(), "filter");
 
   return arguments;
 }
@@ -83,14 +83,13 @@ StartSnifferCommand::ParseArguments(const std::string& data) const {
  * command, also the future host connection for the sniffer.
  * @param args The parsed arguments for the StartSnifferCommand.
  */
-void StartSnifferCommand::Execute(
-    int connection_id, std::map<std::string, std::vector<std::string>> args) {
-  auto interfaces = args["interfaces"];
-  auto filters = args["filters"];
+void StartSnifferCommand::Execute(int connection_id,
+                                  std::map<std::string, std::string> args) {
+  auto interface = args["interface"];
+  auto filter = args["filter"];
 
   std::unique_ptr<PacketSniffer> sniffer = std::make_unique<PcapPacketSniffer>(
-      interfaces, filters, server_->config_manager(), layer_stack_,
-      server_);
+      interface, filter, server_->config_manager(), layer_stack_, server_);
 
   server_->set_sniffer(std::move(sniffer));
   server_->set_host_connection(connection_id);

@@ -41,7 +41,7 @@ class Interface : public sniffer::common::serialization::SerializableEntity {
 
   std::string description() const;
 
-  void set_addresses(std::vector<InterfaceAddress> addresses);
+  void AddAddress(const InterfaceAddress& address);
 
   std::vector<InterfaceAddress> addresses() const;
 

@@ -35,8 +35,9 @@ class NetworkLayer : public Layer {
       const sniffer::common::serialization::SerializationMgr& serializer);
 
   void HandleReception(
-      int next_header_id, sniffer::protocols::SniffedPacket* packet,
-      sniffer::common::serialization::SerializedObject* acc) override;
+      std::string prev_header_name, int current_header_id,
+      sniffer::protocols::SniffedPacket* packet,
+      sniffer::common::serialization::SerializedObject* composite) override;
 };
 
 }  // namespace layers

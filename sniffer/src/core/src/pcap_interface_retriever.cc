@@ -35,13 +35,22 @@ namespace sniffer {
 
 namespace core {
 
+/**
+ * @brief Constructs a PcapInterfaceRetriever object.
+ *
+ * @param factory The IpAddressFactory to use for creating IP addresses for
+ * the interfaces.
+ */
 PcapInterfaceRetriever::PcapInterfaceRetriever(
     const sniffer::common::addressing::IpAddressFactory& factory)
     : InterfaceRetriever{factory} {}
 
+/**
+ * @brief Retrieves a collection of Interface objects.
+ *
+ * @return Collection of interfaces.
+ */
 std::vector<Interface> PcapInterfaceRetriever::Retrieve() {
-  spdlog::get("console")->info("Retrieving pcap interfaces..");
-
   pcap_if_t* interfaces;
   pcap_if_t* current_interface;
   char error_buffer[PCAP_ERRBUF_SIZE];
@@ -59,49 +68,23 @@ std::vector<Interface> PcapInterfaceRetriever::Retrieve() {
     char* name = current_interface->name;
     char* description = current_interface->description;
 
-    spdlog::get("console")->info("Retrieved {0} (desc: {1})", name,
-                                 description ? description : "none");
-
     Interface interface{name, description};
 
     pcap_addr_t* current_if_addresses = current_interface->addresses;
     pcap_addr_t* current_if_address;
 
-    std::vector<InterfaceAddress> interface_addresses;
-
     for (current_if_address = current_if_addresses; current_if_address;
          current_if_address = current_if_address->next) {
       auto ip_addr = ip_addr_factory_.Parse(current_if_address->addr);
-      if (ip_addr) {
-        spdlog::get("console")->info("Retrieved IP address for {0}: {1}", name,
-                                     ip_addr->data());
-      }
-
       auto broad_addr = ip_addr_factory_.Parse(current_if_address->broadaddr);
-      if (broad_addr) {
-        spdlog::get("console")->info("Retrieved BA for {0}: {1}", name,
-                                     broad_addr->data());
-      }
-
       auto dst_addr = ip_addr_factory_.Parse(current_if_address->dstaddr);
-      if (dst_addr) {
-        spdlog::get("console")->info("Retrieved DA for {0}: {1}", name,
-                                     dst_addr->data());
-      }
-
       auto netmask = ip_addr_factory_.Parse(current_if_address->netmask);
-      if (netmask) {
-        spdlog::get("console")->info("Retrieved SM for {0}: {1}", name,
-                                     netmask->data());
-      }
 
       InterfaceAddress if_addr{std::move(ip_addr), std::move(broad_addr),
                                std::move(dst_addr), std::move(netmask)};
 
-      interface_addresses.push_back(std::move(if_addr));
+      interface.AddAddress(std::move(if_addr));
     }
-
-    interface.set_addresses(interface_addresses);
 
     retrieved_interfaces.push_back(interface);
   }

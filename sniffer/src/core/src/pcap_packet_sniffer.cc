@@ -42,17 +42,17 @@ namespace core {
 /**
  * @brief Constructs a packet sniffer based on libpcap.
  *
- * @param interfaces The interfaces to sniff on
- * @param filters Filters to apply
- * @param config An instance of a configuration manager
- * @param stack The LayerStack to use for the packet parsing process
- * @param server A pointer to the server which to use for transmission
+ * @param interface The interface to sniff on.
+ * @param filter Filter to apply.
+ * @param config An instance of a configuration manager.
+ * @param stack The LayerStack to use for the packet parsing process.
+ * @param server A pointer to the server which to use for transmission.
  */
 PcapPacketSniffer::PcapPacketSniffer(
-    std::vector<std::string> interfaces, std::vector<std::string> filters,
+    const std::string& interface, const std::string& filter,
     const sniffer::common::config::ConfigurationMgr& config,
     const LayerStack& stack, Server* server)
-    : PacketSniffer(interfaces, filters, config, stack, server) {}
+    : PacketSniffer(interface, filter, config, stack, server) {}
 
 /**
  * @brief Prepares the physical interfaces to sniff on
@@ -60,30 +60,28 @@ PcapPacketSniffer::PcapPacketSniffer(
 void PcapPacketSniffer::PrepareInterfaces() {
   char error_buffer[PCAP_ERRBUF_SIZE];
 
-  // TODO(arnaudoff): Fix when multiple interfaces are supported
-  const char* interface_name = interfaces_[0].c_str();
+  const char* interface = interface_.c_str();
 
-  if (pcap_lookupnet(interface_name, &network_, &subnet_mask_, error_buffer) ==
-      -1) {
+  if (pcap_lookupnet(interface, &network_, &subnet_mask_, error_buffer) == -1) {
     spdlog::get("console")->warn("Could not get netmask for device {0}: {1}",
-                                 interface_name, error_buffer);
+                                 interface, error_buffer);
     network_ = 0;
     subnet_mask_ = 0;
   }
 
   int snap_len = config_manager_.ExtractValue<int>("sniffer", "snap_len");
 
-  handle_ = pcap_open_live(interface_name, snap_len, 1, 1000, error_buffer);
+  handle_ = pcap_open_live(interface, snap_len, 1, 1000, error_buffer);
   if (handle_ == NULL) {
     std::ostringstream exception_message;
-    exception_message << "Couldn't open device " << interface_name << ": "
+    exception_message << "Couldn't open device " << interface << ": "
                       << error_buffer;
     throw SnifferException{exception_message.str()};
   }
 
   if (pcap_datalink(handle_) != DLT_EN10MB) {
     std::ostringstream exception_message;
-    exception_message << "Not an Ethernet device: " << interface_name;
+    exception_message << "Not an Ethernet device: " << interface;
     throw SnifferException{exception_message.str()};
   }
 }
@@ -92,15 +90,10 @@ void PcapPacketSniffer::PrepareInterfaces() {
  * @brief Parses any filters by passing them to pcap_compile
  */
 void PcapPacketSniffer::ParseFilters() {
-  std::ostringstream filters;
-  std::copy(filters_.begin(), filters_.end() - 1,
-            std::ostream_iterator<std::string>(filters, ";"));
-  filters << filters_.back();
-
-  if (pcap_compile(handle_, &parsed_filters_, filters.str().c_str(), 0,
-                   network_) == -1) {
+  if (pcap_compile(handle_, &parsed_filters_, filter_.c_str(), 0, network_) ==
+      -1) {
     std::ostringstream exception_message;
-    exception_message << "Couldn't parse filters " << filters.str() << ": "
+    exception_message << "Couldn't parse filter " << filter_ << ": "
                       << pcap_geterr(handle_);
     throw SnifferException{exception_message.str()};
   }
@@ -112,10 +105,9 @@ void PcapPacketSniffer::ParseFilters() {
 void PcapPacketSniffer::ApplyFilters() {
   if (pcap_setfilter(handle_, &parsed_filters_) == -1) {
     std::ostringstream exception_message;
-    exception_message << "Couldn't apply filters ";
-    std::copy(filters_.begin(), filters_.end() - 1,
-              std::ostream_iterator<std::string>(exception_message, ","));
-    exception_message << filters_.back() << ": " << pcap_geterr(handle_);
+    exception_message << "Couldn't apply filter " << filter_ << ": "
+                      << pcap_geterr(handle_);
+
     throw SnifferException{exception_message.str()};
   }
 }
@@ -129,6 +121,14 @@ void PcapPacketSniffer::Sniff() {
             OnPacketReceived, reinterpret_cast<u_char*>(this));
 }
 
+/**
+ * @brief This routine is passed to libpcap as a callback that it invokes once a
+ * packet is received on the link.
+ *
+ * @param args
+ * @param header
+ * @param packet
+ */
 void PcapPacketSniffer::OnPacketReceived(u_char* args,
                                          const struct pcap_pkthdr* header,
                                          const u_char* packet) {
@@ -137,21 +137,26 @@ void PcapPacketSniffer::OnPacketReceived(u_char* args,
 }
 
 /**
- * @brief An internal callback called by the static one expected by libpcap
+ * @brief An internal callback called by the static one expected by libpcap.
+ * It forms a SniffedPacket and a composite serialized object, passing both of
+ * them to the layer stack.
  *
  * @param header Pointer to a pcap_pkthdr which is some header metadata
  * @param packet Pointer to the beginning of a packet
  */
 void PcapPacketSniffer::OnPacketReceivedInternal(
     const struct pcap_pkthdr* header, const u_char* packet) {
-  sniffer::protocols::PacketRegion body{0, static_cast<int>(header->caplen)};
+  namespace protocols = sniffer::protocols;
 
-  sniffer::protocols::SniffedPacket packet_obj{packet, body};
-  sniffer::common::serialization::SerializedObject accumulator_obj{"{}"};
+  protocols::PacketRegion body{0, static_cast<int>(header->caplen)};
+  protocols::SniffedPacket sniffed_packet{packet, body};
+
+  sniffer::common::serialization::SerializedObject composite{"{}"};
 
   // http://www.tcpdump.org/linktypes.html
-  stack_.HandleReception(1, &packet_obj, &accumulator_obj);
-  server_->AuthenticatedBroadcast(accumulator_obj.data());
+  stack_.HandleReception("physical", 1, &sniffed_packet, &composite);
+
+  server_->AuthenticatedBroadcast(composite.data());
 }
 
 /**

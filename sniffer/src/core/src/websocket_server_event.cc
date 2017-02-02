@@ -27,10 +27,23 @@ namespace sniffer {
 
 namespace core {
 
+/**
+ * @brief Constructs a WebSocketServerEvent.
+ *
+ * @param type The type of the event.
+ * @param handle The connection handle for the event.
+ */
 WebSocketServerEvent::WebSocketServerEvent(WebSocketServerEventType type,
                                            websocketpp::connection_hdl handle)
     : type{type}, handle{handle} {}
 
+/**
+ * @brief Constructs a WebSocketServerEvent (overload).
+ *
+ * @param type The type of the event.
+ * @param handle The connection handle for the event.
+ * @param message Pointer to a message for the event.
+ */
 WebSocketServerEvent::WebSocketServerEvent(
     WebSocketServerEventType type, websocketpp::connection_hdl handle,
     websocketpp::config::asio::message_type::ptr message)
