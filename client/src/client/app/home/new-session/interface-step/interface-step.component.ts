@@ -14,7 +14,7 @@ declare var $: any;
 
 export class InterfaceStepComponent implements OnInit {
 
-  @ViewChild('selectInterfaces') selectElement: ElementRef;
+  @ViewChild('interfaceName') selectElement: ElementRef;
   public interfaces: Array<Interface> = [];
 
   constructor(private router: Router,
@@ -36,18 +36,10 @@ export class InterfaceStepComponent implements OnInit {
   }
 
   private handleStep() {
-    let selectedElements: Array<string> =
-        $(this.selectElement.nativeElement).dropdown('get values');
+    let selectedInterface: string =
+        $(this.selectElement.nativeElement).find(':selected').val();
 
-    let selectedInterfaces: Array<string> = [];
-    selectedElements.forEach((item, index) => {
-        if (index < selectedElements.length - 1) {
-            selectedInterfaces.push(item);
-        }
-    });
-
-    selectedInterfaces
-      .forEach((i: string) => this.snifferService.addInterface(i));
+    this.snifferService.interfaceName = selectedInterface;
 
     $('#interface-step')
         .addClass('disabled')

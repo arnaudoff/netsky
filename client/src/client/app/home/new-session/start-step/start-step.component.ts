@@ -14,12 +14,12 @@ declare var $: any;
 
 export class StartStepComponent implements AfterViewInit {
 
-  public interfaces: Array<string>;
-  public filters: Array<string>;
+  public interfaceName: string;
+  public filterExpression: string;
 
   constructor(private router: Router, private snifferService: SnifferService) {
-    this.interfaces = this.snifferService.interfaces;
-    this.filters = this.snifferService.filters;
+    this.interfaceName = this.snifferService.interfaceName;
+    this.filterExpression = this.snifferService.filterExpression;
   }
 
   ngAfterViewInit() {

@@ -12,6 +12,11 @@ export class ProjectConfig extends SeedConfig {
 
   PROJECT_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, 'tasks', 'project');
 
+  FONTS_DEST = `${this.APP_DEST}/css/themes/default/assets/fonts/`;
+  FONTS_SRC = [
+      'node_modules/semantic-ui-css/themes/default/assets/fonts/**'
+  ];
+
   constructor() {
     super();
     this.APP_TITLE = 'Netsky';
@@ -24,8 +29,7 @@ export class ProjectConfig extends SeedConfig {
       ...this.NPM_DEPENDENCIES,
       { src: 'jquery/dist/jquery.min.js', inject: 'libs'},
       { src: 'semantic-ui-css/semantic.min.js', inject: 'libs'},
-
-      { src: 'semantic-ui-css/semantic.min.css', inject: true, vendor: true}
+      { src: 'semantic-ui-css/semantic.min.css', inject: true}
     ];
 
     // Add `local` third-party libraries to be injected/bundled.

@@ -12,13 +12,13 @@ export class SnifferService {
   public hostInfo: Subject<Object>;
   public authenticationInfo: Subject<Object>;
 
-  private _interfaces: Array<string>;
-  private _filters: Array<string>;
+  private _interfaceName: string;
+  private _filterExpression: string;
   private _remoteConnection: Subject<Object>;
 
   constructor(private wsService: WebSocketService) {
-    this._interfaces = [];
-    this._filters = [];
+    this._interfaceName = '';
+    this._filterExpression = '';
 
     this._remoteConnection = <Subject<Object>>this.wsService
       .connect(Config.WS_SERVER_ADDRESS)
@@ -41,20 +41,20 @@ export class SnifferService {
       });
   }
 
-  public addInterface(interfaceName: string) {
-      this._interfaces.push(interfaceName);
+  public set interfaceName(name: string) {
+    this._interfaceName = name;
   }
 
-  public get interfaces() : Array<string> {
-      return this._interfaces;
+  public get interfaceName() : string {
+      return this._interfaceName;
   }
 
-  public addFilter(filterExpression: string) {
-      this._filters.push(filterExpression);
+  public set filterExpression(expression: string) {
+      this._filterExpression = expression;
   }
 
-  public get filters() : Array<string> {
-      return this._filters;
+  public get filterExpression() : string {
+      return this._filterExpression;
   }
 
   public retrieveInterfaces() : void {
@@ -69,7 +69,7 @@ export class SnifferService {
 
   public sendAuthenticate(password: string) {
     let argumentsObject: Object = {
-      password: [password],
+      password: password,
     };
 
     let commandObject: Object = {
@@ -81,13 +81,12 @@ export class SnifferService {
 
   public start(): void {
     let argumentsObject: Object = {
-      interfaces: this.interfaces,
-      filters: this.filters,
-      shared: []
+      'interface': this._interfaceName,
+      'filter': this._filterExpression
     };
 
     let commandObject: Object = {
-        'start-sniffer': argumentsObject
+      'start-sniffer': argumentsObject
     };
 
     this._remoteConnection.next(commandObject);

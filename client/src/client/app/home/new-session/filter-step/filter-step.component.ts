@@ -12,7 +12,7 @@ declare var $: any;
 })
 export class FilterStepComponent implements AfterViewInit {
 
-  public filters: string;
+  public filterExpression: string;
 
   constructor(private router: Router, private snifferService: SnifferService) {}
 
@@ -23,7 +23,7 @@ export class FilterStepComponent implements AfterViewInit {
   }
 
   handleStep() {
-    this.snifferService.addFilter(this.filters);
+    this.snifferService.filterExpression = this.filterExpression;
 
     $('#filters-step')
         .addClass('disabled')

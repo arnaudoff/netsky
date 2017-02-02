@@ -1,4 +1,4 @@
-<select class="ui fluid search dropdown" multiple="" #selectInterfaces>
+<select class="ui fluid search dropdown" #interfaceName>
   <option value="">Type in the interface name to sniff on</option>
   <option *ngFor="let interface of interfaces" [value]="interface.name">{{
   interface.name }}</option>
