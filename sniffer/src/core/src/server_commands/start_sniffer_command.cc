@@ -21,6 +21,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -94,7 +95,9 @@ void StartSnifferCommand::Execute(int connection_id,
   server_->set_sniffer(std::move(sniffer));
   server_->set_host_connection(connection_id);
 
-  server_->sniffer()->Start();
+  std::thread sniffing_thread{&sniffer::core::PacketSniffer::Start,
+                              server_->sniffer()};
+  sniffing_thread.detach();
 }
 
 }  // namespace server_commands
