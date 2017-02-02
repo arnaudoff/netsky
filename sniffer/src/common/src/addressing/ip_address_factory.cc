@@ -31,8 +31,6 @@ namespace common {
 
 namespace addressing {
 
-// Effective Modern C++, Meyers, p.119 & p.124
-
 /**
  * @brief A factory method returning a concrete IpAddress with ownership given
  * to the caller of the method.

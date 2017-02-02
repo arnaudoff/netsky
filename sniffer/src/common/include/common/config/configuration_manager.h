@@ -35,10 +35,19 @@ template <template <class> class StoragePolicy,
 class ConfigurationManager : public StoragePolicy<Configuration>,
                              public FormattingPolicy<Configuration> {
  public:
+   /**
+    * @brief Extracts a value from an object.
+    *
+    * @tparam U The type of the value to extract.
+    * @param object The object name to extract from.
+    * @param key The key for the value to extract.
+    *
+    * @return The extracted value of type U.
+    */
   template <typename U>
   U ExtractValue(const std::string& object, const std::string& key) const {
-    auto resource_path =
-        config_path + FormattingPolicy<Configuration>::extension();
+    auto resource_path = StoragePolicy<Configuration>::resource_path() +
+                         FormattingPolicy<Configuration>::extension();
 
     auto configuration = StoragePolicy<Configuration>::Read(resource_path);
 
@@ -46,11 +55,18 @@ class ConfigurationManager : public StoragePolicy<Configuration>,
         configuration, object, key);
   }
 
+   /**
+    * @brief Sets a value to an object.
+    *
+    * @tparam U The type of the value to set.
+    * @param object The object name to set value to.
+    * @param key The key for the value to set.
+    */
   template <typename U>
   void SetValue(const std::string& object, const std::string& key,
                 U value) const {
-    auto resource_path =
-        config_path + FormattingPolicy<Configuration>::extension();
+    auto resource_path = StoragePolicy<Configuration>::resource_path() +
+                         FormattingPolicy<Configuration>::extension();
 
     auto old_config = StoragePolicy<Configuration>::Read(resource_path);
 
@@ -59,9 +75,6 @@ class ConfigurationManager : public StoragePolicy<Configuration>,
 
     StoragePolicy<Configuration>::Write(new_config, resource_path);
   }
-
- private:
-  static constexpr auto config_path = "../../config/config.";
 };
 
 }  // namespace config

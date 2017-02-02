@@ -1,7 +1,7 @@
 {
     "sniffer": {
         "packets_count": -1,
-        "snap_len": 65535
+        "snap_len": 1518
     },
     "server": {
         "port": 1903,

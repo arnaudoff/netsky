@@ -29,11 +29,11 @@ namespace serialization {
 
 class SerializedObject {
  public:
-  explicit SerializedObject(const std::string& data) : data_{data} {}
+  explicit SerializedObject(const std::string& data);
 
-  std::string data() const { return data_; }
+  std::string data() const;
 
-  void set_data(const std::string& data) { data_ = data; }
+  void set_data(const std::string& data);
 
  private:
   std::string data_;

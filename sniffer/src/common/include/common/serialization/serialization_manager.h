@@ -33,40 +33,99 @@ namespace serialization {
 template <template <class> class SerializationPolicy>
 class SerializationManager : public SerializationPolicy<SerializedObject> {
  public:
+  /**
+   * @brief Creates an empty serialized object.
+   *
+   * @return The empty serialized object.
+   */
   SerializedObject CreateObject() const {
     return SerializationPolicy<SerializedObject>::Create();
   }
 
-  bool ObjectExists(const SerializedObject& data,
-                    const std::string& object) const {
-    return SerializationPolicy<SerializedObject>::ObjectExists(data, object);
+  /**
+   * @brief Checks if object with the name name exists in the serialized object.
+   *
+   * @param serialized_obj The serialized object to look into.
+   * @param name The name of the object to search for.
+   *
+   * @return True if it exists, false otherwise.
+   */
+  bool ObjectExists(const SerializedObject& serialized_obj,
+                    const std::string& name) const {
+    return SerializationPolicy<SerializedObject>::ObjectExists(serialized_obj,
+                                                               name);
   }
 
-  bool IsEmpty(const SerializedObject& obj) const {
-    return SerializationPolicy<SerializedObject>::IsEmpty(obj);
+  /**
+   * @brief Checks if a serialized object is empty.
+   *
+   * @param serialized_obj The serialized object to check.
+   *
+   * @return True if empty, false otherwise.
+   */
+  bool IsEmpty(const SerializedObject& serialized_obj) const {
+    return SerializationPolicy<SerializedObject>::IsEmpty(serialized_obj);
   }
 
+  /**
+   * @brief Extracts a value of type U from a serialized object.
+   *
+   * @tparam U The type of the value.
+   * @param serialized_obj The serialized object to extract the value from.
+   * @param object_name The name of the object to extract from.
+   * @param key_name The name of the key.
+   *
+   * @return The extracted value.
+   */
   template <typename U>
-  U ExtractValue(const SerializedObject& data, const std::string& object,
-                 const std::string& key) const {
+  U ExtractValue(const SerializedObject& serialized_obj,
+                 const std::string& object_name,
+                 const std::string& key_name) const {
     return SerializationPolicy<SerializedObject>::template ExtractValue<U>(
-        data, object, key);
+        serialized_obj, object_name, key_name);
   }
 
+  /**
+   * @brief Sets a value of type U to a serialized object.
+   *
+   * @tparam U The type of the value.
+   * @param key_name The name of the key.
+   * @param serialized_obj The serialized object to set the value to.
+   */
   template <typename U>
-  void SetValue(const std::string& key, U value, SerializedObject* obj) const {
-    SerializationPolicy<SerializedObject>::template SetValue<U>(key, value,
-                                                                obj);
+  void SetValue(const std::string& key_name, U value,
+                SerializedObject* serialized_obj) const {
+    SerializationPolicy<SerializedObject>::template SetValue<U>(key_name, value,
+                                                                serialized_obj);
   }
 
-  void SetObject(const std::string& key, const SerializedObject& obj,
-                 SerializedObject* p_obj) const {
-    SerializationPolicy<SerializedObject>::SetObject(key, obj, p_obj);
+  /**
+   * @brief Sets a serialized object to a serialized object.
+   *
+   * @param key_name The name of the key to use for the child object.
+   * @param serialized_obj The child serialized object to set.
+   * @param serialized_parent_obj The parent serialized object to set to.
+   */
+  void SetObject(const std::string& key_name,
+                 const SerializedObject& serialized_obj,
+                 SerializedObject* serialized_parent_obj) const {
+    SerializationPolicy<SerializedObject>::SetObject(key_name, serialized_obj,
+                                                     serialized_parent_obj);
   }
 
-  void AppendObject(const std::string& key, const SerializedObject& obj,
-                    SerializedObject* p_obj) const {
-    SerializationPolicy<SerializedObject>::AppendObject(key, obj, p_obj);
+  /**
+   * @brief Appends a serialized object to another serialized object. The parent
+   * object generally holds an array of child serialized object.
+   *
+   * @param key_name The name of the key.
+   * @param serialized_obj The child object to append.
+   * @param serialized_parent_obj The parent object to append to.
+   */
+  void AppendObject(const std::string& key_name,
+                    const SerializedObject& serialized_obj,
+                    SerializedObject* serialized_parent_obj) const {
+    SerializationPolicy<SerializedObject>::AppendObject(
+        key_name, serialized_obj, serialized_parent_obj);
   }
 
   void AppendVariableDepthObject(const std::string& root_key,

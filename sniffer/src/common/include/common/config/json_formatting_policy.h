@@ -33,6 +33,16 @@ namespace config {
 template <class T>
 class JsonFormattingPolicy {
  public:
+   /**
+    * @brief Extracts a value from a config given an object and a key name.
+    *
+    * @tparam U The type of the value, e.g. std::string.
+    * @param config The config object, normally Configuration.
+    * @param object The name of the object which contains key.
+    * @param key The name of the key.
+    *
+    * @return The value extracted.
+    */
   template <typename U>
   U ExtractValue(const T& config, const std::string& object,
                  const std::string& key) const {
@@ -40,6 +50,18 @@ class JsonFormattingPolicy {
     return json_obj[object][key].template get<U>();
   }
 
+  /**
+   * @brief Sets a value to a config object given an object name and a key name.
+   *
+   * @tparam U The type of the value, e.g. std::string or int.
+   * @param config The config object to use, normally Configuration.
+   * @param object The object name which contains key.
+   * @param key The name of the key.
+   * @param value The value to set.
+   *
+   * @return A new instance of T (normally Configuration) containing the value
+   * set.
+   */
   template <typename U>
   T SetValue(const T& config, const std::string& object, const std::string& key,
              U value) const {
@@ -51,6 +73,11 @@ class JsonFormattingPolicy {
     return config_obj;
   }
 
+  /**
+   * @brief Returns the extension for the JsonFormattingPolicy.
+   *
+   * @return The extension (.json).
+   */
   std::string extension() const { return "json"; }
 };
 

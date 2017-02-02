@@ -29,7 +29,7 @@ class IpAddress {
  public:
   virtual ~IpAddress() {}
 
-  virtual char* data() const = 0;
+  virtual const char* data() const = 0;
 };
 
 }  // namespace addressing

@@ -5,6 +5,7 @@ add_library(netsky-common
   src/addressing/ipv4_address.cc
   src/addressing/ipv6_address.cc
   src/config/configuration.cc
+  src/serialization/serialized_object.cc
 )
 
 # Define headers for this library. PUBLIC headers are used for

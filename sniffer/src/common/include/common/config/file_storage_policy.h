@@ -33,20 +33,42 @@ namespace config {
 template <class T>
 class FileStoragePolicy {
  public:
+   /**
+    * @brief Reads from a configuration file.
+    *
+    * @param resource Path to the file to read from.
+    *
+    * @return Object of type T encapsulating the contents of the file.
+    */
   T Read(const std::string& resource) const {
-    std::ifstream t(resource);
+    std::ifstream in(resource);
     std::stringstream buffer;
 
-    buffer << t.rdbuf();
+    buffer << in.rdbuf();
 
     T config{buffer.str()};
     return config;
   }
 
+  /**
+   * @brief Writes an object of type T to the resource specified by resource.
+   *
+   * @param config The object to save to the resource.
+   * @param resource Path to the resource file.
+   */
   void Write(const T& config, const std::string& resource) const {
     std::ofstream out(resource);
     out << config.data();
     out.close();
+  }
+
+  /**
+   * @brief Defines where the configuration file resides on the disk.
+   *
+   * @return The path to the configuration file.
+   */
+  std::string resource_path() const {
+    return "../../config/config.";
   }
 };
 

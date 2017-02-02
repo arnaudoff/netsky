@@ -24,8 +24,18 @@ namespace common {
 
 namespace config {
 
+/**
+ * @brief Constructs a configuration object.
+ *
+ * @param data The raw data for the configuration.
+ */
 Configuration::Configuration(const std::string& data) : data_{data} {}
 
+/**
+ * @brief Retrieves the configuration data.
+ *
+ * @return The data.
+ */
 std::string Configuration::data() const { return data_; }
 
 }  // namespace config

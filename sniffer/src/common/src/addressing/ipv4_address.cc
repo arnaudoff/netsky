@@ -26,17 +26,38 @@ namespace common {
 
 namespace addressing {
 
+/**
+ * @brief Constructs an Ipv4Address by allocating an internal buffer for it
+ * and uses the inet_ntop function to convert it to dot-decimal notation.
+ *
+ * @param sockaddr Pointer to the base sockaddr struct that is casted to
+ * sockaddr_in.
+ */
 Ipv4Address::Ipv4Address(struct sockaddr* sockaddr) {
   struct sockaddr_in* addr_in = (struct sockaddr_in*)sockaddr;
   buffer_ = new char[INET_ADDRSTRLEN];
   inet_ntop(AF_INET, &(addr_in->sin_addr), buffer_, INET_ADDRSTRLEN);
 }
 
+/**
+ * @brief Copy constructor. Allocates a new buffer and copies the other one into
+ * it.
+ *
+ * @param other The object to copy from.
+ */
 Ipv4Address::Ipv4Address(const Ipv4Address& other) {
   buffer_ = new char[INET_ADDRSTRLEN];
   strcpy(buffer_, other.buffer_);
 }
 
+/**
+ * @brief Copy assignment. Frees the current buffer and allocates a new one by
+ * copying the other one into it.
+ *
+ * @param other The object to copy from.
+ *
+ * @return The resulting object.
+ */
 Ipv4Address& Ipv4Address::operator=(const Ipv4Address& other) {
   if (this != &other) {
     delete[] buffer_;
@@ -48,10 +69,19 @@ Ipv4Address& Ipv4Address::operator=(const Ipv4Address& other) {
   return *this;
 }
 
+/**
+ * @brief Destructs the object by freeing the memory.
+ */
 Ipv4Address::~Ipv4Address() { delete[] buffer_; }
 
-// TODO(arnaudoff): Refactor this crap
-char* Ipv4Address::data() const { return buffer_; }
+/**
+ * @brief Returns a constant pointer to the beginning of the buffer. This is so
+ * because outside users should not be able to change the internal state from
+ * the getter.
+ *
+ * @return Pointer to the beginning of the buffer.
+ */
+const char* Ipv4Address::data() const { return buffer_; }
 
 }  // namespace addressing
 

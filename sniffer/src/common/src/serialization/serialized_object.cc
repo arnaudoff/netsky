@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Copyright (C) 2017  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -16,40 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IPV6_ADDRESS_H_
-#define SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IPV6_ADDRESS_H_
-
-#include <arpa/inet.h>
-#include <sys/socket.h>
-
-#include "common/addressing/ip_address.h"
+#include "common/serialization/serialized_object.h"
 
 namespace sniffer {
 
 namespace common {
 
-namespace addressing {
+namespace serialization {
 
-class Ipv6Address : public IpAddress {
- public:
-  explicit Ipv6Address(struct sockaddr* sockaddr);
+/**
+ * @brief Constructs a SerializedObject.
+ *
+ * @param data The raw data for the object.
+ */
+SerializedObject::SerializedObject(const std::string& data) : data_{data} {}
 
-  Ipv6Address(const Ipv6Address& other);
+/**
+ * @brief Retrieves the data.
+ *
+ * @return The raw data field of the object.
+ */
+std::string SerializedObject::data() const { return data_; }
 
-  Ipv6Address& operator=(const Ipv6Address& other);
+/**
+ * @brief Sets the raw data of the object.
+ *
+ * @param data The data for the object.
+ */
+void SerializedObject::set_data(const std::string& data) { data_ = data; }
 
-  ~Ipv6Address();
-
-  const char* data() const override;
-
- private:
-  char* buffer_;
-};
-
-}  // namespace addressing
+}  // namespace config
 
 }  // namespace common
 
 }  // namespace sniffer
-
-#endif  // SNIFFER_SRC_COMMON_INCLUDE_COMMON_ADDRESSING_IPV6_ADDRESS_H_

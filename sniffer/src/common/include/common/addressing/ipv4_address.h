@@ -40,7 +40,7 @@ class Ipv4Address : public IpAddress {
 
   ~Ipv4Address();
 
-  char* data() const override;
+  const char* data() const override;
 
  private:
   char* buffer_;

@@ -33,9 +33,20 @@ namespace common {
 
 namespace serialization {
 
+/**
+ * @brief This class represents a policy for serialization via JSON.
+ *
+ * @tparam T Type of an object to use as serialized, ready to use, object
+ * (normally uses SerializedObject).
+ */
 template <class T>
 class JsonSerializationPolicy {
  public:
+  /**
+   * @brief Creates an empty serialized object.
+   *
+   * @return The empty serialized object.
+   */
   T Create() const {
     nlohmann::json empty_obj = nlohmann::json::object();
 
@@ -44,56 +55,103 @@ class JsonSerializationPolicy {
     return obj;
   }
 
-  bool ObjectExists(const T& serialized_obj, const std::string& object) const {
+  /**
+   * @brief Checks if object with the name name exists in the serialized object.
+   *
+   * @param serialized_obj The serialized object to look into.
+   * @param name The name of the object to search for.
+   *
+   * @return True if it exists, false otherwise.
+   */
+  bool ObjectExists(const T& serialized_obj, const std::string& name) const {
     auto json_obj = nlohmann::json::parse(serialized_obj.data());
 
-    if (json_obj.find(object) != json_obj.end()) {
+    if (json_obj.find(name) != json_obj.end()) {
       return true;
     }
 
     return false;
   }
 
+  /**
+   * @brief Checks if a serialized object is empty.
+   *
+   * @param serialized_obj The serialized object to check.
+   *
+   * @return True if empty, false otherwise.
+   */
   bool IsEmpty(const T& serialized_obj) const {
     auto json_obj = nlohmann::json::parse(serialized_obj.data());
     return json_obj.empty();
   }
 
+  /**
+   * @brief Extracts a value of type U from a serialized object.
+   *
+   * @tparam U The type of the value.
+   * @param serialized_obj The serialized object to extract the value from.
+   * @param object_name The name of the object to extract from.
+   * @param key_name The name of the key.
+   *
+   * @return The extracted value.
+   */
   template <typename U>
-  U ExtractValue(const T& serialized_obj, const std::string& object,
-                 const std::string& key) const {
+  U ExtractValue(const T& serialized_obj, const std::string& object_name,
+                 const std::string& key_name) const {
     auto json_obj = nlohmann::json::parse(serialized_obj.data());
-    return json_obj[object][key].template get<U>();
+    return json_obj[object_name][key_name].template get<U>();
   }
 
+  /**
+   * @brief Sets a value of type U to a serialized object.
+   *
+   * @tparam U The type of the value.
+   * @param key_name The name of the key.
+   * @param serialized_obj The serialized object to set the value to.
+   */
   template <typename U>
-  void SetValue(const std::string& key, U value, T* serialized_obj) const {
+  void SetValue(const std::string& key_name, U value, T* serialized_obj) const {
     auto json_obj = nlohmann::json::parse(serialized_obj->data());
 
-    json_obj[key] = value;
+    json_obj[key_name] = value;
 
     serialized_obj->set_data(json_obj.dump());
   }
 
-  void SetObject(const std::string& key, const T& serialized_obj,
+  /**
+   * @brief Sets a serialized object to a serialized object.
+   *
+   * @param key_name The name of the key to use for the child object.
+   * @param serialized_obj The child serialized object to set.
+   * @param serialized_parent_obj The parent serialized object to set to.
+   */
+  void SetObject(const std::string& key_name, const T& serialized_obj,
                  T* serialized_parent_obj) const {
     auto json_pobj = nlohmann::json::parse(serialized_parent_obj->data());
     auto json_obj = nlohmann::json::parse(serialized_obj.data());
-    json_pobj[key] = json_obj;
+    json_pobj[key_name] = json_obj;
 
     serialized_parent_obj->set_data(json_pobj.dump());
   }
 
-  void AppendObject(const std::string& key, const T& serialized_obj,
+  /**
+   * @brief Appends a serialized object to another serialized object. The parent
+   * object generally holds an array of child serialized object.
+   *
+   * @param key_name The name of the key.
+   * @param serialized_obj The child object to append.
+   * @param serialized_parent_obj The parent object to append to.
+   */
+  void AppendObject(const std::string& key_name, const T& serialized_obj,
                     T* serialized_parent_obj) const {
     auto json_pobj = nlohmann::json::parse(serialized_parent_obj->data());
     auto json_obj = nlohmann::json::parse(serialized_obj.data());
 
-    if (!json_pobj.count(key)) {
-      json_pobj[key] = nlohmann::json::array();
+    if (!json_pobj.count(key_name)) {
+      json_pobj[key_name] = nlohmann::json::array();
     }
 
-    json_pobj[key].push_back(json_obj);
+    json_pobj[key_name].push_back(json_obj);
 
     serialized_parent_obj->set_data(json_pobj.dump());
   }
