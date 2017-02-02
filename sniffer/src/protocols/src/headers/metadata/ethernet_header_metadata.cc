@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Copyright (C) 2017  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,6 +18,9 @@
 
 #include "protocols/headers/metadata/ethernet_header_metadata.h"
 
+#include <map>
+#include <string>
+
 namespace sniffer {
 
 namespace protocols {
@@ -26,10 +29,26 @@ namespace headers {
 
 namespace metadata {
 
-EthernetHeaderMetadata::EthernetHeaderMetadata(int id, std::string name,
-                                               int size, bool variable_length,
-                                               int length_field_offset)
-    : HeaderMetadata(id, name, size, variable_length, length_field_offset) {}
+/**
+ * @brief Constructs an EthernetHeaderMetadata object.
+ *
+ * @param lower_layer_id_mappings Maps the ID of the Ethernet header based on
+ * the lower layer header. (typically the key is a fixed constant)
+ * @param name The name of the header.
+ * @param length The length of the header. Almost always 14 is assumed.
+ * @param minimum_length The minimum length for the header.
+ * @param has_variable_length Whether it's var-length or fixed-length.
+ * Typically it's a fixed-length header.
+ * @param length_field_offset Determines how many bytes into the header to look
+ * to fetch the length field if it's a variable-length header.
+ */
+EthernetHeaderMetadata::EthernetHeaderMetadata(
+    std::map<std::string, int> lower_layer_id_mappings, std::string name,
+    int length, int minimum_length, bool variable_length,
+    int length_field_offset, bool accounts_for_payload_length)
+    : HeaderMetadata(lower_layer_id_mappings, name, length, minimum_length,
+                     variable_length, length_field_offset,
+                     accounts_for_payload_length) {}
 
 }  // namespace metadata
 

@@ -25,7 +25,6 @@ namespace protocols {
 
 struct PacketRegion {
   PacketRegion();
-
   PacketRegion(int offset, int length);
 
   int offset;

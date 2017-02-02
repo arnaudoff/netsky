@@ -18,6 +18,8 @@
 
 #include "protocols/sniffed_packet.h"
 
+#include <iostream>
+
 #include "protocols/packet_region.h"
 
 namespace sniffer {
@@ -28,11 +30,10 @@ namespace protocols {
  * @brief Constructs a SniffedPacket object.
  *
  * @param data A pointer to the beginning of an array of bytes.
- *
  * @param body Designates where the body of the packet begins.
  */
 SniffedPacket::SniffedPacket(const u_char* data, PacketRegion body)
-    : data_{data} {
+    : data_{data}, payload_length_{0} {
   body_.offset = body.offset;
   body_.length = body.length;
 
@@ -79,6 +80,15 @@ const u_char* SniffedPacket::ExtractTrailer(int trailer_length) {
 }
 
 /**
+ * @brief Returns the beginning of the body region.
+ *
+ * @return Pointer to the beginning of the body region.
+ */
+const u_char* SniffedPacket::Body() {
+  return &(data_[body_.offset]);
+}
+
+/**
  * @brief Peeks byte_offset into the body, without extracting
  * a header of particular size. This function is primary used for
  * headers with variable length.
@@ -88,7 +98,35 @@ const u_char* SniffedPacket::ExtractTrailer(int trailer_length) {
  * @return A pointer to the bytes after the byte_offset.
  */
 const u_char* SniffedPacket::Peek(int byte_offset) {
-  return &(data_[header_.offset + byte_offset]);
+  return &(data_[body_.offset + byte_offset]);
+}
+
+PacketRegion SniffedPacket::header_region() const {
+  return header_;
+}
+
+PacketRegion SniffedPacket::body_region() const {
+  return body_;
+}
+
+PacketRegion SniffedPacket::trailer_region() const {
+  return trailer_;
+}
+
+void SniffedPacket::IncrementPayloadLength(int length) {
+  payload_length_ += length;
+
+  std::cout << "payload increment to" << payload_length_ << std::endl;
+}
+
+void SniffedPacket::DecrementPayloadLength(int length) {
+  payload_length_ -= length;
+
+  std::cout << "payload decrement to" << payload_length_ << " with " << length << std::endl;;
+}
+
+int SniffedPacket::payload_length() const {
+  return payload_length_;
 }
 
 }  // namespace protocols

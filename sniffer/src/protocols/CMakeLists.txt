@@ -5,10 +5,12 @@ add_library(netsky-protocols
   src/headers/ethernet_header.cc
   src/headers/internet_header.cc
   src/headers/transmission_control_header.cc
+  src/headers/user_datagram_header.cc
   src/headers/metadata/header_metadata.cc
   src/headers/metadata/ethernet_header_metadata.cc
   src/headers/metadata/internet_header_metadata.cc
   src/headers/metadata/transmission_control_header_metadata.cc
+  src/headers/metadata/user_datagram_header_metadata.cc
   src/packet_region.cc
   src/sniffed_packet.cc
   )

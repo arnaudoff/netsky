@@ -21,11 +21,14 @@
 
 #include <sys/types.h>
 
+#include <map>
 #include <string>
 
 namespace sniffer {
 
 namespace protocols {
+
+class SniffedPacket;
 
 namespace headers {
 
@@ -33,29 +36,41 @@ namespace metadata {
 
 class HeaderMetadata {
  public:
-  HeaderMetadata(int id, std::string name, int length, bool has_variable_length,
-                 int length_field_offset = 0);
+  HeaderMetadata(std::map<std::string, int> lower_layer_id_mappings,
+                 std::string name, int length, int minimum_length,
+                 bool has_variable_length, int length_field_offset,
+                 bool accounts_for_payload_length);
 
   virtual ~HeaderMetadata() {}
 
-  int id() const;
+  std::map<std::string, int> lower_layer_id_mappings() const;
 
   std::string name() const;
 
   int length() const;
 
+  int minimum_length() const;
+
   bool has_variable_length() const;
 
   int length_field_offset() const;
 
-  virtual int CalculateLength(const u_char* length_field) const;
+  bool accounts_for_payload_length() const;
+
+  void AccountForPayloadLength(SniffedPacket* packet) const;
+
+  virtual void set_length(const u_char* length_field);
+
+ protected:
+  int length_;
 
  private:
-  int id_;
+  std::map<std::string, int> lower_layer_id_mappings_;
   std::string name_;
-  int length_;
+  int minimum_length_;
   bool has_variable_length_;
   int length_field_offset_;
+  bool accounts_for_payload_length_;
 };
 
 }  // namespace metadata

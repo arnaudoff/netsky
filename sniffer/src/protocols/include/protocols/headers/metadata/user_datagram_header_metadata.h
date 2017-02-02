@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_
-#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_USER_DATAGRAM_HEADER_METADATA_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_USER_DATAGRAM_HEADER_METADATA_H_
 
 #include <sys/types.h>
 
@@ -34,12 +34,12 @@ namespace headers {
 
 namespace metadata {
 
-class EthernetHeaderMetadata : public HeaderMetadata {
+class UserDatagramHeaderMetadata : public HeaderMetadata {
  public:
-  EthernetHeaderMetadata(std::map<std::string, int> lower_layer_id_mappings,
-                         std::string name, int length, int minimum_length,
-                         bool has_variable_length, int length_field_offset,
-                         bool accounts_for_payload_length);
+  UserDatagramHeaderMetadata(std::map<std::string, int> lower_layer_id_mappings,
+                             std::string name, int length, int minimum_length,
+                             bool has_variable_length, int length_field_offset,
+                             bool accounts_for_payload_length);
 };
 
 }  // namespace metadata
@@ -50,4 +50,4 @@ class EthernetHeaderMetadata : public HeaderMetadata {
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_ETHERNET_HEADER_METADATA_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_USER_DATAGRAM_HEADER_METADATA_H_

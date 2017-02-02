@@ -41,15 +41,8 @@ namespace headers {
 InternetHeader::InternetHeader(int length, SniffedPacket* packet)
     : Header{length, packet},
       data_{(const formats::Internet*)(packet_->ExtractHeader(length_))} {
-  /*
-  if (size_ < 20) {
-      std::ostringstream exception_message;
-      exception_message << "Invalid IP header length: " << size_ << "
-  bytes.";
-      throw std::out_of_range { exception_message.str() };
-  }
-  */
-}
+        packet->IncrementPayloadLength(ntohs(data_->total_length));
+      }
 
 /**
  * @brief Parses the VIHL field.
@@ -143,8 +136,6 @@ sniffer::common::serialization::SerializedObject InternetHeader::Serialize(
   serializer.SetValue<u_short>("size", 1, &upper_layer_value_obj);
   serializer.AppendObject("children", upper_layer_value_obj, &upper_layer_obj);
 
-  // TODO(arnaudoff): Extract the length (and upper_layer?) stuff into the
-  // Header and call the base implementation from here.
   auto length_obj = serializer.CreateObject();
   serializer.SetValue<std::string>("name", "length", &length_obj);
 
@@ -162,6 +153,14 @@ sniffer::common::serialization::SerializedObject InternetHeader::Serialize(
   return root_obj;
 }
 
+/**
+ * @brief Summarises two of the most important fields in the header.
+ *
+ * @param serializer The serialized to use for summarization.
+ *
+ * @return A SerializedObject containing the object with the summary fields
+ * contained as properties.
+ */
 sniffer::common::serialization::SerializedObject InternetHeader::Summarise(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
   auto root_obj = serializer.CreateObject();

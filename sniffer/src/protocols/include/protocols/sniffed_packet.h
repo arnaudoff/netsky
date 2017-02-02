@@ -35,12 +35,28 @@ class SniffedPacket {
 
   const u_char* ExtractTrailer(int trailer_length);
 
+  const u_char* Body();
+
+  PacketRegion header_region() const;
+
+  PacketRegion body_region() const;
+
+  PacketRegion trailer_region() const;
+
+  void IncrementPayloadLength(int length);
+
+  void DecrementPayloadLength(int length);
+
+  int payload_length() const;
+
   const u_char* Peek(int byte_offset);
 
  private:
   PacketRegion header_;
   PacketRegion body_;
   PacketRegion trailer_;
+
+  int payload_length_;
 
   const u_char* data_;
 };

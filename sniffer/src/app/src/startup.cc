@@ -18,6 +18,8 @@
 
 #include <unistd.h>
 
+#include <map>
+
 #include "spdlog/spdlog.h"
 
 #include "common/addressing/ip_address_factory.h"
@@ -38,21 +40,28 @@
 #include "core/layers/data_link_layer.h"
 #include "core/layers/network_layer.h"
 #include "core/layers/transport_layer.h"
+
+#include "core/hex_ascii_payload_interpreter.h"
 #include "core/pcap_interface_retriever.h"
 
-#include "protocols/headers/ethernet_header.h"
-#include "protocols/headers/internet_header.h"
 #include "protocols/headers/metadata/ethernet_header_metadata.h"
 #include "protocols/headers/metadata/header_metadata.h"
 #include "protocols/headers/metadata/internet_header_metadata.h"
 #include "protocols/headers/metadata/transmission_control_header_metadata.h"
+#include "protocols/headers/metadata/user_datagram_header_metadata.h"
+
+#include "protocols/headers/ethernet_header.h"
+#include "protocols/headers/internet_header.h"
 #include "protocols/headers/transmission_control_header.h"
+#include "protocols/headers/user_datagram_header.h"
 
 // Common
 using sniffer::common::serialization::SerializationMgr;
 using sniffer::common::config::ConfigurationMgr;
 using sniffer::common::addressing::IpAddressFactory;
+
 using sniffer::core::PcapInterfaceRetriever;
+using sniffer::core::HexAsciiPayloadInterpreter;
 
 // Layers
 using sniffer::core::LayerStack;
@@ -65,12 +74,14 @@ using sniffer::core::layers::ApplicationLayer;
 using sniffer::protocols::headers::EthernetHeader;
 using sniffer::protocols::headers::InternetHeader;
 using sniffer::protocols::headers::TransmissionControlHeader;
+using sniffer::protocols::headers::UserDatagramHeader;
 
 // Headers metadata
 using sniffer::protocols::headers::metadata::HeaderMetadata;
 using sniffer::protocols::headers::metadata::EthernetHeaderMetadata;
 using sniffer::protocols::headers::metadata::InternetHeaderMetadata;
 using sniffer::protocols::headers::metadata::TransmissionControlHeaderMetadata;
+using sniffer::protocols::headers::metadata::UserDatagramHeaderMetadata;
 
 // Server
 using sniffer::core::WebSocketServerEventHandler;
@@ -105,8 +116,9 @@ int main() {
 
   // Data link layer specific initializations
 
+  std::map<std::string, int> eth_lower_id_map = {{"physical", 1}};
   auto ethernet_metadata = std::make_unique<EthernetHeaderMetadata>(
-      1, "EthernetHeader", 14, false, 0);
+      eth_lower_id_map, "EthernetHeader", 14, 14, false, 0, false);
 
   std::vector<std::unique_ptr<HeaderMetadata>> dll_supported_headers{};
   dll_supported_headers.push_back(std::move(ethernet_metadata));
@@ -116,8 +128,9 @@ int main() {
 
   // Network layer specific initializations
 
+  std::map<std::string, int> ip_lower_id_map = {{"EthernetHeader", 0x800}};
   auto internet_metadata = std::make_unique<InternetHeaderMetadata>(
-      0x800, "InternetHeader", 0, true, 0);
+      ip_lower_id_map, "InternetHeader", 0, 20, true, 0, true);
   std::vector<std::unique_ptr<HeaderMetadata>> nl_supported_headers{};
   nl_supported_headers.push_back(std::move(internet_metadata));
 
@@ -126,18 +139,28 @@ int main() {
 
   // Transport layer specific initialization
 
+  std::map<std::string, int> tcp_lower_id_map = {{"InternetHeader", 0x06}};
   auto tcp_metadata = std::make_unique<TransmissionControlHeaderMetadata>(
-      0x06, "TransmissionControlHeader", 0, true, 0);
+      tcp_lower_id_map, "TransmissionControlHeader", 0, 20, true, 12, true);
+
+  std::map<std::string, int> udp_lower_id_map = {{"InternetHeader", 0x11}};
+  auto udp_metadata = std::make_unique<UserDatagramHeaderMetadata>(
+      udp_lower_id_map, "UserDatagramHeader", 8, 8, false, 0, true);
+
   std::vector<std::unique_ptr<HeaderMetadata>> tl_supported_headers{};
   tl_supported_headers.push_back(std::move(tcp_metadata));
+  tl_supported_headers.push_back(std::move(udp_metadata));
 
   TransportLayer tl{"transport", serializer};
   tl.set_supported_headers(std::move(tl_supported_headers));
 
-  ApplicationLayer al{"application", serializer};
+  auto hexascii_payload_interpreter =
+      std::make_unique<HexAsciiPayloadInterpreter>();
+
+  ApplicationLayer al{"application", serializer,
+                      std::move(hexascii_payload_interpreter)};
 
   // Build the protocol stack
-
   LayerStack ls;
   ls.AddLayer(&dll);
   ls.AddLayer(&nl);

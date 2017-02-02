@@ -21,6 +21,7 @@
 
 #include <sys/types.h>
 
+#include <map>
 #include <string>
 
 #include "protocols/headers/metadata/header_metadata.h"
@@ -35,10 +36,12 @@ namespace metadata {
 
 class InternetHeaderMetadata : public HeaderMetadata {
  public:
-  InternetHeaderMetadata(int id, std::string name, int size,
-                         bool has_variable_length, int length_field_offset = 0);
+  InternetHeaderMetadata(std::map<std::string, int> lower_layer_id_mappings,
+                         std::string name, int length, int minimum_length,
+                         bool has_variable_length, int length_field_offset,
+                         bool accounts_for_payload_length);
 
-  int CalculateLength(const u_char* length_field) const override;
+  void set_length(const u_char* length_field) override;
 };
 
 }  // namespace metadata

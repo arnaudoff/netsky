@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Copyright (C) 2017  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -16,25 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
-#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
+#ifndef SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_USER_DATAGRAM_HEADER_H_
+#define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_USER_DATAGRAM_HEADER_H_
 
 #include <sys/types.h>
 
 #include <string>
 
-#define TH_FIN 0x01
-#define TH_SYN 0x02
-#define TH_RST 0x04
-#define TH_PUSH 0x08
-#define TH_ACK 0x10
-#define TH_URG 0x20
-#define TH_ECE 0x40
-#define TH_CWR 0x80
-#define TH_FLAGS (TH_FIN | TH_SYN | TH_RST | TH_ACK | TH_URG | TH_ECE | TH_CWR)
-
 #include "registry.h"
-
 #include "protocols/headers/header.h"
 
 namespace sniffer {
@@ -45,25 +34,23 @@ namespace headers {
 
 namespace formats {
 
-struct TransmissionControl;
+struct UserDatagram;
 
 }  // namespace formats
 
-class TransmissionControlHeader : public Header {
+class UserDatagramHeader : public Header {
  public:
-  TransmissionControlHeader(int length, SniffedPacket* packet);
+  UserDatagramHeader(int length, SniffedPacket* packet);
 
-  ~TransmissionControlHeader() {}
+  ~UserDatagramHeader() {}
 
-  u_short source_port() const;
+  u_int16_t source_port() const;
 
-  u_short destination_port() const;
+  u_int16_t destination_port() const;
 
-  u_int sequence_number() const;
+  // u_int16_t length() const;
 
-  u_int acknowledgment_number() const;
-
-  u_char offset() const;
+  u_int16_t checksum() const;
 
   int next_header_id() const override;
 
@@ -78,10 +65,10 @@ class TransmissionControlHeader : public Header {
   std::string entity_name() const override;
 
  private:
-  const formats::TransmissionControl* data_;
+  const formats::UserDatagram* data_;
 };
 
-REGISTER_SUBCLASS(Header, TransmissionControlHeader, int, SniffedPacket*)
+REGISTER_SUBCLASS(Header, UserDatagramHeader, int, SniffedPacket*)
 
 }  // namespace headers
 
@@ -89,4 +76,4 @@ REGISTER_SUBCLASS(Header, TransmissionControlHeader, int, SniffedPacket*)
 
 }  // namespace sniffer
 
-#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
+#endif  // SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_USER_DATAGRAM_HEADER_H_

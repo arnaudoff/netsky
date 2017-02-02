@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
+ * Copyright (C) 2017  Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  * Author: Ivaylo Arnaudov <ivaylo.arnaudov12@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -150,6 +150,14 @@ sniffer::common::serialization::SerializedObject EthernetHeader::Serialize(
   return root_obj;
 }
 
+/**
+ * @brief Summarises two of the most important fields in the header.
+ *
+ * @param serializer The serialized to use for summarization.
+ *
+ * @return A SerializedObject containing the object with the summary fields
+ * contained as properties.
+ */
 sniffer::common::serialization::SerializedObject EthernetHeader::Summarise(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
   auto root_obj = serializer.CreateObject();

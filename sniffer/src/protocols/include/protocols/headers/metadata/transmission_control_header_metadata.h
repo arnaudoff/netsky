@@ -20,6 +20,8 @@
 #define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_METADATA_TRANSMISSION_CONTROL_HEADER_METADATA_H_
 
 #include <sys/types.h>
+
+#include <map>
 #include <string>
 
 #include "protocols/headers/metadata/header_metadata.h"
@@ -34,11 +36,12 @@ namespace metadata {
 
 class TransmissionControlHeaderMetadata : public HeaderMetadata {
  public:
-  TransmissionControlHeaderMetadata(int id, std::string name, int length,
-                                    bool has_variable_length,
-                                    int length_field_offset = 0);
+  TransmissionControlHeaderMetadata(
+      std::map<std::string, int> lower_layer_id_mappings, std::string name,
+      int length, int minimum_length, bool has_variable_length,
+      int length_field_offset, bool accounts_for_payload_length);
 
-  int CalculateLength(const u_char* length_field) const override;
+  void set_length(const u_char* length_field) override;
 };
 
 }  // namespace metadata

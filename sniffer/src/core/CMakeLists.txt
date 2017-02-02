@@ -21,6 +21,7 @@ add_library(netsky-core
   src/packet_sniffer.cc
   src/pcap_interface_retriever.cc
   src/pcap_packet_sniffer.cc
+  src/hex_ascii_payload_interpreter.cc
   src/reception_handler.cc
   src/server.cc
   src/server_command_invoker.cc
