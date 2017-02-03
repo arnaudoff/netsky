@@ -43,7 +43,14 @@ class Header : public sniffer::common::serialization::SerializableEntity {
 
   const SniffedPacket* packet() const;
 
+  sniffer::common::serialization::SerializedObject SerializeField(
+      const sniffer::common::serialization::SerializationMgr& serializer,
+      const std::string& field_name, const std::string& field_value,
+      int field_size) const;
+
   virtual int next_header_id() const = 0;
+
+  virtual int length_field_length() const;
 
   virtual sniffer::common::serialization::SerializedObject Serialize(
       const sniffer::common::serialization::SerializationMgr& serializer)

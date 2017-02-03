@@ -20,21 +20,9 @@
 #define SNIFFER_SRC_PROTOCOLS_INCLUDE_PROTOCOLS_HEADERS_TRANSMISSION_CONTROL_HEADER_H_
 
 #include <sys/types.h>
-
 #include <string>
 
-#define TH_FIN 0x01
-#define TH_SYN 0x02
-#define TH_RST 0x04
-#define TH_PUSH 0x08
-#define TH_ACK 0x10
-#define TH_URG 0x20
-#define TH_ECE 0x40
-#define TH_CWR 0x80
-#define TH_FLAGS (TH_FIN | TH_SYN | TH_RST | TH_ACK | TH_URG | TH_ECE | TH_CWR)
-
 #include "registry.h"
-
 #include "protocols/headers/header.h"
 
 namespace sniffer {
@@ -63,9 +51,27 @@ class TransmissionControlHeader : public Header {
 
   u_int acknowledgment_number() const;
 
-  u_char offset() const;
+  u_char urg_flag() const;
+
+  u_char ack_flag() const;
+
+  u_char psh_flag() const;
+
+  u_char rst_flag() const;
+
+  u_char syn_flag() const;
+
+  u_char fin_flag() const;
+
+  u_short window() const;
+
+  u_short checksum() const;
+
+  u_short urgent_pointer() const;
 
   int next_header_id() const override;
+
+  int length_field_length() const override;
 
   sniffer::common::serialization::SerializedObject Serialize(
       const sniffer::common::serialization::SerializationMgr& serializer)

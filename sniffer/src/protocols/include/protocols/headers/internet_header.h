@@ -22,11 +22,6 @@
 #include <sys/types.h>
 #include <string>
 
-#define IP_RF 0x8000      /* reserved fragment flag */
-#define IP_DF 0x4000      /* dont fragment flag */
-#define IP_MF 0x2000      /* more fragments flag */
-#define IP_OFFMASK 0x1fff /* mask for fragmenting bits */
-
 #include "registry.h"
 
 #include "protocols/headers/header.h"
@@ -51,21 +46,25 @@ class InternetHeader : public Header {
 
   u_char version() const;
 
-  u_char header_length() const;
+  u_char precedence() const;
 
-  u_char type_of_service() const;
+  u_char delay_flag() const;
+
+  u_char throughput_flag() const;
+
+  u_char reliability_flag() const;
 
   u_short total_length() const;
 
   u_short identification() const;
 
-  u_char flags() const;
+  u_char dont_fragment_flag() const;
+
+  u_char more_fragments_flag() const;
 
   u_short fragment_offset() const;
 
-  u_short time_to_live() const;
-
-  u_char protocol() const;
+  u_char time_to_live() const;
 
   u_short header_checksum() const;
 
@@ -74,6 +73,8 @@ class InternetHeader : public Header {
   const char* destination_address() const;
 
   int next_header_id() const override;
+
+  int length_field_length() const override;
 
   sniffer::common::serialization::SerializedObject Serialize(
       const sniffer::common::serialization::SerializationMgr& serializer)

@@ -46,30 +46,44 @@ UserDatagramHeader::UserDatagramHeader(int length, SniffedPacket* packet)
 /**
  * @brief Retrieves the 16 bit source port from the UDP header.
  *
- * @return The source port
+ * @return The source port.
  */
-u_int16_t UserDatagramHeader::source_port() const {
+u_short UserDatagramHeader::source_port() const {
   return ntohs(data_->source_port);
 }
 
 /**
  * @brief Retrieves the 16 bit destination port from the UDP header.
  *
- * @return The destination port
+ * @return The destination port.
  */
-u_int16_t UserDatagramHeader::destination_port() const {
+u_short UserDatagramHeader::destination_port() const {
   return ntohs(data_->destination_port);
+}
+
+/**
+ * @brief Retrieves the length from the UDP header (header length + payload).
+ *
+ * @return The header length + payload length.
+ */
+u_short UserDatagramHeader::header_len_payload_len() const {
+  return ntohs(data_->length);
 }
 
 /**
  * @brief Retrieves the checksum from the UDP header.
  *
- * @return The checksum
+ * @return The checksum.
  */
 u_int16_t UserDatagramHeader::checksum() const {
   return data_->checksum;
 }
 
+/**
+ * @brief The header ID of the upper layer protocol; basically unused.
+ *
+ * @return Default value.
+ */
 int UserDatagramHeader::next_header_id() const { return 0; }
 
 /**
@@ -91,37 +105,25 @@ std::string UserDatagramHeader::entity_name() const { return "udp"; }
 sniffer::common::serialization::SerializedObject
 UserDatagramHeader::Serialize(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto source_port_obj = Header::SerializeField(
+      serializer, "src", std::to_string(source_port()), 16);
+
+  auto destination_port_obj = Header::SerializeField(
+      serializer, "dst", std::to_string(destination_port()), 16);
+
+  auto length_obj = Header::SerializeField(
+      serializer, "length", std::to_string(header_len_payload_len()), 16);
+
+  auto checksum_obj = Header::SerializeField(
+      serializer, "checksum", std::to_string(checksum()), 16);
+
   auto root_obj = serializer.CreateObject();
   serializer.SetValue<std::string>("name", entity_name(), &root_obj);
 
-  auto dst_port_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "destination_port", &dst_port_obj);
-
-  auto dst_port_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_int16_t>("name", destination_port(),
-                                 &dst_port_value_obj);
-  serializer.SetValue<int>("size", 2, &dst_port_value_obj);
-  serializer.AppendObject("children", dst_port_value_obj, &dst_port_obj);
-
-  auto src_port_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "source_port", &src_port_obj);
-
-  auto src_port_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_int16_t>("name", source_port(), &src_port_value_obj);
-  serializer.SetValue<int>("size", 2, &src_port_value_obj);
-  serializer.AppendObject("children", src_port_value_obj, &src_port_obj);
-
-  auto length_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "length", &length_obj);
-
-  auto length_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_short>("name", length(), &length_value_obj);
-  serializer.SetValue<u_short>("size", 1, &length_value_obj);
-  serializer.AppendObject("children", length_value_obj, &length_obj);
-
-  serializer.AppendObject("children", dst_port_obj, &root_obj);
-  serializer.AppendObject("children", src_port_obj, &root_obj);
+  serializer.AppendObject("children", source_port_obj, &root_obj);
+  serializer.AppendObject("children", destination_port_obj, &root_obj);
   serializer.AppendObject("children", length_obj, &root_obj);
+  serializer.AppendObject("children", checksum_obj, &root_obj);
 
   return root_obj;
 }
@@ -139,8 +141,8 @@ UserDatagramHeader::Summarise(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
   auto root_obj = serializer.CreateObject();
 
-  serializer.SetValue<u_int16_t>("dst", destination_port(), &root_obj);
-  serializer.SetValue<u_int16_t>("src", source_port(), &root_obj);
+  serializer.SetValue<u_short>("dst", destination_port(), &root_obj);
+  serializer.SetValue<u_short>("src", source_port(), &root_obj);
 
   return root_obj;
 }

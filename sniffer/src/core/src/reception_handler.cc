@@ -98,6 +98,7 @@ void ReceptionHandler::Handle(
       // We have malformed PDU, e.g. an IP header less than 20 bytes, a TCP
       // header less than 20 bytes etc.
       if (current_header_md->length() < current_header_md->minimum_length()) {
+        packet->set_valid(false);
         return;
       }
     }
@@ -135,6 +136,9 @@ void ReceptionHandler::Handle(
       // We have reached the top of the layer stack, nothing more to interpret
       return;
     }
+  } else {
+    packet->set_valid(false);
+    return;
   }
 }
 

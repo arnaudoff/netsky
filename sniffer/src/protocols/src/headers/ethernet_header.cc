@@ -113,38 +113,20 @@ std::string EthernetHeader::entity_name() const { return "ethernet"; }
  */
 sniffer::common::serialization::SerializedObject EthernetHeader::Serialize(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
+  auto source_mac_obj = Header::SerializeField(
+      serializer, "src", source_address(), ADDRESS_LENGTH * 8);
+
+  auto destination_mac_obj = Header::SerializeField(
+      serializer, "dst", destination_address(), ADDRESS_LENGTH * 8);
+
+  auto ether_type_obj = Header::SerializeField(
+      serializer, "ether_type", std::to_string(ether_type()), 16);
+
   auto root_obj = serializer.CreateObject();
   serializer.SetValue<std::string>("name", entity_name(), &root_obj);
 
-  auto dst_addr_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "destination_address",
-                                   &dst_addr_obj);
-
-  auto dst_addr_value_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", destination_address(),
-                                   &dst_addr_value_obj);
-  serializer.SetValue<int>("size", ADDRESS_LENGTH, &dst_addr_value_obj);
-  serializer.AppendObject("children", dst_addr_value_obj, &dst_addr_obj);
-
-  auto src_addr_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "source_address", &src_addr_obj);
-
-  auto src_addr_value_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", source_address(),
-                                   &src_addr_value_obj);
-  serializer.SetValue<int>("size", ADDRESS_LENGTH, &src_addr_value_obj);
-  serializer.AppendObject("children", src_addr_value_obj, &src_addr_obj);
-
-  auto ether_type_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "ether_type", &ether_type_obj);
-
-  auto ether_type_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_short>("name", ether_type(), &ether_type_value_obj);
-  serializer.SetValue<u_short>("size", 2, &ether_type_value_obj);
-  serializer.AppendObject("children", ether_type_value_obj, &ether_type_obj);
-
-  serializer.AppendObject("children", dst_addr_obj, &root_obj);
-  serializer.AppendObject("children", src_addr_obj, &root_obj);
+  serializer.AppendObject("children", source_mac_obj, &root_obj);
+  serializer.AppendObject("children", destination_mac_obj, &root_obj);
   serializer.AppendObject("children", ether_type_obj, &root_obj);
 
   return root_obj;

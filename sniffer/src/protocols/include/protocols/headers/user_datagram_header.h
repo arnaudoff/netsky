@@ -44,13 +44,13 @@ class UserDatagramHeader : public Header {
 
   ~UserDatagramHeader() {}
 
-  u_int16_t source_port() const;
+  u_short source_port() const;
 
-  u_int16_t destination_port() const;
+  u_short destination_port() const;
 
-  // u_int16_t length() const;
+  u_short header_len_payload_len() const;
 
-  u_int16_t checksum() const;
+  u_short checksum() const;
 
   int next_header_id() const override;
 

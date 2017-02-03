@@ -59,14 +59,19 @@ void ApplicationLayer::HandleReception(
     std::string prev_header_name, int current_header_id,
     sniffer::protocols::SniffedPacket* packet,
     sniffer::common::serialization::SerializedObject* composite) {
-  if (packet->payload_length() > 0) {
+  int payload_length = packet->payload_length();
+
+  if (payload_length > 0) {
     auto serializer = reception_handler_.serializer();
     auto payload_obj = serializer.CreateObject();
 
     auto interpreted_payload =
-        interpreter_->Interpret(packet->Body(), packet->payload_length());
-    std::cout << "PAYLOAD LENGTH PAYLOAD LENGTH: " << interpreted_payload.length() << std::endl;
-    std::cout << interpreted_payload << std::endl;
+        interpreter_->Interpret(packet->Body(), payload_length);
+
+    serializer.SetValue<std::string>("contents", interpreted_payload, &payload_obj);
+    serializer.SetValue<int>("length", payload_length, &payload_obj);
+    serializer.SetObject("payload", payload_obj, composite);
+
   }
 }
 

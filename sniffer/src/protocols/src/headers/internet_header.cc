@@ -41,8 +41,15 @@ namespace headers {
 InternetHeader::InternetHeader(int length, SniffedPacket* packet)
     : Header{length, packet},
       data_{(const formats::Internet*)(packet_->ExtractHeader(length_))} {
-        packet->IncrementPayloadLength(ntohs(data_->total_length));
-      }
+  packet->IncrementPayloadLength(ntohs(data_->total_length));
+}
+
+/**
+ * @brief Returns the length of the length field.
+ *
+ * @return The number of bits in the IHL field.
+ */
+int InternetHeader::length_field_length() const { return 4; }
 
 /**
  * @brief Parses the VIHL field.
@@ -52,6 +59,108 @@ InternetHeader::InternetHeader(int length, SniffedPacket* packet)
  */
 u_char InternetHeader::version() const {
   return data_->version_internet_header_length >> 4;
+}
+
+/**
+ * @brief Parses the precedence of the ToS field.
+ *
+ * @return 3 bits containing the QoS desired.
+ */
+u_char InternetHeader::precedence() const {
+  return (data_->type_of_service & 0xe0) >> 5;
+}
+
+/**
+ * @brief Determines whether normal delay or low delay is to be used for the
+ * datagram.
+ *
+ * @return The value of the delay flag.
+ */
+u_char InternetHeader::delay_flag() const {
+  return (data_->type_of_service & 0x10) >> 4;
+}
+
+/**
+ * @brief Determines whether normal throughput or high throughput is to be
+ * used for the datagram.
+ *
+ * @return The value of the throughput flag.
+ */
+u_char InternetHeader::throughput_flag() const {
+  return (data_->type_of_service & 0x08) >> 3;
+}
+
+/**
+ * @brief Determines whether normal reliability or high reliability is to be
+ * used for the datagram.
+ *
+ * @return The value of the reliability flag.
+ */
+u_char InternetHeader::reliability_flag() const {
+  return (data_->type_of_service & 0x04) >> 2;
+}
+
+/**
+ * @brief Parses the Total Length field.
+ *
+ * @return The length of the datagram in octets, incl. internet header and data.
+ */
+u_short InternetHeader::total_length() const {
+  return ntohs(data_->total_length);
+}
+
+/**
+ * @brief Parses the Identification field.
+ *
+ * @return The identifying value assigned by the sender to aid in assembling the
+ * fragments of a datagram.
+ */
+u_short InternetHeader::identification() const {
+  return ntohs(data_->identification);
+}
+
+/**
+ * @brief Returns the DF flag (may fragment / don't fragment)
+ *
+ * @return The value of the DF flag.
+ */
+u_char InternetHeader::dont_fragment_flag() const {
+  return (data_->fragment_offset & 0x4000) >> 14;
+}
+
+/**
+ * @brief Returns the DF flag (may fragment / don't fragment)
+ *
+ * @return The value of the DF flag.
+ */
+u_char InternetHeader::more_fragments_flag() const {
+  return (data_->fragment_offset & 0x2000) >> 13;
+}
+
+/**
+ * @brief Indicates where in the datagram this fragment belongs.
+ *
+ * @return The fragment offset measured in units of 8 octets.
+ */
+u_short InternetHeader::fragment_offset() const {
+  return data_->fragment_offset & 0x1fff;
+}
+
+/**
+ * @brief Indicates the maximum number of router hops for the datagram.
+ *
+ * @return The value of the TTL field.
+ */
+u_char InternetHeader::time_to_live() const { return data_->time_to_live; }
+
+/**
+ * @brief Checksum of the header only, e.g. since the TTL changes it's
+ * recomputed.
+ *
+ * @return The checksum for the header.
+ */
+u_short InternetHeader::header_checksum() const {
+  return ntohs(data_->header_checksum);
 }
 
 /**
@@ -97,58 +206,67 @@ std::string InternetHeader::entity_name() const { return "internet"; }
  */
 sniffer::common::serialization::SerializedObject InternetHeader::Serialize(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
-  auto root_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", entity_name(), &root_obj);
+  auto version_obj = Header::SerializeField(serializer, "version",
+                                            std::to_string(version()), 4);
 
-  auto dst_addr_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "destination_address",
-                                   &dst_addr_obj);
+  auto precedence_obj = Header::SerializeField(serializer, "precedence",
+                                               std::to_string(precedence()), 3);
+  auto delay_flag_obj = Header::SerializeField(serializer, "delay",
+                                               std::to_string(delay_flag()), 1);
+  auto throughput_flag_obj = Header::SerializeField(
+      serializer, "throughput", std::to_string(throughput_flag()), 1);
 
-  auto dst_addr_value_obj = serializer.CreateObject();
-  serializer.SetValue<const char*>("name", destination_address(),
-                                   &dst_addr_value_obj);
-  serializer.SetValue<int>("size", 4, &dst_addr_value_obj);
-  serializer.AppendObject("children", dst_addr_value_obj, &dst_addr_obj);
+  auto reliability_flag_obj = Header::SerializeField(
+      serializer, "reliability", std::to_string(reliability_flag()), 1);
 
-  auto src_addr_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "source_address", &src_addr_obj);
+  auto total_length_obj = Header::SerializeField(
+      serializer, "total length", std::to_string(total_length()), 16);
 
-  auto src_addr_value_obj = serializer.CreateObject();
-  serializer.SetValue<const char*>("name", source_address(),
-                                   &src_addr_value_obj);
-  serializer.SetValue<int>("size", 4, &src_addr_value_obj);
-  serializer.AppendObject("children", src_addr_value_obj, &src_addr_obj);
+  auto identification_obj = Header::SerializeField(
+      serializer, "identification", std::to_string(identification()), 16);
 
-  auto version_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "version", &version_obj);
+  auto dont_fragment_flag_obj = Header::SerializeField(
+      serializer, "fl_dont_fragment", std::to_string(dont_fragment_flag()), 1);
 
-  auto version_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_short>("name", version(), &version_value_obj);
-  serializer.SetValue<u_short>("size", 1, &version_value_obj);
-  serializer.AppendObject("children", version_value_obj, &version_obj);
+  auto more_fragments_flag_obj =
+      Header::SerializeField(serializer, "fl_more_fragments",
+                             std::to_string(more_fragments_flag()), 1);
 
-  auto upper_layer_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "upper_layer", &upper_layer_obj);
+  auto fragment_offset_obj = Header::SerializeField(
+      serializer, "fragment_offset", std::to_string(fragment_offset()), 13);
 
-  auto upper_layer_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_short>("name", next_header_id(),
-                               &upper_layer_value_obj);
-  serializer.SetValue<u_short>("size", 1, &upper_layer_value_obj);
-  serializer.AppendObject("children", upper_layer_value_obj, &upper_layer_obj);
+  auto time_to_live_obj = Header::SerializeField(
+      serializer, "ttl", std::to_string(time_to_live()), 8);
 
-  auto length_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "length", &length_obj);
+  auto protocol_obj = Header::SerializeField(
+      serializer, "protocol", std::to_string(next_header_id()), 8);
 
-  auto length_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_short>("name", length(), &length_value_obj);
-  serializer.SetValue<u_short>("size", 1, &length_value_obj);
-  serializer.AppendObject("children", length_value_obj, &length_obj);
+  auto checksum_obj = Header::SerializeField(
+      serializer, "checksum", std::to_string(header_checksum()), 16);
 
-  serializer.AppendObject("children", dst_addr_obj, &root_obj);
-  serializer.AppendObject("children", src_addr_obj, &root_obj);
+  auto source_addr_obj = Header::SerializeField(
+      serializer, "src", std::string(source_address()), 32);
+
+  auto destination_addr_obj = Header::SerializeField(
+      serializer, "dst", std::string(destination_address()), 32);
+
+  auto root_obj = Header::Serialize(serializer);
   serializer.AppendObject("children", version_obj, &root_obj);
-  serializer.AppendObject("children", upper_layer_obj, &root_obj);
-  serializer.AppendObject("children", length_obj, &root_obj);
+
+  serializer.AppendObject("children", precedence_obj, &root_obj);
+  serializer.AppendObject("children", delay_flag_obj, &root_obj);
+  serializer.AppendObject("children", throughput_flag_obj, &root_obj);
+  serializer.AppendObject("children", reliability_flag_obj, &root_obj);
+  serializer.AppendObject("children", total_length_obj, &root_obj);
+  serializer.AppendObject("children", identification_obj, &root_obj);
+  serializer.AppendObject("children", dont_fragment_flag_obj, &root_obj);
+  serializer.AppendObject("children", more_fragments_flag_obj, &root_obj);
+  serializer.AppendObject("children", fragment_offset_obj, &root_obj);
+  serializer.AppendObject("children", time_to_live_obj, &root_obj);
+  serializer.AppendObject("children", protocol_obj, &root_obj);
+  serializer.AppendObject("children", checksum_obj, &root_obj);
+  serializer.AppendObject("children", source_addr_obj, &root_obj);
+  serializer.AppendObject("children", destination_addr_obj, &root_obj);
 
   return root_obj;
 }

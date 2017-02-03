@@ -33,7 +33,7 @@ namespace protocols {
  * @param body Designates where the body of the packet begins.
  */
 SniffedPacket::SniffedPacket(const u_char* data, PacketRegion body)
-    : data_{data}, payload_length_{0} {
+    : data_{data}, payload_length_{0}, valid_{true} {
   body_.offset = body.offset;
   body_.length = body.length;
 
@@ -115,18 +115,22 @@ PacketRegion SniffedPacket::trailer_region() const {
 
 void SniffedPacket::IncrementPayloadLength(int length) {
   payload_length_ += length;
-
-  std::cout << "payload increment to" << payload_length_ << std::endl;
 }
 
 void SniffedPacket::DecrementPayloadLength(int length) {
   payload_length_ -= length;
-
-  std::cout << "payload decrement to" << payload_length_ << " with " << length << std::endl;;
 }
 
 int SniffedPacket::payload_length() const {
   return payload_length_;
+}
+
+bool SniffedPacket::valid() const {
+  return valid_;
+}
+
+void SniffedPacket::set_valid(bool valid) {
+  valid_ = valid;
 }
 
 }  // namespace protocols

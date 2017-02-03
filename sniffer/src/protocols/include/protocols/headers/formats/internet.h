@@ -36,10 +36,10 @@ struct Internet {
   u_char type_of_service;
   u_short total_length;
   u_short identification;
-  u_short offset;
+  u_short fragment_offset;
   u_char time_to_live;
   u_char protocol;
-  u_short checksum;
+  u_short header_checksum;
   struct in_addr source_address, destination_address;
 };
 

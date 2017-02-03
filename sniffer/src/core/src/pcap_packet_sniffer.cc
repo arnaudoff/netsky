@@ -156,7 +156,10 @@ void PcapPacketSniffer::OnPacketReceivedInternal(
   // http://www.tcpdump.org/linktypes.html
   stack_.HandleReception("physical", 1, &sniffed_packet, &composite);
 
-  server_->AuthenticatedBroadcast(composite.data());
+  // Discard malformed/partly parsed packets.
+  if (sniffed_packet.valid()) {
+    server_->AuthenticatedBroadcast(composite.data());
+  }
 }
 
 /**

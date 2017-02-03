@@ -49,6 +49,10 @@ class SniffedPacket {
 
   int payload_length() const;
 
+  bool valid() const;
+
+  void set_valid(bool valid);
+
   const u_char* Peek(int byte_offset);
 
  private:
@@ -57,6 +61,7 @@ class SniffedPacket {
   PacketRegion trailer_;
 
   int payload_length_;
+  bool valid_;
 
   const u_char* data_;
 };

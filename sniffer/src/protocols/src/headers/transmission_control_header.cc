@@ -46,13 +46,11 @@ TransmissionControlHeader::TransmissionControlHeader(int length,
           length_))} {}
 
 /**
- * @brief Retrieves the offset
+ * @brief Returns the length of the length field.
  *
- * @return The offset.
+ * @return The number of bits in the Data Offset field.
  */
-u_char TransmissionControlHeader::offset() const {
-  return (data_->offset_x2 & 0xf0) >> 4;
-}
+int TransmissionControlHeader::length_field_length() const { return 4; }
 
 /**
  * @brief Retrieves the 16 bit source port from the TCP header.
@@ -78,7 +76,7 @@ u_short TransmissionControlHeader::destination_port() const {
  * @return The sequence number.
  */
 u_int TransmissionControlHeader::sequence_number() const {
-  return data_->sequence_number;
+  return ntohl(data_->sequence_number);
 }
 
 /**
@@ -87,7 +85,89 @@ u_int TransmissionControlHeader::sequence_number() const {
  * @return The acknowledgment number.
  */
 u_int TransmissionControlHeader::acknowledgment_number() const {
-  return data_->acknowledgment_number;
+  return ntohl(data_->acknowledgment_number);
+}
+
+/**
+ * @brief Retrieves the urgent flag.
+ *
+ * @return The value of the urgent flag.
+ */
+u_char TransmissionControlHeader::urg_flag() const {
+  return (data_->flags & 0x20) >> 5;
+}
+
+/**
+ * @brief Retrieves the acknowledgement flag.
+ *
+ * @return The value of the acknowledgment flag.
+ */
+u_char TransmissionControlHeader::ack_flag() const {
+  return (data_->flags & 0x10) >> 4;
+}
+
+/**
+ * @brief Retrieves the push flag.
+ *
+ * @return The value of the push flag.
+ */
+u_char TransmissionControlHeader::psh_flag() const {
+  return (data_->flags & 0x08) >> 3;
+}
+
+/**
+ * @brief Retrieves the reset flag.
+ *
+ * @return The value of the reset flag.
+ */
+u_char TransmissionControlHeader::rst_flag() const {
+  return (data_->flags & 0x04) >> 2;
+}
+
+/**
+ * @brief Retrieves the syn flag.
+ *
+ * @return The value of the syn flag.
+ */
+u_char TransmissionControlHeader::syn_flag() const {
+  return (data_->flags & 0x02) >> 1;
+}
+
+/**
+ * @brief Retrieves the fin flag.
+ *
+ * @return The value of the fin flag.
+ */
+u_char TransmissionControlHeader::fin_flag() const {
+  return (data_->flags & 0x01);
+}
+
+/**
+ * @brief Retrieves the window field.
+ *
+ * @return The value of the window (how many octets the sender is willing
+ * to accept).
+ */
+u_short TransmissionControlHeader::window() const {
+  return ntohs(data_->destination_port);
+}
+
+/**
+ * @brief Retrieves the checksum.
+ *
+ * @return The value of the checksum.
+ */
+u_short TransmissionControlHeader::checksum() const {
+  return ntohs(data_->destination_port);
+}
+
+/**
+ * @brief Retrieves the urgent pointer.
+ *
+ * @return The urgent pointer value.
+ */
+u_short TransmissionControlHeader::urgent_pointer() const {
+  return ntohs(data_->destination_port);
 }
 
 int TransmissionControlHeader::next_header_id() const { return 0; }
@@ -111,56 +191,63 @@ std::string TransmissionControlHeader::entity_name() const { return "tcp"; }
 sniffer::common::serialization::SerializedObject
 TransmissionControlHeader::Serialize(
     const sniffer::common::serialization::SerializationMgr& serializer) const {
-  auto root_obj = serializer.CreateObject();
+  auto src_port_obj = Header::SerializeField(serializer, "source_port",
+                                             std::to_string(source_port()), 16);
+
+  auto dst_port_obj = Header::SerializeField(
+      serializer, "destination_port", std::to_string(destination_port()), 16);
+
+  auto seq_number_obj = Header::SerializeField(
+      serializer, "seq", std::to_string(sequence_number()), 32);
+
+  auto ack_number_obj = Header::SerializeField(
+      serializer, "ack", std::to_string(sequence_number()), 32);
+
+  auto urg_flag_obj = Header::SerializeField(serializer, "urg_flag",
+                                             std::to_string(urg_flag()), 1);
+
+  auto ack_flag_obj = Header::SerializeField(serializer, "ack_flag",
+                                             std::to_string(ack_flag()), 1);
+
+  auto psh_flag_obj = Header::SerializeField(serializer, "psh_flag",
+                                             std::to_string(psh_flag()), 1);
+
+  auto rst_flag_obj = Header::SerializeField(serializer, "rst_flag",
+                                             std::to_string(rst_flag()), 1);
+
+  auto syn_flag_obj = Header::SerializeField(serializer, "syn_flag",
+                                             std::to_string(syn_flag()), 1);
+
+  auto fin_flag_obj = Header::SerializeField(serializer, "fin_flag",
+                                             std::to_string(fin_flag()), 1);
+
+  auto window_obj = Header::SerializeField(serializer, "window",
+                                           std::to_string(window()), 16);
+
+  auto checksum_obj = Header::SerializeField(serializer, "checksum",
+                                             std::to_string(checksum()), 16);
+
+  auto urgent_pointer_obj = Header::SerializeField(
+      serializer, "urgent_pointer", std::to_string(urgent_pointer()), 16);
+
+  auto root_obj = Header::Serialize(serializer);
   serializer.SetValue<std::string>("name", entity_name(), &root_obj);
 
-  auto dst_port_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "destination_port", &dst_port_obj);
-
-  auto dst_port_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_short>("name", destination_port(),
-                                 &dst_port_value_obj);
-  serializer.SetValue<int>("size", 2, &dst_port_value_obj);
-  serializer.AppendObject("children", dst_port_value_obj, &dst_port_obj);
-
-  auto src_port_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "source_port", &src_port_obj);
-
-  auto src_port_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_short>("name", source_port(), &src_port_value_obj);
-  serializer.SetValue<int>("size", 2, &src_port_value_obj);
-  serializer.AppendObject("children", src_port_value_obj, &src_port_obj);
-
-  auto seq_number_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "seq_number", &seq_number_obj);
-
-  auto seq_number_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_int>("name", sequence_number(), &seq_number_value_obj);
-  serializer.SetValue<int>("size", 4, &seq_number_value_obj);
-  serializer.AppendObject("children", seq_number_value_obj, &seq_number_obj);
-
-  auto ack_number_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "ack_number", &ack_number_obj);
-
-  auto ack_number_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_int>("name", acknowledgment_number(),
-                           &ack_number_value_obj);
-  serializer.SetValue<int>("size", 4, &ack_number_value_obj);
-  serializer.AppendObject("children", ack_number_value_obj, &ack_number_obj);
-
-  auto length_obj = serializer.CreateObject();
-  serializer.SetValue<std::string>("name", "length", &length_obj);
-
-  auto length_value_obj = serializer.CreateObject();
-  serializer.SetValue<u_short>("name", length(), &length_value_obj);
-  serializer.SetValue<u_short>("size", 1, &length_value_obj);
-  serializer.AppendObject("children", length_value_obj, &length_obj);
-
-  serializer.AppendObject("children", dst_port_obj, &root_obj);
   serializer.AppendObject("children", src_port_obj, &root_obj);
+  serializer.AppendObject("children", dst_port_obj, &root_obj);
   serializer.AppendObject("children", seq_number_obj, &root_obj);
   serializer.AppendObject("children", ack_number_obj, &root_obj);
-  serializer.AppendObject("children", length_obj, &root_obj);
+
+  serializer.AppendObject("children", urg_flag_obj, &root_obj);
+  serializer.AppendObject("children", ack_flag_obj, &root_obj);
+  serializer.AppendObject("children", psh_flag_obj, &root_obj);
+  serializer.AppendObject("children", rst_flag_obj, &root_obj);
+  serializer.AppendObject("children", syn_flag_obj, &root_obj);
+  serializer.AppendObject("children", fin_flag_obj, &root_obj);
+
+  serializer.AppendObject("children", window_obj, &root_obj);
+  serializer.AppendObject("children", checksum_obj, &root_obj);
+  serializer.AppendObject("children", urgent_pointer_obj, &root_obj);
 
   return root_obj;
 }
