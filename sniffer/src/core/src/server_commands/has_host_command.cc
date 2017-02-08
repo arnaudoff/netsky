@@ -53,6 +53,7 @@ void HasHostCommand::Execute(int connection_id,
                              std::map<std::string, std::string> args) {
   sniffer::core::response_models::HasHostResponseModel model{
       server_->has_host_connection()};
+
   auto model_obj = model.Serialize(serializer_);
 
   server_->Unicast(connection_id, model_obj.data());

@@ -50,15 +50,10 @@ void ServerCommandInvoker::Invoke(Server* server, int connection_id,
                                   const std::string& message) {
   for (auto command : server_commands_) {
     if (command->Matches(message)) {
-      spdlog::get("console")->info("Invoking command {0} for client {1}",
-                                   command->name(), connection_id);
-
       if (command->secure()) {
         if (server->IsClientAuthenticated(connection_id)) {
           command->Execute(connection_id, command->ParseArguments(message));
         }
-
-        // TODO(arnaudoff): Log unauthorized attempt
       } else {
         command->Execute(connection_id, command->ParseArguments(message));
       }

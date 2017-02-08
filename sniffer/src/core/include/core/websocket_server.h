@@ -83,23 +83,16 @@ class WebSocketServer : public Server {
 
  private:
   websocketpp::server<websocketpp::config::asio_tls> server_;
-
   std::unique_ptr<WebSocketServerEventHandler> event_handler_;
 
   std::map<int, websocketpp::connection_hdl> ws_connections_map_;
-
-  // https://channel9.msdn.com/posts/C-and-Beyond-2012-Herb-Sutter-You-dont-know-blank-and-blank
-
   mutable std::mutex ws_connections_map_lock_;
 
   int next_connection_id_;
-
   mutable std::mutex next_connection_id_lock_;
 
   mutable std::mutex connections_lock_;
-
   mutable std::mutex authenticated_connections_lock_;
-
   mutable std::mutex host_lock_;
 
   void Run(uint16_t port);

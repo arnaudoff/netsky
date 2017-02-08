@@ -55,7 +55,7 @@ PcapPacketSniffer::PcapPacketSniffer(
     : PacketSniffer(interface, filter, config, stack, server) {}
 
 /**
- * @brief Prepares the physical interfaces to sniff on
+ * @brief Prepares the physical interfaces to sniff on.
  */
 void PcapPacketSniffer::PrepareInterfaces() {
   char error_buffer[PCAP_ERRBUF_SIZE];
@@ -87,7 +87,7 @@ void PcapPacketSniffer::PrepareInterfaces() {
 }
 
 /**
- * @brief Parses any filters by passing them to pcap_compile
+ * @brief Parses any filters by passing them to pcap_compile().
  */
 void PcapPacketSniffer::ParseFilters() {
   if (pcap_compile(handle_, &parsed_filters_, filter_.c_str(), 0, network_) ==
@@ -100,7 +100,7 @@ void PcapPacketSniffer::ParseFilters() {
 }
 
 /**
- * @brief Applies the filters by pcap_setfilter
+ * @brief Applies the filters by pcap_setfilter().
  */
 void PcapPacketSniffer::ApplyFilters() {
   if (pcap_setfilter(handle_, &parsed_filters_) == -1) {
@@ -113,7 +113,7 @@ void PcapPacketSniffer::ApplyFilters() {
 }
 
 /**
- * @brief Encapsulates a call to pcap_loop
+ * @brief Encapsulates a call to pcap_loop().
  */
 void PcapPacketSniffer::Sniff() {
   pcap_loop(handle_,

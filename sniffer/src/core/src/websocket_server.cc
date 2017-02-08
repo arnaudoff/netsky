@@ -161,8 +161,7 @@ void WebSocketServer::Start(uint16_t port) {
     // Run the Boost.Asio loop on the main thread
     Run(port);
 
-    // Wait for the processing thread to finish (and not detach it); p.17
-    // C++ Concurrency in action, p. 17
+    // Wait for the processing thread to finish
     processing_thread.join();
   } catch (const websocketpp::exception& e) {
     spdlog::get("console")->critical("The WS server failed: {0}", e.what());

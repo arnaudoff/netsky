@@ -23,6 +23,7 @@
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <memory>
 
 #include "websocketpp/config/asio.hpp"  // NOLINT
 #include "websocketpp/server.hpp"       // NOLINT
@@ -49,7 +50,7 @@ class WebSocketServerEventHandler {
   void OnMessageReceived(websocketpp::connection_hdl handle,
                          websocketpp::config::asio::message_type::ptr msg);
 
-  websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> OnTlsInit(
+  std::shared_ptr<websocketpp::lib::asio::ssl::context> OnTlsInit(
       WebSocketServerTlsMode mode, WebSocketServer* ws_server,
       websocketpp::connection_hdl handle);
 

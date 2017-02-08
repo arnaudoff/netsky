@@ -98,15 +98,12 @@ class Layer {
   ReceptionHandler reception_handler_;
 
  private:
+  std::string name_;
   Layer* lower_layer_;
-
   Layer* upper_layer_;
-
   std::vector<
       std::unique_ptr<sniffer::protocols::headers::metadata::HeaderMetadata>>
       supported_headers_;
-
-  std::string name_;
 };
 
 }  // namespace layers
