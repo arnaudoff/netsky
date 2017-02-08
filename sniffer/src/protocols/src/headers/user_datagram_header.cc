@@ -75,8 +75,8 @@ u_short UserDatagramHeader::header_len_payload_len() const {
  *
  * @return The checksum.
  */
-u_int16_t UserDatagramHeader::checksum() const {
-  return data_->checksum;
+u_short UserDatagramHeader::checksum() const {
+  return ntohs(data_->checksum);
 }
 
 /**

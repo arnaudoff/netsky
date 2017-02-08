@@ -170,6 +170,11 @@ u_short TransmissionControlHeader::urgent_pointer() const {
   return ntohs(data_->destination_port);
 }
 
+/**
+ * @brief The header ID of the upper layer protocol; basically unused.
+ *
+ * @return Default value.
+ */
 int TransmissionControlHeader::next_header_id() const { return 0; }
 
 /**
