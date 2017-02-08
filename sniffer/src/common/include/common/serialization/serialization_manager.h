@@ -128,13 +128,24 @@ class SerializationManager : public SerializationPolicy<SerializedObject> {
         key_name, serialized_obj, serialized_parent_obj);
   }
 
-  void AppendVariableDepthObject(const std::string& root_key,
-                                 const std::string& children_key,
+  /**
+   * @brief Appends a child object to the parent object at height = parent
+   * object tree height - subtree_depth_delta.
+   *
+   * @param root_key_name The name of key of the root object.
+   * @param children_key_name The name of the key for the children object.
+   * @param subtree_depth_delta The distance from the leaf of the tree to the
+   * specific position where to append the child.
+   * @param serialized_obj The object to append.
+   * @param serialized_parent_obj The object to append to.
+   */
+  void AppendVariableDepthObject(const std::string& root_key_name,
+                                 const std::string& children_key_name,
                                  int subtree_depth_delta,
                                  const SerializedObject& obj,
                                  SerializedObject* p_obj) const {
     SerializationPolicy<SerializedObject>::AppendVariableDepthObject(
-        root_key, children_key, subtree_depth_delta, obj, p_obj);
+        root_key_name, children_key_name, subtree_depth_delta, obj, p_obj);
   }
 };
 

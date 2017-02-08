@@ -156,21 +156,45 @@ class JsonSerializationPolicy {
     serialized_parent_obj->set_data(json_pobj.dump());
   }
 
-  void AppendVariableDepthObject(const std::string& root_key,
-                                 const std::string& children_key,
+  /**
+   * @brief Appends a child object to the parent object at height = parent
+   * object tree height - subtree_depth_delta.
+   *
+   * @param root_key_name The name of key of the root object.
+   * @param children_key_name The name of the key for the children object.
+   * @param subtree_depth_delta The distance from the leaf of the tree to the
+   * specific position where to append the child.
+   * @param serialized_obj The object to append.
+   * @param serialized_parent_obj The object to append to.
+   */
+  void AppendVariableDepthObject(const std::string& root_key_name,
+                                 const std::string& children_key_name,
                                  int subtree_depth_delta,
                                  const T& serialized_obj,
                                  T* serialized_parent_obj) const {
     auto json_pobj = nlohmann::json::parse(serialized_parent_obj->data());
     auto json_obj = nlohmann::json::parse(serialized_obj.data());
 
-    InsertObjectAtNthDepth(children_key, subtree_depth_delta, json_obj,
-                           &(json_pobj[root_key]));
+    InsertObjectAtNthDepth(children_key_name, subtree_depth_delta, json_obj,
+                           &(json_pobj[root_key_name]));
 
     serialized_parent_obj->set_data(json_pobj.dump());
   }
 
-  int InsertObjectAtNthDepth(const std::string& children_key,
+  /**
+   * @brief Traverses a tree recursively while calculating its height
+   * starting with the root object and appends an object at height -
+   * subtree_depth_delta.
+   *
+   * @param children_key_name The name of the children property to append to.
+   * @param subtree_depth_delta The distance from the leaf of the parent object
+   * tree to the children property to append to.
+   * @param obj_to_insert The object to insert.
+   * @param root The root of the parent object tree.
+   *
+   * @return The height of the tree.
+   */
+  int InsertObjectAtNthDepth(const std::string& children_key_name,
                              int subtree_depth_delta,
                              nlohmann::json obj_to_insert,
                              nlohmann::json* root) const {
@@ -180,14 +204,14 @@ class JsonSerializationPolicy {
 
     int height = 0;
 
-    for (auto& obj : (*root)[children_key]) {
+    for (auto& obj : (*root)[children_key_name]) {
       height = std::max(
-          height, InsertObjectAtNthDepth(children_key, subtree_depth_delta,
+          height, InsertObjectAtNthDepth(children_key_name, subtree_depth_delta,
                                          obj_to_insert, &obj));
     }
 
     if (height + 1 == subtree_depth_delta) {
-      (*root)[children_key].push_back(obj_to_insert);
+      (*root)[children_key_name].push_back(obj_to_insert);
     }
 
     return height + 1;
