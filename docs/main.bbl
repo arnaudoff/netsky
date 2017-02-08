@@ -1,9 +1,41 @@
-\begin{thebibliography}{2}
+\begin{thebibliography}{7}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Alexandrescu(2001)]{alexandrescu_modern_2001}
+A.~Alexandrescu.
+\newblock \emph{Modern {C}++ design: generic programming and design patterns
+  applied}.
+\newblock C++ in-depth series. Addison-Wesley, Boston, MA, 2001.
+\newblock ISBN 978-0-201-70431-0.
+
+\bibitem[Gamma(1995)]{gamma_design_1995}
+E.~Gamma, editor.
+\newblock \emph{Design patterns: elements of reusable object-oriented
+  software}.
+\newblock Addison-{Wesley} professional computing series. Addison-Wesley,
+  Reading, Mass, 1995.
+\newblock ISBN 978-0-201-63361-0.
+
+\bibitem[Meyers(2014)]{meyers_effective_2014}
+S.~Meyers.
+\newblock \emph{Effective modern {C}++: 42 specific ways to improve your use of
+  {C}++11 and {C}++14}.
+\newblock O'Reilly Media, Beijing ; Sebastopol, CA, first edition edition,
+  2014.
+\newblock ISBN 978-1-4919-0399-5.
+\newblock OCLC: ocn884480640.
+
+\bibitem[Sanders(2011)]{sanders_practical_2011}
+C.~Sanders.
+\newblock \emph{Practical packet analysis: using {Wireshark} to solve
+  real-world network problems}.
+\newblock No Starch Press, San Francisco, Calif, 2. ed edition, 2011.
+\newblock ISBN 978-1-59327-266-1.
+\newblock OCLC: 755869776.
 
 \bibitem[Stroustrup(2013)]{stroustrup_c++_2013}
 B.~Stroustrup.
@@ -17,5 +49,12 @@ A.~S. Tanenbaum and D.~Wetherall.
 \newblock Pearson Prentice Hall, Boston, 5th ed edition, 2011.
 \newblock ISBN 978-0-13-212695-3.
 \newblock OCLC: ocn660087726.
+
+\bibitem[Williams(2012)]{williams_c++_2012}
+A.~Williams.
+\newblock \emph{C++ concurrency in action: practical multithreading}.
+\newblock Manning, Shelter Island, NY, 2012.
+\newblock ISBN 978-1-933988-77-1.
+\newblock OCLC: ocn320189325.
 
 \end{thebibliography}
