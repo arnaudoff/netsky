@@ -1,37 +1,36 @@
-<div class="ui inverted vertical footer segment">
-  <div class="ui center aligned container">
-    <div class="ui stackable inverted divided grid">
-      <div class="three wide column">
-        <h4 class="ui inverted header">Help</h4>
-        <div class="ui inverted link list">
-          <a href="#" class="item">Documentation</a>
-          <a href="#" class="item">Supported protocols</a>
+<div [ngClass]="['ui', 'inverted', 'vertical', 'footer', 'segment']">
+  <div [ngClass]="['ui', 'center', 'aligned', 'container']">
+    <div [ngClass]="['ui', 'stackable', 'inverted', 'divided', 'grid']">
+      <div [ngClass]="['three', 'wide', 'column']">
+        <h4 [ngClass]="['ui', 'inverted', 'header']">Help</h4>
+        <div [ngClass]="['ui', 'inverted', 'link', 'list']">
+          <a href="https://github.com/arnaudoff/netsky/blob/master/docs/main.pdf" [ngClass]="['item']">Documentation</a>
         </div>
       </div>
-      <div class="three wide column">
-        <h4 class="ui inverted header">Source code</h4>
-        <div class="ui inverted link list">
-          <a href="#" class="item">GitHub</a>
-          <a href="#" class="item">Contribution</a>
+      <div [ngClass]="['three', 'wide', 'column']">
+        <h4 [ngClass]="['ui', 'inverted', 'header']">Source code</h4>
+        <div [ngClass]="['ui', 'inverted', 'link', 'list']">
+          <a href="https://github.com/arnaudoff/netsky/" [ngClass]="['item']">GitHub</a>
         </div>
       </div>
-      <div class="three wide column">
-        <h4 class="ui inverted header">Bug reports</h4>
-        <div class="ui inverted link list">
-          <a href="#" class="item">New issue</a>
+      <div [ngClass]="['three', 'wide', 'column']">
+        <h4 [ngClass]="['ui', 'inverted', 'header']">Bug reports</h4>
+        <div [ngClass]="['ui', 'inverted', 'link', 'list']">
+          <a href="https://github.com/arnaudoff/netsky/issues/new" [ngClass]="['item']">New issue</a>
         </div>
       </div>
-      <div class="seven wide column">
-        <h4 class="ui inverted header">Netsky</h4>
+      <div [ngClass]="['seven', 'wide', 'column']">
+        <h4 [ngClass]="['ui', 'inverted', 'header']">Netsky</h4>
         <p>A simple packet sniffer based on libpcap, AngularJS 2 and WebSockets.</p>
       </div>
     </div>
-    <div class="ui inverted section divider"></div>
-    <img src="assets/images/logo.png" class="ui centered mini image">
-    <div class="ui horizontal inverted small divided link list">
-      <a class="item" href="#">Netsky 0.0.1</a>
-      <a class="item" href="#">Ivaylo Arnaudov</a>
-      <a class="item" href="#">MIT license</a>
+    <div [ngClass]="['ui', 'inverted', 'section', 'divider']"></div>
+    <img src="assets/images/logo.png" [ngClass]="['ui', 'centered', 'mini', 'image']">
+    <div [ngClass]="['ui', 'horizontal', 'inverted', 'small', 'divided', 'link',
+      'list']">
+      <a [ngClass]="['item']" href="https://github.com/arnaudoff/netsky">Netsky 0.0.1</a>
+      <a [ngClass]="['item']" href="https://blog.arnaudoff.net/">Ivaylo Arnaudov</a>
+      <a [ngClass]="['item']" href="#">GNU General Public License v2</a>
     </div>
   </div>
 </div>

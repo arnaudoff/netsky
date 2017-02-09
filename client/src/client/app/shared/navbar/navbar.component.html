@@ -1,40 +1,10 @@
-<div class="ui fixed inverted menu">
-  <div class="ui container">
-    <a class="item" [routerLink]="['/']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Home</a>
-    <div class="ui simple dropdown item">
-      Capture <i class="dropdown icon"></i>
-      <div class="menu">
-        <a class="item" href="#">Link Item</a>
-        <a class="item" href="#">Link Item</a>
-        <div class="divider"></div>
-        <div class="header">Statistics</div>
-        <div class="item">
-          <i class="dropdown icon"></i>
-          Sub Menu
-          <div class="menu">
-            <a class="item" href="#">Link Item</a>
-            <a class="item" href="#">Link Item</a>
-          </div>
-        </div>
-        <a class="item" href="#">Link Item</a>
-      </div>
-    </div>
-    <div class="ui simple dropdown item">
-      Settings <i class="dropdown icon"></i>
-      <div class="menu">
-        <a class="item" href="#">Link Item</a>
-        <a class="item" href="#">Link Item</a>
-        <div class="divider"></div>
-        <div class="header">Server</div>
-        <div class="item">
-          <i class="dropdown icon"></i>
-          Sub Menu
-          <div class="menu">
-            <a class="item" href="#">Link Item</a>
-            <a class="item" href="#">Link Item</a>
-          </div>
-        </div>
-        <a class="item" href="#">Link Item</a>
+<div [ngClass]="['ui', 'fixed', 'inverted', 'menu']">
+  <div [ngClass]="['ui', 'container']">
+    <a [ngClass]="['item']" [routerLink]="['/']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Home</a>
+    <div [ngClass]="['ui', 'simple', 'dropdown', 'item']">
+      Capture <i [ngClass]="['dropdown', 'icon']"></i>
+      <div [ngClass]="['menu']">
+        <a [ngClass]="['item']" href="#">Stop</a>
       </div>
     </div>
   </div>

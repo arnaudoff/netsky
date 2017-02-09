@@ -9,8 +9,8 @@ import { AuthenticationInfo } from './authentication-info';
 @Injectable()
 export class SnifferService {
 
-  public hostInfo: Subject<Object>;
-  public authenticationInfo: Subject<Object>;
+  public hostInfo: Subject<HostInfo>;
+  public authenticationInfo: Subject<AuthenticationInfo>;
 
   private _interfaceName: string;
   private _filterExpression: string;

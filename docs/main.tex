@@ -1711,16 +1711,229 @@ lastline=62]{../sniffer/src/core/src/server_command_invoker.cc}
 
 \subsection{Имплементация на услуги}
 
-\subsubsection{Имплементация на \texttt{WebSocketClient}}
+Голяма част от имплементацията на услугите е базиранa основно на
+парадигмата \textit{реактивно програмиране} и т.нар.
+реактивни разширения (reactive extensions), реализирани чрез
+RxJS библиотеката, вградена в Angular 2. На практика,
+те позволяват програмиране с асинхронни потоци от събития или данни,
+като предимството е, че в тях е застъпена функционалната парадигма,
+следователно тези потоци могат да се съединяват (merge), филтрират,
+трансформират (map) и др. Пример за поток може да бъде стандартно \texttt{click}
+събитие:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/observable.png}
+  \caption{Визуализация на асинрхонен поток от данни.}
+  \label{observable_fig}
+\end{figure}
+
+Всяко събитие се прихваща асинхронно чрез дефиниране на callback
+функция, изпълняваща се при излъчване на стойност, на друга подобна
+функция, изпълняваща се когато е излъчена грешка, и на друга такава,
+когато е излъчено събитие за край
+на потока (completed). Тези функции се наричат изследващи състоянието
+(observers), а потока, който се изследва --- изследваем (observable). В
+обектно-ориентирания дизайн този шаблон е известен като \textit{наблюдател}
+(observer). \cite{gamma_design_1995}
+
+\subsubsection{Имплементация на \texttt{WebSocketService}}
+
+Класът \texttt{WebSocketService} се занимава с установяването и поддръжката на
+двустранната комуникация със сървъра. Той има два метода:
+публичния \texttt{connect()}, и частния \texttt{create()}.
+Методът \texttt{connect()} приема URL, към който да се свърже,
+създавайки обект от типа \texttt{WebSocket}, дефиниран от WebSocket
+API-а на браузъра.
+
+Класът има поле от тип \texttt{Rx.Subject}, което представлява едновременно
+изследваем (observable) и изследващ обект (observer) от събития, включващи
+съобщение (\texttt{MessageEvent}). Всяка излъчена стойност или
+събитие се изпраща на всички изследващи обекти (subscribers). Това
+поле се зарежда мързеливо (lazy load) от \texttt{create()} метода.
+
+\lstinputlisting[language={JavaScript},
+  caption={Имплементация на \texttt{connect()} метода на
+  \texttt{WebSocketService}},
+  firstline=12,
+lastline=21]{../client/src/client/app/shared/websocket/websocket.service.ts}
+
+В \texttt{create()} метода се създава изследваем обект
+(observable), сдвоявайки (bind) callback функциите на изследващия го обект с
+тези, извиквани по подразбиране за \texttt{WebSocket} обекта. Така този изследваем
+обект на практика приема данните от канала на комуникация и ги 'предава' на
+изследващите: когато по канала се получи съобщение, се извиква \texttt{next}
+callback функцията на
+изследващия, когато се получи грешка --- \texttt{error} callback функцията, когато се затвори
+канала --- \texttt{completed} callback функцията.
+
+\lstinputlisting[language={JavaScript},
+  caption={Имплементация на \texttt{create()} метода на
+  \texttt{WebSocketService}},
+  firstline=23,
+lastline=43]{../client/src/client/app/shared/websocket/websocket.service.ts}
+
 \subsubsection{Имплементация на \texttt{SnifferService}}
+
+\texttt{SnifferService} поддържа връзка към сървъра, използвайки вече описания
+\texttt{WebSocketService}. Вика се \texttt{connect()} метода му с адреса
+на сървъра, определен от средата на изпълнение (development или production),
+а при отговор потока трансформира получения \texttt{MessageEvent} обект към JSON преди да достигне крайния абонат (subscriber).
+
+\lstinputlisting[language={JavaScript},
+  caption={Част от имплементация на конструктора на
+  \texttt{SnifferService}},
+  firstline=23,
+lastline=27]{../client/src/client/app/shared/sniffer/sniffer.service.ts}
+
+Услугата предоставя и методи за 'настройване' на
+параметрите на анализатора: тя се инжектира като зависимост (dependency) на
+стъпковите компоненти, където последователно тези параметри се настройват --- това
+са методите \texttt{interfaceName()} и \texttt{filterExpression()}.
+Освен това, тя де факто описва интерфейс към
+командите на сървъра, например извикването на \texttt{start()} метода на
+\texttt{SnifferService} води до изпращане на команда за стартиране на
+анализатора:
+
+\lstinputlisting[language={JavaScript},
+  caption={Част от имплементация на конструктора на
+  \texttt{SnifferService}},
+  firstline=82,
+lastline=93]{../client/src/client/app/shared/sniffer/sniffer.service.ts}
+
+Аналогични са имплементациите на \texttt{retrieveInterfaces()}, \texttt{sendAuthenticate()} и
+\texttt{sendHostCheck()} методите. Отговорите на тези команди представляват
+потоци:
+
+\lstinputlisting[language={JavaScript},
+  caption={Част от имплементация на конструктора на
+  \texttt{SnifferService}},
+  firstline=82,
+lastline=93]{../client/src/client/app/shared/sniffer/sniffer.service.ts}
+
+Те са от типа \texttt{HostInfo} и \texttt{AuthenticationInfo}. Това
+на практика са модели, аналогични на моделите на отговор, имплементирани на
+сървъра. Потока за отговори на \texttt{retrieveInterfaces()} е енкапсулиран в
+друга услуга --- \texttt{InterfaceService}.
+
 \subsubsection{Имплементация на \texttt{InterfaceService}}
+
+Услугата представлява енкапсулация на потока на отговори на командата за
+намиране на физически интерфейси, чийто тип е масив от \texttt{Interface}
+обекти:
+
+\lstinputlisting[language={JavaScript},
+  caption={Имплементация на \texttt{InterfaceService}},
+  firstline=8,
+lastline=22]{../client/src/client/app/shared/interface/interface.service.ts}
+
+\texttt{Interface} е модел, който дефинира свойствата на един физически
+интерфейс. Той е аналогичен по свойства на обектите, към който
+\texttt{Interface} обекта на сървъра се сериализира. Има следната дефиниция:
+
+\lstinputlisting[language={JavaScript},
+  caption={Дефиниция на \texttt{Interface} моделa},
+  firstline=3]{../client/src/client/app/shared/interface/interface.ts}
+
+Подобно на \texttt{Interface}, \texttt{InterfaceAddress} модела на клиента
+има свойствата на обекта, резултат от сериализацията на
+\texttt{InterfaceAddress} обектите за даден физически интерфейс на сървъра:
+
+\lstinputlisting[language={JavaScript},
+  caption={Дефиниция на \texttt{InterfaceAddress} моделa}]{../client/src/client/app/shared/interface/interface-address.ts}
+
+\subsubsection{Имплементация на \texttt{PacketService}}
+
+Класът \texttt{PacketService} предоставя основния поток от пакети, които се
+изпращат по комуникационния канал между сървъра и клиента. Стандартно, той бива
+трансформиран като се извлечат данните от \texttt{MessageEvent} обекта и се десериализират
+в конкретен обект --- \texttt{Packet}. Това става в конструктора на класата:
+
+\lstinputlisting[language={JavaScript},
+  caption={Имплементация на конструктора на \texttt{PacketService}
+моделa}, firstline=15, lastline=22]{../client/src/client/app/shared/packet/packet.service.ts}
+
+Услугата има и отговорността да пази изследвания пакет за цялото приложение,
+чрез полето
+\texttt{\_observedPacket}, което е от тип \texttt{BehaviorSubject<Packet>}.
+Разликата между използвания вече \texttt{Rx.Subject} клас и
+\texttt{Rx.BehaviorSubject} е, че последния излъчва стойности
+(в случая \texttt{Packet} обекти) дори
+когато в потока не съществуват такива (т.е по подразбиране, ако пакет не е
+избран,
+потока връща като стойности празни обекти).
 
 \subsection{Имплементация на компоненти}
 
+\subsubsection{Имплементация на \texttt{HomeComponent}}
+
+\texttt{HomeComponent} проверява дали на сървъра съществува сесия на анализ
+посредством \texttt{sendHostCheck()} метода на \texttt{SnifferService}. В
+конструктора компонента се абонира за потока от отговори на командата и при
+отговор пренасочва към правилния компонент. Ако сесия не съществува,
+клиента се пренасочва към \texttt{NewSessionComponent}, ако такава
+съществува --- \texttt{SessionSubscriptionComponent}.
+
+\subsubsection{Имплементация на \texttt{NewSessionComponent}}
+
+\texttt{NewSessionComponent} няма съществена програмна логика, но съдържа
+шаблона, в който се изобразяват стъпките за настройване на параметрите на
+анализатора, които се изобразяват в \texttt{<router-outlet></router-outlet>}.
+
 \subsubsection{Имплементация на \texttt{PasswordStepComponent}}
+
+В \texttt{PasswordStepComponent} се съдържа логиката за четене на
+паролата на администратора, което се в шаблона се имплементира със
+стандартно \texttt{input} поле, и автентикацията. При натискането на
+\texttt{Next} бутона се извиква метода на компонента \texttt{handleStep()},
+който чете въведената парола и я изпраща
+чрез \texttt{sendAuthenticate} метода на
+\texttt{SnifferService}. Тъй като в конструктора на компонента той се
+абонира към поток от отговори на съобщения за автентикация, при положителен
+отговор клиентът се пренасочва към компонента за избиране на физически
+интерфейси.
+
 \subsubsection{Имплементация на \texttt{InterfaceStepComponent}}
-\subsubsection{Имплементация на \texttt{FilterStepComponent}}
-\subsubsection{Имплементация на \texttt{StartStepComponent}}
+
+\texttt{InterfaceStepComponent} е компонент, който предоставя на мрежовия
+администратор възможността да избере чрез typeahead падащо меню конкретния
+физически интерфейс, на който да слуша анализатора. В конструктора си компонента
+изпраща команда за намиране на интерфейсите чрез \texttt{retrieveInterfaces()}
+метода на \texttt{SnifferService}, след това се абонира към потока от отговорина
+командата от \texttt{InterfaceService} и когато получи такива, попълва списъка,
+от когото се генерира падащото меню. След като се натисне \texttt{Next} бутона
+се извиква \texttt{handleStep()} метода, който настройва интерфейса като
+параметър на \texttt{SnifferService} и пренасочва администратора към следващата
+стъпка --- \texttt{FilterStepComponent}.
+
+\subsubsection{Имплементация на FilterStepComponent}
+
+\texttt{FilterStepComponent} представлява компонент, аналогичен по имплементация на
+\texttt{PasswordStepComponent} --- \texttt{input} поле, чиято стойност се
+прочита, но вместо да се изпрати се записва като параметър на \texttt{SnifferService}.
+
+\subsubsection{Имплементация на StartStepComponent}
+
+\texttt{StartStepComponent} има тривиална имплементация ---
+в шаблона изобразява
+систематизирано в таблица обобщение на зададените параметри на
+\texttt{SnifferService}. При натискането на \texttt{Start} бутона се извиква
+\texttt{handleStep()} метода на услугата, който чрез \texttt{start()}
+метода на \texttt{SnifferService} инстанцията изпраща команда за пускане
+на анализатора с вече зададените параметри.
+
+\subsubsection{Имплементация на \texttt{SessionSubscriptionComponent}}
+
+\texttt{SessionSubscriptionComponent} компонента се инициализира в случай, че
+вече съществува сесия на анализ. Неговата единствена задача е да прочете
+паролата от \texttt{n}-тия свързан мрежов администратор, да я изпрати на сървъра
+чрез \texttt{sendAuthenticate()} метода на \texttt{SnifferService} и при успешна
+автентикация, да пренасочи администратора към \texttt{CaptureComponent}.
+
+\subsubsection{Имплементация на \texttt{PacketListComponent}}
+
+\subsubsection{Имплементация на \texttt{PacketDetailsComponent}}
+\subsubsection{Имплементация на \texttt{PacketBytesComponent}}
 
 \chapter{Ръководство на потребителя}
 
@@ -1728,15 +1941,75 @@ lastline=62]{../sniffer/src/core/src/server_command_invoker.cc}
 
 \section{Работа с приложението}
 
+\subsection{Въвеждане на парола}
+
+Преди да има възможност за избор на интерфейс, мрежовият администратор
+трябва да бъде автентикиран към сървъра. За тази цел той трябва да въведе парола.
+След въвеждането на парола, \texttt{Next} бутона отвежда към следващата стъпка ---
+избора на физически интерфейс.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/screenshots/password.png}
+  \caption{Въвеждане на парола за сесията.}
+  \label{screenshots_password_fig}
+\end{figure}
+
+\subsection{Избор на физически интерфейс}
+
+На мрежовия администратор се предоставя списък от имена на интерфейси, както и
+адресите на тези, които имат такива: IP адрес, мрежова маска и т.н. За избор на
+интерфейс е достатъчно да се започне въвеждането на името на интерфейса, след
+това от падащото меню се избира чрез мишката или Enter. След избора на интерфейс,
+\texttt{Next} бутона отвежда към следващата стъпка ---
+въвеждането на филтриращ израз.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/screenshots/interface.png}
+  \caption{Избор на физически интерфейс.}
+  \label{screenshots_interface_fig}
+\end{figure}
+
+\subsection{Въвеждане на филтриращ израз}
+
+Мрежовия администратор може да въведе филтър, който да е валиден за цялата сесия
+на анализ. Например, филтърът \texttt{ip} позволява само IP трафик. Съществуват
+по-прости\footnote{\url{http://alumni.cs.ucr.edu/~marios/ethereal-tcpdump.pdf}}
+филтри,
+но и
+комплексни\footnote{\url{https://www.wains.be/pub/networking/tcpdump_advanced_filters.txt}}
+такива, с които може да се филтрира на ниво битове.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/screenshots/filter.png}
+  \caption{Въвеждане на филтриращ израз.}
+  \label{screenshots_filter_fig}
+\end{figure}
+
+\subsection{Стартиране на сесия}
+
+След настройването на необходимите параметри на сесията, на мрежовия
+администратор се представя екран на кратък обзор на конфигурираните параметри.
+След натискането на \texttt{Start} бутона, сесията започва.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/screenshots/start.png}
+  \caption{Стартиране на сесия.}
+  \label{screenshots_start_fig}
+\end{figure}
+
 \chapter{Заключение}
 
 Представената дипломна работа реализира прост мрежов анализатор с възможност за
 отдалечен преглед на анализа от няколко мрежови администратори. Въпреки че не
-се цели в цялостна имплементация на голямо множество протоколи, текущата
-имплементация предлага принципен модел на реализация, който се стреми към
-прилагане на вече доказани добри практики в обектно-ориентирания дизайн с оглед
-улесняване на поддръжката и разширяване на функционалността на приложението.
-Текущата имплементация включва в себе си използването на библиотеки на
+се цели в имплементация на голямо множество протоколи, текущата
+имплементация предлага принципен модел на реализация, който се стреми да направи
+добавянето на такива лесно чрез прилагане на вече доказани добри практики в
+обектно-ориентирания дизайн.  Текущата имплементация включва в себе си
+използването на библиотеки на
 ниско ниво (libpcap), използването на вече установени езици поддържащи механизми
 за абстракция (C++11), както и модерни технологии в лицето на
 Angular 2, TypeScript и WebSocket протокола.

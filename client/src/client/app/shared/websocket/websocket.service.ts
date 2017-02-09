@@ -6,31 +6,28 @@ export class WebSocketService {
 
   public activeConnection: Rx.Observable<Object>;
 
-  private subject: Rx.Subject<MessageEvent>;
-  private ws: WebSocket;
+  private _subject: Rx.Subject<MessageEvent>;
+  private _ws: WebSocket;
 
   public connect(url: string): Rx.Subject<MessageEvent> {
-    this.ws = new WebSocket(url);
-    this.activeConnection = Rx.Observable.fromEvent(this.ws, 'open');
+    this._ws = new WebSocket(url);
+    this.activeConnection = Rx.Observable.fromEvent(this._ws, 'open');
 
-    if (!this.subject) {
-      this.subject = this.create(url);
+    if (!this._subject) {
+      this._subject = this.create(url);
     }
 
-    return this.subject;
+    return this._subject;
   }
 
   private create(url: string): Rx.Subject<MessageEvent> {
-    let wsInstance = this.ws;
+    let wsInstance = this._ws;
 
     let observable = Rx.Observable.create((observer: Rx.Observer<MessageEvent>) => {
-      // Emit the received message to the observer
       wsInstance.onmessage = observer.next.bind(observer);
-
       wsInstance.onerror = observer.error.bind(observer);
       wsInstance.onclose = observer.complete.bind(observer);
 
-      // Close the websocket on unsubscribe
       return wsInstance.close.bind(wsInstance);
     });
 

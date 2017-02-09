@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2017.1.6)  8 FEB 2017 16:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Arch Linux) (preloaded format=pdflatex 2017.1.6)  9 FEB 2017 23:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -2437,7 +2437,7 @@ Underfull \hbox (badness 6559) in paragraph at lines 188--190
 []\T2A/cmr/bx/n/12 Форматиране на дан-ни-те \T2A/cmr/m/n/12 Де-фи-ни-ра под-ред-ба-та на дан-ни-те, в как-ва
  []
 
-<figures/five_layer_network.png, id=411, 769.87625pt x 668.4975pt>
+<figures/five_layer_network.png, id=431, 769.87625pt x 668.4975pt>
 File: figures/five_layer_network.png Graphic file (type png)
  <use figures/five_layer_network.png>
 Package pdftex.def Info: figures/five_layer_network.png used on input line 211.
@@ -2461,7 +2461,7 @@ Underfull \hbox (badness 2181) in paragraph at lines 228--241
 \T2A/cmr/m/n/12 им-п-ле-мен-та-ци-я-та на пред-с-та-ве-ния в дип-лом-на-та ра-бо-та мре-жов ана-ли-за-тор. Той
  []
 
-[9] <figures/interlayer_communication.png, id=419, 839.135pt x 519.9425pt>
+[9] <figures/interlayer_communication.png, id=439, 839.135pt x 519.9425pt>
 File: figures/interlayer_communication.png Graphic file (type png)
  <use figures/interlayer_communication.png>
 Package pdftex.def Info: figures/interlayer_communication.png used on input line 244.
@@ -2490,7 +2490,7 @@ Underfull \hbox (badness 5622) in paragraph at lines 276--280
  []\T2A/cmr/bx/n/12 Open Systems Interconnection (OSI)[] \T2A/cmr/m/n/12 пред-с-тав-ля-ва мо-дел на свър-з-ва-не на
  []
 
-[10 <./figures/five_layer_network.png>] [11 <./figures/interlayer_communication.png>] <figures/osi_vs_tcp.png, id=436, 540.0175pt x 326.21875pt>
+[10 <./figures/five_layer_network.png>] [11 <./figures/interlayer_communication.png>] <figures/osi_vs_tcp.png, id=456, 540.0175pt x 326.21875pt>
 File: figures/osi_vs_tcp.png Graphic file (type png)
  <use figures/osi_vs_tcp.png>
 Package pdftex.def Info: figures/osi_vs_tcp.png used on input line 329.
@@ -2505,7 +2505,7 @@ Underfull \hbox (badness 1360) in paragraph at lines 346--356
 \T2A/cmr/m/n/12 ад-ми-нис-т-ра-тив-ни при-ви-ле-гии, тъй ка-то ко-пи-ра-не-то на по-лу-че-ни-/-из-п-ра-те-ни па-ке-ти
  []
 
-<figures/bpf_overview.png, id=438, 618.31pt x 537.00626pt>
+<figures/bpf_overview.png, id=458, 618.31pt x 537.00626pt>
 File: figures/bpf_overview.png Graphic file (type png)
  <use figures/bpf_overview.png>
 Package pdftex.def Info: figures/bpf_overview.png used on input line 359.
@@ -2830,7 +2830,7 @@ Underfull \hbox (badness 5175) in paragraph at lines 460--467
 []\T2A/cmr/bx/n/12 Поддържани про-то-ко-ли \T2A/cmr/m/n/12 Под-дър-жа над 850 раз-лич-ни про-то-ко-ла --- от
  []
 
-<figures/wireshark.png, id=461, 1686.3pt x 1001.7425pt>
+<figures/wireshark.png, id=482, 1686.3pt x 1001.7425pt>
 File: figures/wireshark.png Graphic file (type png)
  <use figures/wireshark.png>
 Package pdftex.def Info: figures/wireshark.png used on input line 490.
@@ -2844,7 +2844,7 @@ Underfull \hbox (badness 4303) in paragraph at lines 511--516
 []\T2A/cmr/bx/n/12 Потребителски ин-тер-фейс \T2A/cmr/m/n/12 Ми-ни-ма-лис-ти-чен command-line interface (CLI).
  []
 
-[15] <figures/tcpdump_cmd.png, id=469, 552.0625pt x 105.39375pt>
+[15] <figures/tcpdump_cmd.png, id=490, 552.0625pt x 105.39375pt>
 File: figures/tcpdump_cmd.png Graphic file (type png)
  <use figures/tcpdump_cmd.png>
 Package pdftex.def Info: figures/tcpdump_cmd.png used on input line 519.
@@ -2854,7 +2854,7 @@ Underfull \hbox (badness 2173) in paragraph at lines 529--533
 \T2A/cmr/m/n/12 под-дър-жа през \T2A/cmr/bx/n/12 WinDump\T2A/cmr/m/n/12 , ко-я-то из-пол-з-ва \T2A/cmr/bx/n/12 WinPcap \T2A/cmr/m/n/12 --- Microsoft Windows
  []
 
-<figures/tcpdump.png, id=471, 1539.7525pt x 766.865pt>
+<figures/tcpdump.png, id=492, 1539.7525pt x 766.865pt>
 File: figures/tcpdump.png Graphic file (type png)
  <use figures/tcpdump.png>
 Package pdftex.def Info: figures/tcpdump.png used on input line 538.
@@ -4542,7 +4542,7 @@ Package epstopdf Info: Source file: <figures/client_server_abstract.eps>
 (epstopdf)             Command: <repstopdf --outfile=figures/client_server_abstract-eps-converted-to.pdf figures/client_server_abstract.eps>
 (epstopdf)             \includegraphics on input line 666.
 Package epstopdf Info: Output file is already uptodate.
-<figures/client_server_abstract-eps-converted-to.pdf, id=497, 377.41pt x 175.65625pt>
+<figures/client_server_abstract-eps-converted-to.pdf, id=517, 377.41pt x 175.65625pt>
 File: figures/client_server_abstract-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/client_server_abstract-eps-converted-to.pdf>
 Package pdftex.def Info: figures/client_server_abstract-eps-converted-to.pdf used on input line 666.
@@ -4663,7 +4663,7 @@ Package epstopdf Info: Source file: <figures/configuration_manager_uml.eps>
 (epstopdf)             Command: <repstopdf --outfile=figures/configuration_manager_uml-eps-converted-to.pdf figures/configuration_manager_uml.eps>
 (epstopdf)             \includegraphics on input line 694.
 Package epstopdf Info: Output file is already uptodate.
- <figures/configuration_manager_uml-eps-converted-to.pdf, id=518, 387.4475pt x 193.72375pt>
+ <figures/configuration_manager_uml-eps-converted-to.pdf, id=538, 387.4475pt x 193.72375pt>
 File: figures/configuration_manager_uml-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/configuration_manager_uml-eps-converted-to.pdf>
 Package pdftex.def Info: figures/configuration_manager_uml-eps-converted-to.pdf used on input line 694.
@@ -4842,7 +4842,7 @@ Package epstopdf Info: Source file: <figures/layer_stack_uml.eps>
 (epstopdf)             Command: <repstopdf --outfile=figures/layer_stack_uml-eps-converted-to.pdf figures/layer_stack_uml.eps>
 (epstopdf)             \includegraphics on input line 714.
 Package epstopdf Info: Output file is already uptodate.
-<figures/layer_stack_uml-eps-converted-to.pdf, id=522, 143.53625pt x 99.37125pt>
+<figures/layer_stack_uml-eps-converted-to.pdf, id=542, 143.53625pt x 99.37125pt>
 File: figures/layer_stack_uml-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/layer_stack_uml-eps-converted-to.pdf>
 Package pdftex.def Info: figures/layer_stack_uml-eps-converted-to.pdf used on input line 714.
@@ -4856,7 +4856,7 @@ Package epstopdf Info: Source file: <figures/layers_uml.eps>
 (epstopdf)             Command: <repstopdf --outfile=figures/layers_uml-eps-converted-to.pdf figures/layers_uml.eps>
 (epstopdf)             \includegraphics on input line 726.
 Package epstopdf Info: Output file is already uptodate.
- <figures/layers_uml-eps-converted-to.pdf, id=524, 540.0175pt x 304.13625pt>
+ <figures/layers_uml-eps-converted-to.pdf, id=544, 540.0175pt x 304.13625pt>
 File: figures/layers_uml-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/layers_uml-eps-converted-to.pdf>
 Package pdftex.def Info: figures/layers_uml-eps-converted-to.pdf used on input line 726.
@@ -4899,12 +4899,12 @@ Package epstopdf Info: Source file: <figures/sniffed_packet_uml.eps>
 (epstopdf)             Command: <repstopdf --outfile=figures/sniffed_packet_uml-eps-converted-to.pdf figures/sniffed_packet_uml.eps>
 (epstopdf)             \includegraphics on input line 757.
 Package epstopdf Info: Output file is already uptodate.
-<figures/sniffed_packet_uml-eps-converted-to.pdf, id=561, 113.42375pt x 154.5775pt>
+<figures/sniffed_packet_uml-eps-converted-to.pdf, id=581, 113.42375pt x 154.5775pt>
 File: figures/sniffed_packet_uml-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/sniffed_packet_uml-eps-converted-to.pdf>
 Package pdftex.def Info: figures/sniffed_packet_uml-eps-converted-to.pdf used on input line 757.
 (pdftex.def)             Requested size: 79.39607pt x 108.20349pt.
- [22 <./figures/layers_uml-eps-converted-to.pdf> <./figures/sniffed_packet_uml-eps-converted-to.pdf>] <figures/sniffed_packet_regions.png, id=595, 965.6075pt x 206.7725pt>
+ [22 <./figures/layers_uml-eps-converted-to.pdf> <./figures/sniffed_packet_uml-eps-converted-to.pdf>] <figures/sniffed_packet_regions.png, id=615, 965.6075pt x 206.7725pt>
 File: figures/sniffed_packet_regions.png Graphic file (type png)
  <use figures/sniffed_packet_regions.png>
 Package pdftex.def Info: figures/sniffed_packet_regions.png used on input line 783.
@@ -4918,7 +4918,7 @@ Package epstopdf Info: Source file: <figures/packet_sniffer_uml.eps>
 (epstopdf)             Command: <repstopdf --outfile=figures/packet_sniffer_uml-eps-converted-to.pdf figures/packet_sniffer_uml.eps>
 (epstopdf)             \includegraphics on input line 806.
 Package epstopdf Info: Output file is already uptodate.
- <figures/packet_sniffer_uml-eps-converted-to.pdf, id=599, 154.5775pt x 293.095pt>
+ <figures/packet_sniffer_uml-eps-converted-to.pdf, id=619, 154.5775pt x 293.095pt>
 File: figures/packet_sniffer_uml-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/packet_sniffer_uml-eps-converted-to.pdf>
 Package pdftex.def Info: figures/packet_sniffer_uml-eps-converted-to.pdf used on input line 806.
@@ -4928,7 +4928,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 822--828
 []\T2A/cmtt/m/n/12 InterfaceRetriever \T2A/cmr/m/n/12 съ-дър-жа обект от ти-па \T2A/cmtt/m/n/12 IpAddressFactory\T2A/cmr/m/n/12 . Цел-та на
  []
 
-<figures/main_algorithm.pdf, id=619, 643.40375pt x 590.205pt>
+<figures/main_algorithm.pdf, id=639, 643.40375pt x 590.205pt>
 File: figures/main_algorithm.pdf Graphic file (type pdf)
  <use figures/main_algorithm.pdf>
 Package pdftex.def Info: figures/main_algorithm.pdf used on input line 833.
@@ -5034,7 +5034,7 @@ Package epstopdf Info: Source file: <figures/server_websocketserver_uml.eps>
 (epstopdf)             Command: <repstopdf --outfile=figures/server_websocketserver_uml-eps-converted-to.pdf figures/server_websocketserver_uml.eps>
 (epstopdf)             \includegraphics on input line 875.
 Package epstopdf Info: Output file is already uptodate.
-<figures/server_websocketserver_uml-eps-converted-to.pdf, id=630, 175.65625pt x 458.71375pt>
+<figures/server_websocketserver_uml-eps-converted-to.pdf, id=650, 175.65625pt x 458.71375pt>
 File: figures/server_websocketserver_uml-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/server_websocketserver_uml-eps-converted-to.pdf>
 Package pdftex.def Info: figures/server_websocketserver_uml-eps-converted-to.pdf used on input line 875.
@@ -5054,7 +5054,7 @@ Package epstopdf Info: Source file: <figures/server_command_uml.eps>
 (epstopdf)             Command: <repstopdf --outfile=figures/server_command_uml-eps-converted-to.pdf figures/server_command_uml.eps>
 (epstopdf)             \includegraphics on input line 894.
 Package epstopdf Info: Output file is already uptodate.
- <figures/server_command_uml-eps-converted-to.pdf, id=651, 971.63pt x 326.21875pt>
+ <figures/server_command_uml-eps-converted-to.pdf, id=671, 971.63pt x 326.21875pt>
 File: figures/server_command_uml-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/server_command_uml-eps-converted-to.pdf>
 Package pdftex.def Info: figures/server_command_uml-eps-converted-to.pdf used on input line 894.
@@ -5145,7 +5145,7 @@ Underfull \hbox (badness 2173) in paragraph at lines 917--919
 []\T2A/cmr/m/n/12 Базирайки се на ком-по-нен-т-на-та ар-хи-тек-ту-ра на Angular 2, ар-хи-тек-ту-ра-та на
  []
 
-<figures/ng_component_and_dependencies_tree.pdf, id=652, 839.135pt x 393.47pt>
+<figures/ng_component_and_dependencies_tree.pdf, id=672, 839.135pt x 393.47pt>
 File: figures/ng_component_and_dependencies_tree.pdf Graphic file (type pdf)
  <use figures/ng_component_and_dependencies_tree.pdf>
 Package pdftex.def Info: figures/ng_component_and_dependencies_tree.pdf used on input line 922.
@@ -6166,7 +6166,7 @@ Overfull \hbox (6.0pt too wide) in paragraph at lines 1137--1137
 (../sniffer/src/common/include/common/serialization/json_serialization_policy.h
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 174.
-) <figures/insert_object_nth_depth.pdf, id=768, 857.2025pt x 356.33125pt>
+) <figures/insert_object_nth_depth.pdf, id=788, 857.2025pt x 356.33125pt>
 File: figures/insert_object_nth_depth.pdf Graphic file (type pdf)
  <use figures/insert_object_nth_depth.pdf>
 Package pdftex.def Info: figures/insert_object_nth_depth.pdf used on input line 1152.
@@ -7860,325 +7860,1085 @@ Package hyperref Warning: Glyph not defined in PD1 encoding,
 Package hyperref Warning: Glyph not defined in PD1 encoding,
 (hyperref)                removing `\cyri' on input line 1712.
 
+<figures/observable.png, id=1203, 513.92pt x 261.97874pt>
+File: figures/observable.png Graphic file (type png)
+ <use figures/observable.png>
+Package pdftex.def Info: figures/observable.png used on input line 1726.
+(pdftex.def)             Requested size: 241.84843pt x 123.28592pt.
+
+Underfull \hbox (badness 1092) in paragraph at lines 1731--1739
+[]\T2A/cmr/m/n/12 Всяко съ-би-тие се прих-ва-ща асин-х-рон-но чрез де-фи-ни-ра-не на callback фун-к-ция,
+ []
+
+
+Underfull \hbox (badness 5008) in paragraph at lines 1742--1748
+[]\T2A/cmr/m/n/12 Класът \T2A/cmtt/m/n/12 WebSocketService \T2A/cmr/m/n/12 се за-ни-ма-ва с ус-та-но-вя-ва-не-то и под-дръж-ка-та на
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1749--1754
+\T2A/cmr/m/n/12 (observable) и из-с-лед-ващ обект (observer) от съ-би-тия, включ-ва-щи съ-об-ще-ние
+ []
+
+(/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1759: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1759 ...p/shared/websocket/websocket.service.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1759: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1759 ...p/shared/websocket/websocket.service.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+[45 <./figures/observable.png>]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1759--1759
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/websocket/websocket.service.ts) (/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1774: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1774 ...p/shared/websocket/websocket.service.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1774: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1774 ...p/shared/websocket/websocket.service.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1774--1774
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/websocket/websocket.service.ts
+Overfull \hbox (20.18393pt too wide) in paragraph at lines 26--27
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+)
+Underfull \hbox (badness 5726) in paragraph at lines 1778--1782
+[]\T2A/cmtt/m/n/12 SnifferService \T2A/cmr/m/n/12 под-дър-жа връз-ка към сър-въ-ра, из-пол-з-вай-ки ве-че опи-са-ния
+ []
+
+(/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1787: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1787 ...t/app/shared/sniffer/sniffer.service.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1787: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1787 ...t/app/shared/sniffer/sniffer.service.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1787--1787
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/sniffer/sniffer.service.ts) [46] (/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1802: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1802 ...t/app/shared/sniffer/sniffer.service.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1802: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1802 ...t/app/shared/sniffer/sniffer.service.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1802--1802
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/sniffer/sniffer.service.ts) (/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1812: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1812 ...t/app/shared/sniffer/sniffer.service.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1812: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1812 ...t/app/shared/sniffer/sniffer.service.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1812--1812
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/sniffer/sniffer.service.ts)
+Underfull \hbox (badness 1430) in paragraph at lines 1814--1818
+[]\T2A/cmr/m/n/12 Те са от ти-па \T2A/cmtt/m/n/12 HostInfo \T2A/cmr/m/n/12 и \T2A/cmtt/m/n/12 AuthenticationInfo\T2A/cmr/m/n/12 . То-ва на прак-ти-ка са мо-де-ли,
+ []
+
+(/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1828: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1828 ...p/shared/interface/interface.service.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1828: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1828 ...p/shared/interface/interface.service.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1828--1828
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/interface/interface.service.ts [47]) (/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1836: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1836 ...lient/app/shared/interface/interface.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1836: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1836 ...lient/app/shared/interface/interface.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1836--1836
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/interface/interface.ts) (/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1843: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1843 ...p/shared/interface/interface-address.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1843: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1843 ...p/shared/interface/interface-address.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1843--1843
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/interface/interface-address.ts) (/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+./main.tex:1854: Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1854 ...ent/app/shared/packet/packet.service.ts}
+                                                  
+The following languages weren't loadable:
+    ,javascript$
+This may cause errors in the sequel.
+
+
+./main.tex:1854: Package Listings Error: language javascript undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1854 ...ent/app/shared/packet/packet.service.ts}
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 1854--1854
+[][][][][][][] 
+ []
+
+(../client/src/client/app/shared/packet/packet.service.ts)
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\CYRI' on input line 1718.
+(hyperref)                removing `\CYRI' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrm' on input line 1718.
+(hyperref)                removing `\cyrm' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrp' on input line 1718.
+(hyperref)                removing `\cyrp' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrl' on input line 1718.
+(hyperref)                removing `\cyrl' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1718.
+(hyperref)                removing `\cyre' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrm' on input line 1718.
+(hyperref)                removing `\cyrm' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1718.
+(hyperref)                removing `\cyre' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1718.
+(hyperref)                removing `\cyrn' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1718.
+(hyperref)                removing `\cyrt' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1718.
+(hyperref)                removing `\cyra' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrc' on input line 1718.
+(hyperref)                removing `\cyrc' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1718.
+(hyperref)                removing `\cyri' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrya' on input line 1718.
+(hyperref)                removing `\cyrya' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1718.
+(hyperref)                removing `\cyrn' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1718.
+(hyperref)                removing `\cyra' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrk' on input line 1718.
+(hyperref)                removing `\cyrk' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1718.
+(hyperref)                removing `\cyro' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrm' on input line 1718.
+(hyperref)                removing `\cyrm' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrp' on input line 1718.
+(hyperref)                removing `\cyrp' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1718.
+(hyperref)                removing `\cyro' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1718.
+(hyperref)                removing `\cyrn' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1718.
+(hyperref)                removing `\cyre' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1718.
+(hyperref)                removing `\cyrn' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1718.
+(hyperref)                removing `\cyrt' on input line 1866.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1718.
+(hyperref)                removing `\cyri' on input line 1866.
 
-[45]
+[48]
+Underfull \hbox (badness 5741) in paragraph at lines 1885--1895
+[]\T2A/cmr/m/n/12 В \T2A/cmtt/m/n/12 PasswordStepComponent \T2A/cmr/m/n/12 се съ-дър-жа ло-ги-ка-та за че-те-не на па-ро-ла-та на
+ []
+
+
+Underfull \hbox (badness 1087) in paragraph at lines 1911--1914
+[]\T2A/cmtt/m/n/12 FilterStepComponent \T2A/cmr/m/n/12 пред-с-тав-ля-ва ком-по-нент, ана-ло-ги-чен по им-п-ле-мен-та-ция на
+ []
+
+
+Underfull \hbox (badness 4168) in paragraph at lines 1917--1924
+[]\T2A/cmtt/m/n/12 StartStepComponent \T2A/cmr/m/n/12 има три-ви-ал-на им-п-ле-мен-та-ция --- в шаб-ло-на изоб-ра-зя-ва
+ []
+
+
+Underfull \hbox (badness 1975) in paragraph at lines 1927--1932
+[]\T2A/cmtt/m/n/12 SessionSubscriptionComponent \T2A/cmr/m/n/12 ком-по-нен-та се ини-ци-а-ли-зи-ра в слу-чай, че ве-че
+ []
+
+[49] [50]
 {\Bulgarian \CYRG \cyrl \cyra \cyrv \cyra } 4.
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\CYRR' on input line 1725.
+(hyperref)                removing `\CYRR' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrhrdsn' on input line 1725.
+(hyperref)                removing `\cyrhrdsn' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrk' on input line 1725.
+(hyperref)                removing `\cyrk' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1725.
+(hyperref)                removing `\cyro' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrv' on input line 1725.
+(hyperref)                removing `\cyrv' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1725.
+(hyperref)                removing `\cyro' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrd' on input line 1725.
+(hyperref)                removing `\cyrd' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrs' on input line 1725.
+(hyperref)                removing `\cyrs' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1725.
+(hyperref)                removing `\cyrt' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrv' on input line 1725.
+(hyperref)                removing `\cyrv' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1725.
+(hyperref)                removing `\cyro' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1725.
+(hyperref)                removing `\cyrn' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1725.
+(hyperref)                removing `\cyra' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrp' on input line 1725.
+(hyperref)                removing `\cyrp' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1725.
+(hyperref)                removing `\cyro' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1725.
+(hyperref)                removing `\cyrt' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrr' on input line 1725.
+(hyperref)                removing `\cyrr' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1725.
+(hyperref)                removing `\cyre' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrb' on input line 1725.
+(hyperref)                removing `\cyrb' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1725.
+(hyperref)                removing `\cyri' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1725.
+(hyperref)                removing `\cyrt' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1725.
+(hyperref)                removing `\cyre' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrl' on input line 1725.
+(hyperref)                removing `\cyrl' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrya' on input line 1725.
+(hyperref)                removing `\cyrya' on input line 1938.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\CYRR' on input line 1729.
+(hyperref)                removing `\CYRR' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1729.
+(hyperref)                removing `\cyra' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrb' on input line 1729.
+(hyperref)                removing `\cyrb' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1729.
+(hyperref)                removing `\cyro' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1729.
+(hyperref)                removing `\cyrt' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1729.
+(hyperref)                removing `\cyra' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrs' on input line 1729.
+(hyperref)                removing `\cyrs' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrp' on input line 1729.
+(hyperref)                removing `\cyrp' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrr' on input line 1729.
+(hyperref)                removing `\cyrr' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1729.
+(hyperref)                removing `\cyri' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrl' on input line 1729.
+(hyperref)                removing `\cyrl' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1729.
+(hyperref)                removing `\cyro' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrzh' on input line 1729.
+(hyperref)                removing `\cyrzh' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1729.
+(hyperref)                removing `\cyre' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1729.
+(hyperref)                removing `\cyrn' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1729.
+(hyperref)                removing `\cyri' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1729.
+(hyperref)                removing `\cyre' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1729.
+(hyperref)                removing `\cyrt' on input line 1942.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyro' on input line 1729.
+(hyperref)                removing `\cyro' on input line 1942.
 
-[46
 
-]
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\CYRV' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrhrdsn' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrv' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrzh' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrd' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrn' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrn' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrp' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrr' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyro' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrl' on input line 1944.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1944.
+
+<figures/screenshots/password.png, id=1361, 1052.93375pt x 502.87875pt>
+File: figures/screenshots/password.png Graphic file (type png)
+ <use figures/screenshots/password.png>
+Package pdftex.def Info: figures/screenshots/password.png used on input line 1953.
+(pdftex.def)             Requested size: 435.32422pt x 207.90811pt.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\CYRI' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrz' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrb' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyro' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrr' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrn' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrf' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrz' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrch' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrs' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrk' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrn' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrt' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrr' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrf' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrishrt' on input line 1958.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrs' on input line 1958.
+
+<figures/screenshots/interface.png, id=1362, 1072.005pt x 561.09625pt>
+File: figures/screenshots/interface.png Graphic file (type png)
+ <use figures/screenshots/interface.png>
+Package pdftex.def Info: figures/screenshots/interface.png used on input line 1969.
+(pdftex.def)             Requested size: 435.32422pt x 227.85062pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\CYRV' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrhrdsn' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrv' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrzh' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrd' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrn' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrn' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrf' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrl' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrt' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrr' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrr' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrshch' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrz' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrr' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1974.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrz' on input line 1974.
+
+[51
+
+ <./figures/screenshots/password.png>] <figures/screenshots/filter.png, id=1372, 1049.9225pt x 549.05125pt>
+File: figures/screenshots/filter.png Graphic file (type png)
+ <use figures/screenshots/filter.png>
+Package pdftex.def Info: figures/screenshots/filter.png used on input line 1986.
+(pdftex.def)             Requested size: 435.32422pt x 227.65096pt.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\CYRS' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrt' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrr' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrt' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrr' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrn' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrn' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyra' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrs' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyre' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrs' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyri' on input line 1991.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\cyrya' on input line 1991.
+
+
+Underfull \hbox (badness 7576) in paragraph at lines 1993--1996
+[]\T2A/cmr/m/n/12 След нас-т-рой-ва-не-то на не-об-хо-ди-ми-те па-ра-мет-ри на се-си-я-та, на мре-жо-вия
+ []
+
+<figures/screenshots/start.png, id=1373, 1037.8775pt x 531.9875pt>
+File: figures/screenshots/start.png Graphic file (type png)
+ <use figures/screenshots/start.png>
+Package pdftex.def Info: figures/screenshots/start.png used on input line 1999.
+(pdftex.def)             Requested size: 435.32422pt x 223.14099pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[52 <./figures/screenshots/interface.png> <./figures/screenshots/filter.png>] [53 <./figures/screenshots/start.png>]
 {\Bulgarian \CYRG \cyrl \cyra \cyrv \cyra } 5.
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\CYRZ' on input line 1731.
+(hyperref)                removing `\CYRZ' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1731.
+(hyperref)                removing `\cyra' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrk' on input line 1731.
+(hyperref)                removing `\cyrk' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrl' on input line 1731.
+(hyperref)                removing `\cyrl' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyryu' on input line 1731.
+(hyperref)                removing `\cyryu' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrch' on input line 1731.
+(hyperref)                removing `\cyrch' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1731.
+(hyperref)                removing `\cyre' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1731.
+(hyperref)                removing `\cyrn' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1731.
+(hyperref)                removing `\cyri' on input line 2004.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1731.
+(hyperref)                removing `\cyre' on input line 2004.
 
-(./main.bbl [47
+(./main.bbl [54
 
 ]
 
@@ -8234,72 +8994,72 @@ Underfull \hbox (badness 3009) in paragraph at lines 16--22
 []\T2A/cmr/m/n/12 E. Gamma, editor.  \T2A/cmr/m/it/12 Design patterns: elements of reusable object-oriented software\T2A/cmr/m/n/12 .
  []
 
-) [48
+) [55
 
 ]
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\CYRS' on input line 1748.
+(hyperref)                removing `\CYRS' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrp' on input line 1748.
+(hyperref)                removing `\cyrp' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1748.
+(hyperref)                removing `\cyri' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrs' on input line 1748.
+(hyperref)                removing `\cyrs' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrhrdsn' on input line 1748.
+(hyperref)                removing `\cyrhrdsn' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrk' on input line 1748.
+(hyperref)                removing `\cyrk' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1748.
+(hyperref)                removing `\cyrn' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1748.
+(hyperref)                removing `\cyra' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrf' on input line 1748.
+(hyperref)                removing `\cyrf' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1748.
+(hyperref)                removing `\cyri' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrg' on input line 1748.
+(hyperref)                removing `\cyrg' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyru' on input line 1748.
+(hyperref)                removing `\cyru' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrr' on input line 1748.
+(hyperref)                removing `\cyrr' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1748.
+(hyperref)                removing `\cyri' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1748.
+(hyperref)                removing `\cyrt' on input line 2021.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1748.
+(hyperref)                removing `\cyre' on input line 2021.
 
 (./main.lof
 Underfull \hbox (badness 2229) in paragraph at lines 21--21
@@ -8310,123 +9070,123 @@ Underfull \hbox (badness 2229) in paragraph at lines 21--21
 \tf@lof=\write8
 \openout8 = `main.lof'.
 
- [49
+ [56
 
 ]
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\CYRS' on input line 1749.
+(hyperref)                removing `\CYRS' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrp' on input line 1749.
+(hyperref)                removing `\cyrp' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1749.
+(hyperref)                removing `\cyri' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrs' on input line 1749.
+(hyperref)                removing `\cyrs' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrhrdsn' on input line 1749.
+(hyperref)                removing `\cyrhrdsn' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrk' on input line 1749.
+(hyperref)                removing `\cyrk' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrn' on input line 1749.
+(hyperref)                removing `\cyrn' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1749.
+(hyperref)                removing `\cyra' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1749.
+(hyperref)                removing `\cyrt' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyra' on input line 1749.
+(hyperref)                removing `\cyra' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrb' on input line 1749.
+(hyperref)                removing `\cyrb' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrl' on input line 1749.
+(hyperref)                removing `\cyrl' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1749.
+(hyperref)                removing `\cyri' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrc' on input line 1749.
+(hyperref)                removing `\cyrc' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyri' on input line 1749.
+(hyperref)                removing `\cyri' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyrt' on input line 1749.
+(hyperref)                removing `\cyrt' on input line 2022.
 
 
 Package hyperref Warning: Glyph not defined in PD1 encoding,
-(hyperref)                removing `\cyre' on input line 1749.
+(hyperref)                removing `\cyre' on input line 2022.
 
 (./main.lot)
 \tf@lot=\write9
 \openout9 = `main.lot'.
 
- (./main.ind) [50
+ (./main.ind) [57
 
 ]
 
-./main.tex:1753: LaTeX Error: \begin{titlepage} on input line 1 ended by \end{document}.
+./main.tex:2026: LaTeX Error: \begin{titlepage} on input line 1 ended by \end{document}.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1753 \end{document}
+l.2026 \end{document}
                      
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1753.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1753.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2026.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 2026.
 (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1753.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1753.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2026.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2026.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 36E671100A3E0A3A226D1AFFB15BF644;4105.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1753.
+(rerunfilecheck)             Checksum: ABCD488FA96825E8481464E01CDFAE67;4343.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2026.
  )
 (\end occurred inside a group at level 1)
 
 ### semi simple group (level 1) entered at line 1 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 23923 strings out of 493013
- 418982 string characters out of 6139318
- 625627 words of memory out of 5000000
- 26293 multiletter control sequences out of 15000+600000
+ 24359 strings out of 493013
+ 428796 string characters out of 6139318
+ 633627 words of memory out of 5000000
+ 26511 multiletter control sequences out of 15000+600000
  25410 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,9n,120p,1160b,2167s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t2a.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1728.pfb>
-Output written on main.pdf (50 pages, 1513218 bytes).
+Output written on main.pdf (57 pages, 1660623 bytes).
 PDF statistics:
- 1434 PDF objects out of 1440 (max. 8388607)
- 1305 compressed objects within 14 object streams
- 592 named destinations out of 1000 (max. 500000)
- 636 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1643 PDF objects out of 1728 (max. 8388607)
+ 1500 compressed objects within 15 object streams
+ 720 named destinations out of 1000 (max. 500000)
+ 693 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -13,10 +13,6 @@ export class InterfaceService {
   constructor(private wsService: WebSocketService) {
     this.interfaces = <Subject<Array<Interface>>>this.wsService
       .connect(Config.WS_SERVER_ADDRESS)
-      .filter((response: MessageEvent) => {
-          let data = JSON.parse(response.data);
-          return data.hasOwnProperty('interfaces');
-      })
       .map((response: MessageEvent) : Array<Interface> => {
         let data = JSON.parse(response.data);
         return <Array<Interface>>data.interfaces;
