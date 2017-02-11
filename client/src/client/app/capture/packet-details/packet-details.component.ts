@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, NgZone } from '@angular/core';
 import * as d3 from 'd3';
 
 import { PacketService, Packet } from './../../shared/packet/index';
@@ -15,36 +15,52 @@ export class PacketDetailsComponent {
 
   private packetToDisplay: Packet = null;
 
-  private readonly width: number = 1120;
-  private readonly height: number = 300;
+  private readonly heightDecreaseCoefficient: number = 3;
+  private width: number = window.innerWidth;
+  private height: number = window.innerHeight / this.heightDecreaseCoefficient;
 
-  private xScale: d3.scale.Linear<number, number> =
-    d3.scale.linear().range([0, this.width]);
-
-  private yScale: d3.scale.Linear<number, number> =
-    d3.scale.linear().range([0, this.height]);
+  private xScale: d3.scale.Linear<number, number>;
+  private yScale: d3.scale.Linear<number, number>;
 
   private group: d3.selection.Update<any>;
 
   private xCoefficient: number;
   private yCoefficient: number;
 
-  constructor(private packetService: PacketService, private element: ElementRef) {
-    packetService.observedPacket.subscribe((packet: Packet) => {
-      if (Object.keys(packet).length === 0) {
-        console.log('Please select a packet from the list to visualise.');
-      } else {
-        if (this.packetToDisplay) {
-          $('.chart').remove();
-        }
+  constructor(
+    private packetService: PacketService,
+    private element: ElementRef,
+    private ngZone: NgZone) {
+      packetService.observedPacket.subscribe((packet: Packet) => {
+        if (Object.keys(packet).length > 0) {
+          if (this.packetToDisplay) {
+            $('.chart').remove();
+          }
 
-        this.packetToDisplay = packet;
-        this.displayPacket();
-      }
-    });
+          this.packetToDisplay = packet;
+          this.displayPacket();
+        }
+      });
+
+      window.onresize = (e) =>
+      {
+        ngZone.run(() => {
+          this.width = window.innerWidth;
+          this.height = window.innerHeight / this.heightDecreaseCoefficient;
+
+          if (this.packetToDisplay) {
+            $('.chart').remove();
+          }
+
+          this.displayPacket();
+        });
+      };
   }
 
   private displayPacket() {
+    this.xScale = d3.scale.linear().range([0, this.width]);
+    this.yScale = d3.scale.linear().range([0, this.height]);
+
     let visualSelection: d3.Selection<any> =
       d3.select(this.element.nativeElement)
         .append('div')

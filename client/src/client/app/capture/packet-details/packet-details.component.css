@@ -1,19 +1,1 @@
-.chart {
-  display: block;
-  font-size: 11px;
-}
 
-rect {
-  stroke: #000;
-  fill: #ddd;
-  fill-opacity: .8;
-}
-
-rect.parent {
-  cursor: pointer;
-  fill: #eee;
-}
-
-text {
-  pointer-events: none;
-}

@@ -1,5 +1,9 @@
-<br />
-<br />
-<packet-list></packet-list>
-<packet-details></packet-details>
-<packet-bytes></packet-bytes>
+<div [ngClass]="['ui', 'top', 'attached', 'segment']">
+  <packet-list></packet-list>
+</div>
+<div [ngClass]="['ui', 'attached', 'segment']">
+  <packet-details></packet-details>
+</div>
+<div [ngClass]="['ui', 'bottom', 'attached', 'segment']">
+  <packet-bytes></packet-bytes>
+</div>

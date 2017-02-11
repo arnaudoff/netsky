@@ -1,4 +1,4 @@
-<div [ngClass]="['ui', 'warning', 'message']">
+<div [ngClass]="['ui', 'info', 'message']">
   <i [ngClass]="['close', 'icon']"></i>
   <div [ngClass]="['header']">
     There's a session available right now.
@@ -14,7 +14,9 @@
     Subscribe
   </button>
 </div>
-<div *ngIf="!authencationInfo?.isAuthenticated" [ngClass]="['ui', 'negative', 'message']">
+<div *ngIf="authenticationInfo &&
+         !authencationInfo?.isAuthenticated"
+  [ngClass]="['ui', 'negative', 'message']">
   <i [ngClass]="['close', 'icon']"></i>
   <div [ngClass]="['header']">
     Failed to subscribe to sniffing session
