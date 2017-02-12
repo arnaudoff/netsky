@@ -23,7 +23,8 @@ export class FilterStepComponent implements AfterViewInit {
   }
 
   handleStep() {
-    this.snifferService.filterExpression = this.filterExpression;
+    this.snifferService.filterExpression =
+      this.filterExpression ? this.filterExpression : '';
 
     $('#filters-step')
         .addClass('disabled')
