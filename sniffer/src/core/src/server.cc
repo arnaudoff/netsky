@@ -101,6 +101,7 @@ void Server::set_host_connection(int connection_id) {
   has_host_connection_ = true;
 }
 
+
 /**
  * @brief Retrieves all stored connections on the server since it's started
  *
@@ -144,6 +145,9 @@ void Server::AddConnection(int connection_id) {
  * @brief Removes a connection from the set of connections AND authenticated
  * connections (if the disconnecting user was authenticated).
  *
+ * If the disconnecting user was a host, denote that no hosts exists anymore and
+ * stop the sniffing thread.
+ *
  * @param connection_id The connection ID to remove.
  */
 void Server::RemoveConnection(int connection_id) {
@@ -152,6 +156,18 @@ void Server::RemoveConnection(int connection_id) {
   if (authenticated_connections_.count(connection_id)) {
     authenticated_connections_.erase(connection_id);
   }
+
+  if (host_connection_ == connection_id) {
+    StopSniffer();
+  }
+}
+
+/**
+ * @brief Removes the host connection snd stops the sniffing thread.
+ */
+void Server::StopSniffer() {
+  has_host_connection_ = false;
+  sniffer_.reset();
 }
 
 /**

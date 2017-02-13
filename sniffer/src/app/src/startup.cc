@@ -31,6 +31,7 @@
 #include "core/server_commands/kill_command.h"
 #include "core/server_commands/retrieve_interfaces_command.h"
 #include "core/server_commands/start_sniffer_command.h"
+#include "core/server_commands/stop_sniffer_command.h"
 
 #include "core/websocket_server.h"
 #include "core/websocket_server_event_handler.h"
@@ -50,52 +51,15 @@
 #include "protocols/headers/metadata/transmission_control_header_metadata.h"
 #include "protocols/headers/metadata/user_datagram_header_metadata.h"
 
-#include "protocols/headers/ethernet_header.h"
-#include "protocols/headers/internet_header.h"
-#include "protocols/headers/transmission_control_header.h"
-#include "protocols/headers/user_datagram_header.h"
-
-// Common
-using sniffer::common::serialization::SerializationMgr;
-using sniffer::common::config::ConfigurationMgr;
-using sniffer::common::addressing::IpAddressFactory;
-
-using sniffer::core::PcapInterfaceRetriever;
-using sniffer::core::HexAsciiPayloadInterpreter;
-
-// Layers
-using sniffer::core::LayerStack;
-using sniffer::core::layers::DataLinkLayer;
-using sniffer::core::layers::NetworkLayer;
-using sniffer::core::layers::TransportLayer;
-using sniffer::core::layers::ApplicationLayer;
-
-// Headers
-using sniffer::protocols::headers::EthernetHeader;
-using sniffer::protocols::headers::InternetHeader;
-using sniffer::protocols::headers::TransmissionControlHeader;
-using sniffer::protocols::headers::UserDatagramHeader;
-
-// Headers metadata
-using sniffer::protocols::headers::metadata::HeaderMetadata;
-using sniffer::protocols::headers::metadata::EthernetHeaderMetadata;
-using sniffer::protocols::headers::metadata::InternetHeaderMetadata;
-using sniffer::protocols::headers::metadata::TransmissionControlHeaderMetadata;
-using sniffer::protocols::headers::metadata::UserDatagramHeaderMetadata;
-
-// Server
-using sniffer::core::WebSocketServerEventHandler;
-using sniffer::core::WebSocketServer;
-
-// Commands
-using sniffer::core::ServerCommandInvoker;
-using sniffer::core::server_commands::KillCommand;
-using sniffer::core::server_commands::StartSnifferCommand;
-using sniffer::core::server_commands::RetrieveInterfacesCommand;
-using sniffer::core::server_commands::AuthenticateCommand;
-using sniffer::core::server_commands::HasHostCommand;
-
 int main() {
+  namespace core = sniffer::core;
+  namespace layers = sniffer::core::layers;
+  namespace metadata = sniffer::protocols::headers::metadata;
+  namespace serialization = sniffer::common::serialization;
+  namespace config = sniffer::common::config;
+  namespace addressing = sniffer::common::addressing;
+  namespace commands = sniffer::core::server_commands;
+
   auto console_logger = spdlog::stdout_color_mt("console");
 
   if (getuid()) {
@@ -103,99 +67,107 @@ int main() {
     return 1;
   }
 
-  console_logger->info("Initialized Netsky 0.1.0");
+  console_logger->info(
+      "Initialized Netsky 0.1.0. You may use the client to connect.");
 
   // Initialize the serializer and configuration managers
 
-  SerializationMgr serializer;
-  ConfigurationMgr config_manager;
+  serialization::SerializationMgr serializer;
+  config::ConfigurationMgr config_manager;
 
   // Initialize factories
 
-  IpAddressFactory ip_addr_factory;
+  addressing::IpAddressFactory ip_addr_factory;
 
   // Data link layer specific initializations
 
   std::map<std::string, int> eth_lower_id_map = {{"physical", 1}};
-  auto ethernet_metadata = std::make_unique<EthernetHeaderMetadata>(
+  auto ethernet_metadata = std::make_unique<metadata::EthernetHeaderMetadata>(
       eth_lower_id_map, "EthernetHeader", 14, 14, false, 0, false);
 
-  std::vector<std::unique_ptr<HeaderMetadata>> dll_supported_headers{};
+  std::vector<std::unique_ptr<metadata::HeaderMetadata>>
+      dll_supported_headers{};
   dll_supported_headers.push_back(std::move(ethernet_metadata));
 
-  DataLinkLayer dll{"datalink", serializer};
+  layers::DataLinkLayer dll{"datalink", serializer};
   dll.set_supported_headers(std::move(dll_supported_headers));
 
   // Network layer specific initializations
 
   std::map<std::string, int> ip_lower_id_map = {{"EthernetHeader", 0x800}};
-  auto internet_metadata = std::make_unique<InternetHeaderMetadata>(
+  auto internet_metadata = std::make_unique<metadata::InternetHeaderMetadata>(
       ip_lower_id_map, "InternetHeader", 0, 20, true, 0, true);
-  std::vector<std::unique_ptr<HeaderMetadata>> nl_supported_headers{};
+  std::vector<std::unique_ptr<metadata::HeaderMetadata>> nl_supported_headers{};
   nl_supported_headers.push_back(std::move(internet_metadata));
 
-  NetworkLayer nl{"network", serializer};
+  layers::NetworkLayer nl{"network", serializer};
   nl.set_supported_headers(std::move(nl_supported_headers));
 
   // Transport layer specific initialization
 
   std::map<std::string, int> tcp_lower_id_map = {{"InternetHeader", 0x06}};
-  auto tcp_metadata = std::make_unique<TransmissionControlHeaderMetadata>(
-      tcp_lower_id_map, "TransmissionControlHeader", 0, 20, true, 12, true);
+  auto tcp_metadata =
+      std::make_unique<metadata::TransmissionControlHeaderMetadata>(
+          tcp_lower_id_map, "TransmissionControlHeader", 0, 20, true, 12, true);
 
   std::map<std::string, int> udp_lower_id_map = {{"InternetHeader", 0x11}};
-  auto udp_metadata = std::make_unique<UserDatagramHeaderMetadata>(
+  auto udp_metadata = std::make_unique<metadata::UserDatagramHeaderMetadata>(
       udp_lower_id_map, "UserDatagramHeader", 8, 8, false, 0, true);
 
-  std::vector<std::unique_ptr<HeaderMetadata>> tl_supported_headers{};
+  std::vector<std::unique_ptr<metadata::HeaderMetadata>> tl_supported_headers{};
   tl_supported_headers.push_back(std::move(tcp_metadata));
   tl_supported_headers.push_back(std::move(udp_metadata));
 
-  TransportLayer tl{"transport", serializer};
+  layers::TransportLayer tl{"transport", serializer};
   tl.set_supported_headers(std::move(tl_supported_headers));
 
   auto hexascii_payload_interpreter =
-      std::make_unique<HexAsciiPayloadInterpreter>();
+      std::make_unique<core::HexAsciiPayloadInterpreter>();
 
-  ApplicationLayer al{"application", serializer,
-                      std::move(hexascii_payload_interpreter)};
+  layers::ApplicationLayer al{"application", serializer,
+                              std::move(hexascii_payload_interpreter)};
 
   // Build the protocol stack
-  LayerStack ls;
+  core::LayerStack ls;
   ls.AddLayer(&dll);
   ls.AddLayer(&nl);
   ls.AddLayer(&tl);
   ls.AddLayer(&al);
 
-  auto invoker = std::make_unique<ServerCommandInvoker>();
+  auto invoker = std::make_unique<core::ServerCommandInvoker>();
   auto event_handler =
-      std::make_unique<WebSocketServerEventHandler>(invoker.get());
+      std::make_unique<core::WebSocketServerEventHandler>(invoker.get());
 
-  auto server = std::make_unique<WebSocketServer>(
+  auto server = std::make_unique<core::WebSocketServer>(
       config_manager,
       config_manager.ExtractValue<std::string>("server", "password"),
       std::move(event_handler));
 
   auto pcap_retriever =
-      std::make_unique<PcapInterfaceRetriever>(ip_addr_factory);
+      std::make_unique<core::PcapInterfaceRetriever>(ip_addr_factory);
 
   // Commands for the server
-
-  auto kill_cmd = std::make_unique<KillCommand>(server.get(), serializer);
-  auto retrieve_if_cmd = std::make_unique<RetrieveInterfacesCommand>(
+  auto kill_cmd =
+      std::make_unique<commands::KillCommand>(server.get(), serializer);
+  auto retrieve_if_cmd = std::make_unique<commands::RetrieveInterfacesCommand>(
       server.get(), serializer, std::move(pcap_retriever));
 
-  auto start_sniffer_cmd =
-      std::make_unique<StartSnifferCommand>(server.get(), serializer, ls);
+  auto start_sniffer_cmd = std::make_unique<commands::StartSnifferCommand>(
+      server.get(), serializer, ls);
+
+  auto stop_sniffer_cmd = std::make_unique<commands::StopSnifferCommand>(
+      server.get(), serializer);
 
   auto authenticate_cmd =
-      std::make_unique<AuthenticateCommand>(server.get(), serializer);
+      std::make_unique<commands::AuthenticateCommand>(server.get(), serializer);
 
-  auto hashost_cmd = std::make_unique<HasHostCommand>(server.get(), serializer);
+  auto hashost_cmd =
+      std::make_unique<commands::HasHostCommand>(server.get(), serializer);
 
   invoker->AddCommand(kill_cmd.get());
   invoker->AddCommand(retrieve_if_cmd.get());
   invoker->AddCommand(start_sniffer_cmd.get());
+  invoker->AddCommand(stop_sniffer_cmd.get());
   invoker->AddCommand(authenticate_cmd.get());
   invoker->AddCommand(hashost_cmd.get());
 

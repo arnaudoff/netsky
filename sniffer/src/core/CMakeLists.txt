@@ -15,6 +15,7 @@ add_library(netsky-core
   src/server_commands/retrieve_interfaces_command.cc
   src/server_commands/server_command.cc
   src/server_commands/start_sniffer_command.cc
+  src/server_commands/stop_sniffer_command.cc
   src/interface.cc
   src/interface_address.cc
   src/layer_stack.cc

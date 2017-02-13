@@ -18,6 +18,7 @@
 
 #include <string>
 #include <vector>
+#include <thread>
 
 #include "common/policy_bindings.h"
 #include "core/layer_stack.h"
@@ -45,7 +46,8 @@ PacketSniffer::PacketSniffer(
       filter_{filter},
       config_manager_{config},
       stack_{stack},
-      server_{server} {}
+      server_{server},
+      sniffing_thread_{} {}
 
 /**
  * @brief Starts the packet sniffer.
@@ -59,6 +61,22 @@ void PacketSniffer::Start() {
   }
 
   Sniff();
+}
+
+/**
+ * @brief Runs the Start method in a separate sniffing thread.
+ */
+void PacketSniffer::Run() {
+  sniffing_thread_ = std::thread(&PacketSniffer::Start, this);
+}
+
+/**
+ * @brief Destructs the sniffer by stopping the underlying thread.
+ */
+PacketSniffer::~PacketSniffer() {
+  if (sniffing_thread_.joinable()) {
+    sniffing_thread_.join();
+  }
 }
 
 }  // namespace core

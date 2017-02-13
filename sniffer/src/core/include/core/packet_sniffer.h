@@ -22,6 +22,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <thread>
 
 #include "common/policy_bindings.h"
 #include "core/layer_stack.h"
@@ -38,19 +39,17 @@ class PacketSniffer {
                 const sniffer::common::config::ConfigurationMgr& config,
                 const LayerStack& stack, Server* server);
 
-  virtual ~PacketSniffer() {}
+  virtual ~PacketSniffer();
 
   void Start();
 
+  void Run();
+
  protected:
   std::string interface_;
-
   std::string filter_;
-
   sniffer::common::config::ConfigurationMgr config_manager_;
-
   LayerStack stack_;
-
   Server* server_;
 
   virtual void PrepareInterfaces() = 0;
@@ -60,6 +59,9 @@ class PacketSniffer {
   virtual void ApplyFilters() = 0;
 
   virtual void Sniff() = 0;
+
+ private:
+  std::thread sniffing_thread_;
 };
 
 }  // namespace core

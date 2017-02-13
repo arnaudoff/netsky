@@ -70,6 +70,8 @@ class Server {
 
   virtual void RemoveConnection(int connection_id);
 
+  virtual void StopSniffer();
+
   virtual void Authenticate(int connection_id);
 
   virtual bool IsClientAuthenticated(int connection_id);

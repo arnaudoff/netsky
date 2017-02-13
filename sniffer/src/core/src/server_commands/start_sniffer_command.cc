@@ -95,9 +95,8 @@ void StartSnifferCommand::Execute(int connection_id,
   server_->set_sniffer(std::move(sniffer));
   server_->set_host_connection(connection_id);
 
-  std::thread sniffing_thread{&sniffer::core::PacketSniffer::Start,
-                              server_->sniffer()};
-  sniffing_thread.detach();
+  // Start the underlying sniffing thread.
+  server_->sniffer()->Run();
 }
 
 }  // namespace server_commands
