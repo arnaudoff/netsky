@@ -92,4 +92,8 @@ export class SnifferService {
     this._remoteConnection.next(commandObject);
   }
 
+  public stop(): void {
+    this._remoteConnection.next({ 'stop-sniffer': {} });
+  }
+
 }

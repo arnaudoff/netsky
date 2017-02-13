@@ -1,11 +1,14 @@
 <div [ngClass]="['ui', 'info', 'message']">
   <i [ngClass]="['close', 'icon']"></i>
   <div [ngClass]="['header']">
-    There's a session available right now.
+    There's a session available right now. You can either:
   </div>
-    You can either subscribe to it or wait for it to finish and create a
-    new one.
+  <ul [ngClass]="['list']">
+    <li>subscribe to it</li>
+    <li>or wait for it to finish and create a new one</li>
+  </ul>
 </div>
+
 <div [ngClass]="['ui', 'action', 'input']">
   <input type="password" #passwordInput>
   <button (click)="subscribeClicked(passwordInput.value)"

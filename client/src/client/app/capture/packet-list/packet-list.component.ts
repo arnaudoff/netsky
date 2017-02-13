@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { VirtualScrollComponent, ChangeEvent } from 'angular2-virtual-scroll';
 
-import { PacketService } from '../../shared/index';
 import { Packet } from './../../shared/packet/index';
+import { PacketService } from '../../shared/index';
+import { SnifferService } from '../../shared/sniffer/index';
 
 @Component({
   moduleId: module.id,
@@ -12,17 +13,22 @@ import { Packet } from './../../shared/packet/index';
 })
 export class PacketListComponent {
 
-  public renderablePackets: Packet[] = [];
   public readonly viewPortSize: number = 15;
+  public renderablePackets: Packet[] = [];
   public indices: ChangeEvent;
+  public filterExpression: string = '';
 
   private totalReceived: number = 0;
+  private receivedPacketsBuffer: Packet[] = [];
+
   private packetsBuffer: Packet[] = [];
+  private filteredPacketsBuffer: Packet[] = [];
 
   @ViewChild(VirtualScrollComponent)
   private virtualScroll: VirtualScrollComponent;
 
-  constructor(private packetService: PacketService) {
+  constructor(private packetService: PacketService,
+              private snifferService: SnifferService) {
     this.packetService.packets.subscribe((packet: Packet) => {
       this.totalReceived += 1;
 
@@ -31,28 +37,76 @@ export class PacketListComponent {
       } else if (this.totalReceived === this.viewPortSize) {
         this.virtualScroll.refresh();
       } else {
-        this.packetsBuffer.push(packet);
+        if (this.filterExpression.length > 0) {
+          if (this.packetService.filterSingle(packet, this.filterExpression)) {
+            this.filteredPacketsBuffer.push(packet);
+          }
+        } else {
+          this.packetsBuffer.push(packet);
+        }
+
+        this.receivedPacketsBuffer.push(packet);
       }
     });
+  }
+
+  private packetClicked(packet: Packet) {
+    this.packetService.setObservedPacket(packet);
+  }
+
+  private applyFilter(filterExpression: string) {
+    try {
+      let expression = JSON.parse(filterExpression);
+    } catch (e) {
+      alert('The supplied filter is invalid.');
+    }
+
+    this.filterExpression = filterExpression;
+    this.renderablePackets = [];
+
+    this.filteredPacketsBuffer = this.packetService.filterCollection(
+      this.receivedPacketsBuffer, filterExpression);
+
+    this.shiftBufferToRenderable(this.filteredPacketsBuffer);
+  }
+
+  private clearFilter(): void {
+    this.filterExpression = '';
+    this.renderablePackets = [];
+
+    this.packetsBuffer = this.receivedPacketsBuffer.slice();
+    this.shiftBufferToRenderable(this.packetsBuffer);
   }
 
   private onListChange(event: ChangeEvent) {
     this.indices = event;
 
     if (event.end === this.renderablePackets.length) {
-      let packetsToTake = (this.packetsBuffer.length < this.viewPortSize) ?
-        this.packetsBuffer.length : this.viewPortSize;
+      let buffer: Packet[];
 
-      for (let i = 0; i < packetsToTake; i += 1) {
-        this.renderablePackets.push(this.packetsBuffer.shift());
+      if (this.filterExpression.length > 0) {
+        buffer = this.filteredPacketsBuffer;
+      } else {
+        buffer = this.packetsBuffer;
       }
 
-      this.virtualScroll.refresh();
+      this.shiftBufferToRenderable(buffer);
     }
   }
 
-  private packetClicked(packet: Packet) {
-    this.packetService.setObservedPacket(packet);
+  private shiftBufferToRenderable(sourceBuffer: Packet[]) : void {
+    let packetsToTake = (sourceBuffer.length < this.viewPortSize) ?
+      sourceBuffer.length : this.viewPortSize;
+
+    for (let i = 0; i < packetsToTake; i += 1) {
+      this.renderablePackets.push(sourceBuffer.shift());
+    }
+
+    this.virtualScroll.refresh();
+  }
+
+  private stop() {
+    this.snifferService.stop();
   }
 
 }

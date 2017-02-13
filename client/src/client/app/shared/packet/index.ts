@@ -1,2 +1,2 @@
-export * from './packet.service';
 export * from './packet';
+export * from './packet.service';

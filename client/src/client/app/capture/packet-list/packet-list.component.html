@@ -10,9 +10,51 @@
 
 </virtual-scroll>
 <br />
-<div class="status">
-     Showing <span class="badge">{{indices?.start + 1}}</span>
-     - <span class="badge">{{indices?.end}}</span>
-     of <span class="badge">{{renderablePackets?.length}}</span>
-    <span>({{viewPortPackets?.length}} nodes)</span>
+
+<div [ngClass]="['ui', 'grid']">
+  <div [ngClass]="['seven', 'wide', 'column']">
+    <div [ngClass]="['ui', 'icon', 'input', 'field']">
+      <input #filterExpressionInput
+        type="text"
+        placeholder="Filter expression">
+      <i [ngClass]="['circular', 'options', 'link', 'icon']"></i>
+    </div>
+    <button
+        (click)="applyFilter(filterExpressionInput.value)"
+        [ngClass]="['ui', 'labeled', 'icon', 'button']">
+      <i [ngClass]="['checkmark', 'icon']"></i>
+      Apply
+    </button>
+    <button (click)="clearFilter()" [ngClass]="['ui', 'labeled', 'icon', 'button']">
+      <i [ngClass]="['remove', 'circle', 'icon']"></i>
+      Clear
+    </button>
+  </div>
+  <div [ngClass]="['four', 'wide', 'column']">
+    <div [ngClass]="['ui', 'buttons', 'field']">
+      <button (click)="stop()" [ngClass]="['ui', 'button']">
+        <i [ngClass]="['stop', 'icon']"></i>
+        Stop
+      </button>
+    </div>
+  </div>
+  <div [ngClass]="['five', 'wide', 'column']">
+    <div [ngClass]="['ui', 'labeled', 'button', 'field']">
+      <div [ngClass]="['ui', 'button']">
+        <i [ngClass]="['low', 'vision', 'icon']"></i> Viewing packets
+      </div>
+      <a [ngClass]="['ui', 'basic', 'label']">
+        {{indices?.start + 1}} - {{indices?.end}}
+      </a>
+    </div>
+
+    <div [ngClass]="['ui', 'labeled', 'button', 'field']">
+      <div [ngClass]="['ui', 'button']">
+        <i [ngClass]="['low', 'hashtag', 'icon']"></i> Total packets
+      </div>
+      <a [ngClass]="['ui', 'basic', 'label']">
+        {{ renderablePackets?.length }}
+      </a>
+    </div>
+  </div>
 </div>

@@ -5,6 +5,8 @@ import { Config } from '../config/env.config';
 import { WebSocketService } from './../websocket/index';
 import { Packet } from './packet';
 
+declare var SEARCHJS: any;
+
 @Injectable()
 export class PacketService {
 
@@ -27,6 +29,16 @@ export class PacketService {
 
   public setObservedPacket(packet: Packet) {
     this._observedPacket.next(packet);
+  }
+
+  public filterSingle(packet: Packet, filterExpression: string): boolean {
+    return SEARCHJS.matchObject(packet, JSON.parse(filterExpression));
+  }
+
+  public filterCollection(
+    packets: Packet[],
+    filterExpression: string): Packet[] {
+      return SEARCHJS.matchArray(packets, JSON.parse(filterExpression));
   }
 
 }
