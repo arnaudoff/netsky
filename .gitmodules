@@ -1,4 +1,4 @@
-[submodule "sniffer/vendor/websocketpp"]
+[submodule "sniffer/src/vendor/websocketpp"]
 	path = sniffer/vendor/websocketpp
 	url = https://github.com/LocutusOfBorg/websocketpp
 	branch = patch-2
