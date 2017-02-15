@@ -1,9 +1,7 @@
 [submodule "sniffer/vendor/websocketpp"]
 	path = sniffer/vendor/websocketpp
-	url = https://github.com/zaphoyd/websocketpp
-[submodule "sniffer/src/vendor/websocketpp"]
-	path = sniffer/src/vendor/websocketpp
-	url = https://github.com/zaphoyd/websocketpp
+	url = https://github.com/LocutusOfBorg/websocketpp
+	branch = patch-2
 [submodule "sniffer/src/vendor/nlohmann_json"]
 	path = sniffer/src/vendor/nlohmann_json
 	url = https://github.com/nlohmann/json
