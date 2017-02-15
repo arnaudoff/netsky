@@ -19,7 +19,7 @@ export class PacketListComponent {
   public filterExpression: string = '';
 
   private totalReceived: number = 0;
-  private receivedPacketsBuffer: Packet[] = [];
+  private receivedPackets: Packet[] = [];
 
   private packetsBuffer: Packet[] = [];
   private filteredPacketsBuffer: Packet[] = [];
@@ -45,7 +45,7 @@ export class PacketListComponent {
           this.packetsBuffer.push(packet);
         }
 
-        this.receivedPacketsBuffer.push(packet);
+        this.receivedPackets.push(packet);
       }
     });
   }
@@ -65,7 +65,7 @@ export class PacketListComponent {
     this.renderablePackets = [];
 
     this.filteredPacketsBuffer = this.packetService.filterCollection(
-      this.receivedPacketsBuffer, filterExpression);
+      this.receivedPackets, filterExpression);
 
     this.shiftBufferToRenderable(this.filteredPacketsBuffer);
   }
@@ -74,7 +74,7 @@ export class PacketListComponent {
     this.filterExpression = '';
     this.renderablePackets = [];
 
-    this.packetsBuffer = this.receivedPacketsBuffer.slice();
+    this.packetsBuffer = this.receivedPackets.slice();
     this.shiftBufferToRenderable(this.packetsBuffer);
   }
 

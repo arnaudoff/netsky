@@ -1,4 +1,4 @@
-\begin{thebibliography}{7}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -19,6 +19,15 @@ E.~Gamma, editor.
 \newblock Addison-{Wesley} professional computing series. Addison-Wesley,
   Reading, Mass, 1995.
 \newblock ISBN 978-0-201-63361-0.
+
+\bibitem[Gechev and Hevery(2016)]{gechev_switching_2016}
+M.~M. Gechev and M.~Hevery.
+\newblock \emph{Switching to {Angular} 2: build {SEO}-friendly,
+  high-performance single-page applications with {Angular} 2}.
+\newblock 2016.
+\newblock ISBN 978-1-78588-711-6.
+\newblock URL \url{http://proquest.safaribooksonline.com/?fpi=9781785886201}.
+\newblock OCLC: 946526859.
 
 \bibitem[Meyers(2014)]{meyers_effective_2014}
 S.~Meyers.
