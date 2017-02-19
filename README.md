@@ -22,11 +22,16 @@ An open-source, remote-accessible packet sniffer, written in C++ and Angular 2.
 
 ## Prerequisites
 
+- git
 - Compiler with C++11 support
 - CMake >= 3.6.1
-- git
+- libpcap-dev
 - libssl-dev
 - libboost-system-dev
+- nodejs >= 6.5.0
+- npm >= 3.10.3
+
+Other dependencies will be fetched from git as submodules and from NPM.
 
 ## Building and running
 
@@ -34,11 +39,34 @@ An open-source, remote-accessible packet sniffer, written in C++ and Angular 2.
 # Clone the repository
 
 $ git clone https://github.com/arnaudoff/netsky
+```
 
-# Build the sniffer
+### Building and running the sniffer/server
 
-$ cd sniffer/
+```shell
+$ cd netsky/sniffer/
 $ mkdir build
 $ cd build && cmake -DCMAKE_BUILD_TYPE=Release ../src
 $ make
+
+# Run the sniffer
+$ cd app
+$ sudo ./sniffer
 ```
+
+### Building and running the client
+
+```shell
+$ cd netsky/client/
+
+# Fetch client dependencies to node_modules/
+$ npm install
+
+# Run the client in development env
+$ npm start
+
+# Copy a production-ready build to dist/prod
+$ npm run build.prod
+```
+
+### Serving the client with a webserver (optional)
