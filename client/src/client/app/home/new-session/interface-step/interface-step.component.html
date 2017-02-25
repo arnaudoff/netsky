@@ -10,7 +10,7 @@
     <div [ngClass]="['content']">
       <a [ngClass]="['header']">{{ interface.name }}</a>
       <div [ngClass]="['description']">{{ interface.description }}
-        <div *ngFor="let address of interface.addresses" [ngClass]="item">
+        <div *ngFor="let address of interface.addresses" [ngClass]="['item']">
           <span><i [ngClass]="['marker', 'icon']"></i><b>{{ address.addr }}</b></span>
             <span *ngIf="address.bcast_addr">
               <i [ngClass]="['announcement', 'icon']"></i><b>{{ address.bcast_addr }}</b>

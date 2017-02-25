@@ -23,7 +23,7 @@ export class SessionSubscriptionComponent {
       });
   }
 
-  private subscribeClicked(password: string) : void {
+  public subscribeClicked(password: string) : void {
     this.snifferService.sendAuthenticate(password);
   }
 

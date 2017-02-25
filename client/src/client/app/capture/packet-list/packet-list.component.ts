@@ -50,15 +50,16 @@ export class PacketListComponent {
     });
   }
 
-  private packetClicked(packet: Packet) {
+  public packetClicked(packet: Packet) {
     this.packetService.setObservedPacket(packet);
   }
 
-  private applyFilter(filterExpression: string) {
+  public applyFilter(filterExpression: string) {
     try {
       let expression = JSON.parse(filterExpression);
     } catch (e) {
       alert('The supplied filter is invalid.');
+      return;
     }
 
     this.filterExpression = filterExpression;
@@ -70,7 +71,7 @@ export class PacketListComponent {
     this.shiftBufferToRenderable(this.filteredPacketsBuffer);
   }
 
-  private clearFilter(): void {
+  public clearFilter(): void {
     this.filterExpression = '';
     this.renderablePackets = [];
 
@@ -78,7 +79,7 @@ export class PacketListComponent {
     this.shiftBufferToRenderable(this.packetsBuffer);
   }
 
-  private onListChange(event: ChangeEvent) {
+  public onListChange(event: ChangeEvent) {
     this.indices = event;
 
     if (event.end === this.renderablePackets.length) {
@@ -94,6 +95,10 @@ export class PacketListComponent {
     }
   }
 
+  public stop() {
+    this.snifferService.stop();
+  }
+
   private shiftBufferToRenderable(sourceBuffer: Packet[]) : void {
     let packetsToTake = (sourceBuffer.length < this.viewPortSize) ?
       sourceBuffer.length : this.viewPortSize;
@@ -103,10 +108,6 @@ export class PacketListComponent {
     }
 
     this.virtualScroll.refresh();
-  }
-
-  private stop() {
-    this.snifferService.stop();
   }
 
 }

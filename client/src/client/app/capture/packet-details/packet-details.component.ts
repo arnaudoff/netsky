@@ -12,7 +12,7 @@ declare var $: any;
 })
 export class PacketDetailsComponent {
 
-  private packetToDisplay: Packet = null;
+  public packetToDisplay: Packet = null;
 
   private readonly heightDecreaseCoefficient: number = 3;
   private width: number = window.innerWidth;
@@ -41,8 +41,7 @@ export class PacketDetailsComponent {
         }
       });
 
-      window.onresize = (e) =>
-      {
+      window.onresize = (e) => {
         ngZone.run(() => {
           this.width = window.innerWidth;
           this.height = window.innerHeight / this.heightDecreaseCoefficient;

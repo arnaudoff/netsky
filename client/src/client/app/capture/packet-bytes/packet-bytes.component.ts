@@ -9,7 +9,7 @@ import { PacketService, Packet } from './../../shared/packet/index';
 })
 export class PacketBytesComponent {
 
-  private bytesToDisplay: string = null;
+  public bytesToDisplay: string = null;
 
   constructor(private packetService: PacketService) {
     packetService.observedPacket.subscribe((packet: Packet) => {

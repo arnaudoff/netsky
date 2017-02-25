@@ -35,7 +35,7 @@ export class InterfaceStepComponent implements OnInit {
     $(this.selectElement.nativeElement).dropdown({forceSelection: false});
   }
 
-  private handleStep() {
+  public handleStep() {
     let selectedInterface: string =
         $(this.selectElement.nativeElement).find(':selected').val();
 

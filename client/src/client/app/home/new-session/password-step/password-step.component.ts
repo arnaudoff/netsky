@@ -14,7 +14,7 @@ export class PasswordStepComponent implements AfterViewInit {
 
   public password: string;
 
-  private authenticationInfo: AuthenticationInfo = null;
+  public authenticationInfo: AuthenticationInfo = null;
 
   constructor(private router: Router, private snifferService: SnifferService) {
     this.snifferService.authenticationInfo
@@ -37,7 +37,7 @@ export class PasswordStepComponent implements AfterViewInit {
         .removeClass('disabled');
   }
 
-  handleStep() {
+  public handleStep() {
     if (this.password) {
       this.snifferService.sendAuthenticate(this.password);
     }
