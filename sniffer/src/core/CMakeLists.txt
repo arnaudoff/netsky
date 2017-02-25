@@ -85,11 +85,3 @@ install(EXPORT NetskyCoreConfig DESTINATION share/NetskyCore/cmake)
 # This makes the project importable from the build directory
 
 #export(TARGETS netsky-core FILE NetskyCoreConfig.cmake)
-
-# Add the unit tests
-
-add_executable(testcore test/core_tests.cc)
-
-target_link_libraries(testcore netsky-core)
-
-add_test(testcore testcore)

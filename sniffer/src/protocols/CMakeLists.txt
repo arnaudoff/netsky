@@ -53,11 +53,3 @@ install(EXPORT NetskyProtocolsConfig DESTINATION share/NetskyProtocols/cmake)
 # This makes the project importable from the build directory
 
 # export(TARGETS netsky-protocols FILE NetskyProtocolsConfig.cmake)
-
-# Add the unit tests
-
-add_executable(testprotocols test/protocols_tests.cc)
-
-target_link_libraries(testprotocols netsky-protocols)
-
-add_test(testprotocols testprotocols)

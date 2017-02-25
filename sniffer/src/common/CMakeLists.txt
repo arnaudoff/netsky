@@ -46,11 +46,3 @@ install(EXPORT NetskyCommonConfig DESTINATION share/NetskyCommon/cmake)
 # This makes the project importable from the build directory
 
 # export(TARGETS netsky-common FILE NetskyCommonConfig.cmake)
-
-# Add the unit tests
-
-add_executable(testcommon test/common_tests.cc)
-
-target_link_libraries(testcommon netsky-common)
-
-add_test(testcommon testcommon)
