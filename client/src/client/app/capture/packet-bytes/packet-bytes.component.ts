@@ -5,8 +5,7 @@ import { PacketService, Packet } from './../../shared/packet/index';
 @Component({
   moduleId: module.id,
   selector: 'packet-bytes',
-  templateUrl: 'packet-bytes.component.html',
-  styleUrls: ['packet-bytes.component.css'],
+  templateUrl: 'packet-bytes.component.html'
 })
 export class PacketBytesComponent {
 

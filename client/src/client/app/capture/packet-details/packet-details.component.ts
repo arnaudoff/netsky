@@ -8,8 +8,7 @@ declare var $: any;
 @Component({
   moduleId: module.id,
   selector: 'packet-details',
-  templateUrl: 'packet-details.component.html',
-  styleUrls: ['packet-details.component.css'],
+  templateUrl: 'packet-details.component.html'
 })
 export class PacketDetailsComponent {
 

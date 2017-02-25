@@ -8,8 +8,7 @@ declare var $: any;
 @Component({
   moduleId: module.id,
   selector: 'start-step',
-  templateUrl: 'start-step.component.html',
-  styleUrls: ['start-step.component.css'],
+  templateUrl: 'start-step.component.html'
 })
 
 export class StartStepComponent implements AfterViewInit {
