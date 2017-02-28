@@ -63,6 +63,9 @@ $ sudo ./sniffer
 
 ### Building and running the client
 
+**Note**: Before running and building anything, make sure to change the
+IP address and the port of the server configured for the respective environment. That is done in `netsky/client/tools/env`. Needless to say, if you're using the remote sniffing feature you'd have to put the public IP of your machine in `prod.ts` so that once served, clients can connect through WebSocket.
+
 ```shell
 $ cd netsky/client/
 
@@ -78,6 +81,9 @@ $ npm start
 # Copy a production-ready build to dist/prod (optional)
 $ npm run build.prod
 ```
+
+The above steps were tested with VirtualBox 5.1.14 r112924 on 
+Linux 4.9.8-1-ARCH i686 GNU/Linux (ArchLinux), however, there may be problems with the packages for other distros. If so, feel free to drop an issue.
 
 ### Other configuration
 
@@ -97,12 +103,12 @@ Serving the client is no harder than serving any Angular application. Still,
 `nginx.sample.conf` provides a simple configuration for nginx. Configuration for
 other web servers is similar.
 
-## A note on SSL/TLS
+## Notes on SSL/TLS
 
 - Since the sniffer has built-in SSL/TLS support (and using SSL/TLS is practically a requirement),
-you may need to allow development certificates (for localhost) in your browser to trust the
-sample self-signed certificates that are provided when testing as well as if
-you're trying out the application in production.
+you may need to allow insecure certificates (e.g. `chrome://flags/#allow-insecure-localhost`) in your browser to trust the
+sample self-signed certificates that are provided when trying out the application. If
+you're using it in production, you probably already have a real certificate.
 - Secure WebSocket may sometimes fail if it's not run under https or the
 certificate is invalid.
 
