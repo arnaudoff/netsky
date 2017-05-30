@@ -63,13 +63,26 @@ class FileStoragePolicy {
   }
 
   /**
+   * @brief Sets the resource path, without the extension.
+   *
+   * @param resource_path The runtime-defined path to the server configuration.
+   */
+  void resource_path(const std::string& resource_path) {
+    size_t last_index = resource_path.find_last_of(".");
+    resource_path_ = resource_path.substr(0, last_index + 1);
+  }
+
+  /**
    * @brief Defines where the configuration file resides on the disk.
    *
    * @return The path to the configuration file.
    */
   std::string resource_path() const {
-    return "../../config/config.";
+    return resource_path_;
   }
+
+ private:
+  std::string resource_path_;
 };
 
 }  // namespace config

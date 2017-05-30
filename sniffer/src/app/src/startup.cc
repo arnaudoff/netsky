@@ -19,6 +19,7 @@
 #include <unistd.h>
 
 #include <map>
+#include <fstream>
 
 #include "spdlog/spdlog.h"
 
@@ -51,7 +52,11 @@
 #include "protocols/headers/metadata/transmission_control_header_metadata.h"
 #include "protocols/headers/metadata/user_datagram_header_metadata.h"
 
-int main() {
+void show_help(char* exec_name);
+
+void show_version();
+
+int main(int argc, char *argv[]) {
   namespace core = sniffer::core;
   namespace layers = sniffer::core::layers;
   namespace metadata = sniffer::protocols::headers::metadata;
@@ -67,19 +72,54 @@ int main() {
     return 1;
   }
 
-  console_logger->info(
-      "Initialized Netsky 0.1.0. You may use the client to connect.");
+  if (argc == 1) {
+    show_help(argv[0]);
+    return 1;
+  }
+
+  std::string config_path;
+
+  char tmp;
+  while ((tmp = getopt(argc, argv, "hp:v")) != -1) {
+    switch (tmp) {
+      case 'h':
+        show_help(argv[0]);
+        return 0;
+      case 'p':
+        config_path = optarg;
+        break;
+      case 'v':
+        show_version();
+        return 0;
+      default:
+        show_help(argv[0]);
+        return 0;
+    }
+  }
+
+  console_logger->info("Reading configuration..");
+
+  std::ifstream f(config_path.c_str());
+  if (f.good()) {
+    console_logger->info("Reading config from {}..", config_path);
+  } else {
+    console_logger->critical("Reading configuration from {} failed.", config_path);
+    return 1;
+  }
 
   // Initialize the serializer and configuration managers
 
   serialization::SerializationMgr serializer;
   config::ConfigurationMgr config_manager;
+  config_manager.resource_path(config_path);
 
   // Initialize factories
 
   addressing::IpAddressFactory ip_addr_factory;
 
   // Data link layer specific initializations
+
+  console_logger->info("Initializing data link layer headers..");
 
   std::map<std::string, int> eth_lower_id_map = {{"physical", 1}};
   auto ethernet_metadata = std::make_unique<metadata::EthernetHeaderMetadata>(
@@ -94,6 +134,8 @@ int main() {
 
   // Network layer specific initializations
 
+  console_logger->info("Initializing network layer headers..");
+
   std::map<std::string, int> ip_lower_id_map = {{"EthernetHeader", 0x800}};
   auto internet_metadata = std::make_unique<metadata::InternetHeaderMetadata>(
       ip_lower_id_map, "InternetHeader", 0, 20, true, 0, true);
@@ -104,6 +146,8 @@ int main() {
   nl.set_supported_headers(std::move(nl_supported_headers));
 
   // Transport layer specific initialization
+
+  console_logger->info("Initializing transport layer headers..");
 
   std::map<std::string, int> tcp_lower_id_map = {{"InternetHeader", 0x06}};
   auto tcp_metadata =
@@ -126,6 +170,8 @@ int main() {
 
   layers::ApplicationLayer al{"application", serializer,
                               std::move(hexascii_payload_interpreter)};
+
+  console_logger->info("Building the layer stack..");
 
   // Build the protocol stack
   core::LayerStack ls;
@@ -171,7 +217,22 @@ int main() {
   invoker->AddCommand(authenticate_cmd.get());
   invoker->AddCommand(hashost_cmd.get());
 
+  console_logger->info("Starting the server..");
+  console_logger->info(
+      "Initialized Netsky 0.1.0. You may use the client to connect.");
+
   server->Start(config_manager.ExtractValue<int>("server", "port"));
 
   return 0;
+}
+
+void show_version() {
+  std::cout << "Netsky 0.1.0 by Ivaylo Arnaudov (c) 2017" << std::endl;
+}
+
+void show_help(char* exec_name) {
+  std::cout << "Usage: " << exec_name << " [-option] [argument]" << std::endl;
+  std::cout << "Options: " << "-h  show help information" << std::endl;
+  std::cout << "         " << "-p  path to config file for the server" << std::endl;
+  std::cout << "         " << "-v  show version infomation" << std::endl;
 }
