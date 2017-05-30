@@ -57,6 +57,9 @@ void PacketSniffer::Start() {
 
   if (!filter_.empty()) {
     ParseFilters();
+  }
+
+  if (!filter_.empty()) {
     ApplyFilters();
   }
 

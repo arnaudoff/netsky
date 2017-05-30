@@ -90,12 +90,12 @@ void PcapPacketSniffer::PrepareInterfaces() {
  * @brief Parses any filters by passing them to pcap_compile().
  */
 void PcapPacketSniffer::ParseFilters() {
-  if (pcap_compile(handle_, &parsed_filters_, filter_.c_str(), 0, network_) ==
-      -1) {
+  if (pcap_compile(handle_, &parsed_filters_, filter_.c_str(), 0, network_) == -1) {
     std::ostringstream exception_message;
     exception_message << "Couldn't parse filter " << filter_ << ": "
                       << pcap_geterr(handle_);
-    throw SnifferException{exception_message.str()};
+    filter_.clear();
+    return;
   }
 }
 
