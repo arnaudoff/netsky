@@ -168,6 +168,7 @@ void PcapPacketSniffer::OnPacketReceivedInternal(
  */
 PcapPacketSniffer::~PcapPacketSniffer() {
   pcap_freecode(&parsed_filters_);
+  pcap_breakloop(handle_);
   pcap_close(handle_);
 }
 

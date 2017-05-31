@@ -20,6 +20,8 @@
 #include <vector>
 #include <thread>
 
+#include "spdlog/spdlog.h"
+
 #include "common/policy_bindings.h"
 #include "core/layer_stack.h"
 #include "core/packet_sniffer.h"
@@ -79,6 +81,8 @@ void PacketSniffer::Run() {
 PacketSniffer::~PacketSniffer() {
   if (sniffing_thread_.joinable()) {
     sniffing_thread_.join();
+
+    spdlog::get("console")->info("Stopping the sniffing thread..");
   }
 }
 

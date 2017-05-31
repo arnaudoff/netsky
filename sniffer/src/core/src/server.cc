@@ -22,6 +22,8 @@
 #include <set>
 #include <utility>
 
+#include "spdlog/spdlog.h"
+
 #include "common/policy_bindings.h"
 #include "core/packet_sniffer.h"
 
@@ -168,6 +170,8 @@ void Server::RemoveConnection(int connection_id) {
 void Server::StopSniffer() {
   has_host_connection_ = false;
   sniffer_.reset();
+
+  spdlog::get("console")->info("The sniffer was stopped.");
 }
 
 /**
